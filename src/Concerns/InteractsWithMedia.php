@@ -14,6 +14,8 @@ trait InteractsWithMedia
 
     protected ?int $maxFileSize = null;
 
+    protected bool | Closure | null $relativePaths = null;
+
     protected bool | Closure | null $shouldPreserveFileNames = null;
 
     protected string | Closure | null $visibility = null;
@@ -58,6 +60,18 @@ trait InteractsWithMedia
         $this->visibility = $visibility;
 
         return $this;
+    }
+
+    public function relativePaths(array | Closure $relativePaths): static
+    {
+        $this->relativePaths = $relativePaths;
+
+        return $this;
+    }
+
+    public function useRelativePaths(): bool
+    {
+        return $this->evaluate($this->relativePaths) ?? false;
     }
 
     public function getAcceptedFileTypes(): array

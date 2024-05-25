@@ -18,6 +18,10 @@ class TypistAction extends Action
 
     protected ?string $active = null;
 
+    protected ?string $renderView = null;
+
+    protected ?string $editorView = null;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -54,24 +58,36 @@ class TypistAction extends Action
         return $this;
     }
 
-    public function isVisibleWhen(?string $name = null, array | string $attributes = []): static
-    {
-        $this->visibleWhenName = $name;
-        $this->visibleWhenAttributes = $attributes;
-
-        return $this;
-    }
-
     public function getActive(): ?string
     {
         return $this->active ?? null;
     }
 
-    public function visibleWhen(): ?array
+    public function renderView(string $view): static
     {
-        return [
-            'name' => $this->visibleWhenName,
-            'attributes' => $this->visibleWhenAttributes,
-        ];
+        $this->renderView = $view;
+
+        return $this;
+    }
+
+    public function getRenderView(): ?string
+    {
+        return $this->evaluate($this->renderView)
+            ? view($this->renderView)
+            : null;
+    }
+
+    public function editorView(string $view): static
+    {
+        $this->editorView = $view;
+
+        return $this;
+    }
+
+    public function getEditorView(): ?string
+    {
+        return $this->evaluate($this->editorView)
+            ? view($this->editorView)
+            : null;
     }
 }

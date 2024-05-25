@@ -25,7 +25,7 @@ class TypistEditor extends Field
 
     protected array | Closure $mergeTags = [];
 
-    protected bool | Closure | null $relativePaths = null;
+    protected array | Closure $blocks = [];
 
     protected function setUp(): void
     {
@@ -94,6 +94,7 @@ class TypistEditor extends Field
             $this->getAction('AlignStartAction'),
             $this->getAction('AlignCenterAction'),
             $this->getAction('AlignEndAction'),
+            $this->getAction('AlertAction'),
         ];
     }
 
@@ -136,20 +137,20 @@ class TypistEditor extends Field
         return $this;
     }
 
-    public function getMergeTags(): ?array
+    public function getMergeTags(): array
     {
         return $this->evaluate($this->mergeTags) ?? [];
     }
 
-    public function relativePaths(array | Closure $relativePaths): static
+    public function blocks(array | Closure $blocks): static
     {
-        $this->relativePaths = $relativePaths;
+        $this->blocks = $blocks;
 
         return $this;
     }
 
-    public function useRelativePaths(): bool
+    public function getBlocks(): array
     {
-        return $this->evaluate($this->relativePaths) ?? false;
+        return $this->evaluate($this->blocks) ?? [];
     }
 }

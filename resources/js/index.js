@@ -23,6 +23,7 @@ import DetailsSummary from './extensions/Details/DetailsSummary.js'
 import MediaExtension from './extensions/MediaExtension.js'
 import { isEqual } from "lodash";
 import { BubbleMenu } from '@tiptap/extension-bubble-menu'
+import Block from './extensions/Block.js'
 
 window.editors = []
 
@@ -51,6 +52,7 @@ export default function typist({state, statePath, placeholder, mergeTags = []}) 
                     ClassExtension,
                     IdExtension,
                     StarterKit,
+                    Block,
                     LinkExtension,
                     MediaExtension,
                     Grid,
@@ -58,6 +60,9 @@ export default function typist({state, statePath, placeholder, mergeTags = []}) 
                     Details,
                     DetailsContent,
                     DetailsSummary,
+                    MergeTag.configure({
+                        mergeTags
+                    }),
                     Subscript,
                     Superscript,
                     Table.configure({
@@ -71,9 +76,6 @@ export default function typist({state, statePath, placeholder, mergeTags = []}) 
                     }),
                     TextStyle,
                     Underline,
-                    MergeTag.configure({
-                        mergeTags
-                    }),
                     BubbleMenu.configure({
                         element: _this.$refs.bubbleMenu,
                         tippyOptions: {
@@ -85,14 +87,19 @@ export default function typist({state, statePath, placeholder, mergeTags = []}) 
                             zIndex: 10,
                         },
                         shouldShow: ({ editor, from, to }) => {
-                            if (editor.isActive('link') || editor.isActive('media')) {
-                                return true
+                            if (
+                                editor.isActive('typistBlock') ||
+                                editor.isActive('slashExtension')
+                            ) {
+                                return false
                             }
 
-                            return from !== to && ! (
-                                editor.isActive('scribbleBlock') ||
-                                editor.isActive('slashExtension')
-                            )
+                            if (
+                                editor.isActive('link') ||
+                                editor.isActive('media')
+                            ) {
+                                return true
+                            }
                         },
                     })
                 ],
