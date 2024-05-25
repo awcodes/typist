@@ -1,0 +1,270 @@
+.typist-wrapper {
+    @apply relative h-full flex flex-col ring-1 ring-gray-950/10 rounded-lg shadow-sm ring-1 transition bg-white dark:ring-white/20 dark:bg-white/5;
+
+    .typist-toolbar {
+        @apply p-1 flex items-center justify-between border-b border-gray-950/10 pointer-events-none opacity-50 dark:border-white/5;
+
+        &.focused {
+            @apply pointer-events-auto opacity-100 transition;
+
+            .fi-ac-action.is-active {
+                @apply text-primary-600 dark:text-primary-500
+            }
+        }
+
+        .typist-toolbar-start,
+        .typist-toolbar-end {
+            @apply flex flex-wrap items-center;
+        }
+
+        .fi-ac-btn-group {
+            @apply bg-transparent ring-0 ps-2 pe-1 text-gray-400 dark:text-gray-400;
+        }
+
+        .fi-ac-action:not(.fi-ac-grouped-action) {
+            @apply w-8 h-8 text-gray-400 dark:text-gray-400;
+            margin: 0;
+
+            &:hover,
+            &:focus {
+                @apply text-primary-400 dark:text-primary-600;
+            }
+        }
+    }
+
+    .typist-content {
+        @apply flex h-full;
+    }
+
+    .typist-editor {
+        @apply min-h-24 max-h-[40rem] overflow-y-auto;
+
+        &:has(.ProseMirror-focused) {
+            @apply ring-1 ring-primary-600 dark:ring-primary-500;
+        }
+    }
+
+    .tiptap {
+        @apply p-4 text-gray-950 dark:text-white dark:placeholder:text-gray-500 bg-white/0 ps-3 pe-3;
+
+        &.ProseMirror-focused {
+            @apply outline-none;
+        }
+
+        :first-child {
+            @apply mt-0;
+        }
+
+        :last-child {
+            @apply mb-0;
+        }
+
+        &.ProseMirror-focused {
+            .ProseMirror-selectednode {
+                @apply outline-2 outline-offset-2 outline-dashed outline-gray-900/50 dark:outline-white/80;
+            }
+
+            .ProseMirror-gapcursor:after {
+                @apply border-gray-900/50 dark:border-white/80;
+            }
+
+            .node-scribbleBlock + .ProseMirror-gapcursor {
+                margin-top: 0.5rem;
+            }
+
+            .node-scribbleBlock + .ProseMirror-gapcursor + .node-scribbleBlock {
+                margin-top: 1rem;
+            }
+        }
+
+        > div + div {
+            margin-top: 1rem;
+        }
+
+        p.is-empty::before {
+            @apply text-gray-400 dark:text-gray-600;
+            content: attr(data-placeholder);
+            float: left;
+            height: 0;
+            pointer-events: none;
+        }
+
+        a {
+            @apply text-info-500;
+        }
+
+        .typist-grid {
+            @apply grid gap-4;
+
+            .typist-grid-column {
+                @apply border border-dashed border-gray-400 p-2 rounded-lg dark:border-gray-600;
+
+                > * + * {
+                    margin-block-start: 1rem;
+                }
+            }
+        }
+
+        @media (max-width: theme('screens.sm')) {
+            .typist-grid[data-stack-at="sm"] {
+                grid-template-columns: 1fr !important;
+
+                .typist-grid-column {
+                    grid-column: span 1 !important;
+                }
+            }
+        }
+
+        @media (max-width: theme('screens.md')) {
+            .typist-grid[data-stack-at="md"] {
+                grid-template-columns: 1fr !important;
+
+                .typist-grid-column {
+                    grid-column: span 1 !important;
+                }
+            }
+        }
+
+        @media (max-width: theme('screens.lg')) {
+            .typist-grid[data-stack-at="lg"] {
+                grid-template-columns: 1fr !important;
+
+                .typist-grid-column {
+                    grid-column: span 1 !important;
+                }
+            }
+        }
+
+        span[data-type="mergeTag"] {
+            @apply bg-primary-500/30 dark:bg-primary-500/50;
+        }
+
+        div[data-type="details"] {
+            @apply border border-dashed border-gray-400 rounded relative dark:border-gray-500;
+
+            summary {
+                @apply py-1 px-2 font-bold border-b border-gray-200 dark:border-gray-500;
+
+                &::marker {
+                    content: "";
+                    display: none;
+                }
+            }
+
+            div[data-type="details-content"] {
+                @apply p-2 h-auto;
+
+                > * + * {
+                    margin-block-start: 1rem;
+                }
+            }
+        }
+
+        table {
+            @apply border-collapse m-0 overflow-hidden w-full relative table-fixed;
+        }
+
+        table td,
+        table th {
+            @apply border border-gray-400 py-2 px-3 align-top min-w-4 bg-clip-padding dark:border-gray-600;
+        }
+
+        table td > *,
+        table th > * {
+            @apply mb-0;
+        }
+
+        table th {
+            @apply font-bold text-left bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-100;
+        }
+
+        table .selectedCell {
+            position: relative;
+        }
+
+        table .selectedCell:after {
+            background: rgba(200, 200, 255, 0.4);
+            content: "";
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            pointer-events: none;
+            position: absolute;
+            z-index: 2;
+        }
+
+        table .column-resize-handle {
+            background-color: #adf;
+            bottom: -2px;
+            position: absolute;
+            right: -2px;
+            pointer-events: none;
+            top: 0;
+            width: 4px;
+        }
+
+        table p {
+            margin: 0;
+        }
+
+        .tableWrapper {
+            padding: 1rem 0;
+            overflow-x: auto;
+        }
+
+        &.resize-cursor {
+            cursor: col-resize;
+        }
+    }
+
+    .typist-sidebar {
+        @apply hidden shrink-0 p-2 space-y-2 max-w-sm md:flex flex-col h-full pointer-events-none opacity-50 border-s border-gray-950/10 bg-gray-50 dark:border-white/5 dark:bg-gray-950/20;
+
+        .typist-sidebar-item {
+            @apply cursor-move flex items-center gap-2 rounded border text-xs px-3 py-2 bg-white dark:bg-gray-800 dark:border-gray-700;
+        }
+
+        &.focused {
+            @apply pointer-events-auto opacity-100 transition;
+        }
+    }
+
+    .typist-footer {
+        @apply p-2 text-xs text-gray-400 flex items-center justify-between border-t border-gray-950/10 dark:border-white/5 dark:text-gray-500;
+    }
+}
+
+.typist-bubble-menu {
+    @apply flex items-center gap-2 relative text-gray-200 dark:text-gray-800;
+
+    .divider {
+        @apply self-stretch w-0 mx-1 border-r border-gray-500 dark:border-gray-700;
+    }
+
+    button {
+        @apply text-gray-200 dark:text-gray-800 hover:text-primary-500 dark:hover:text-primary-600;
+
+        &.active {
+            @apply !text-gray-200 dark:!text-gray-800 bg-primary-500/80;
+        }
+    }
+
+    .link-preview {
+        @apply max-w-xs text-sm px-1 truncate overflow-x-hidden whitespace-nowrap;
+    }
+}
+
+.tippy-box[data-theme*="typist-"] {
+    @apply bg-gray-800 dark:bg-gray-300 shadow-md;
+
+    .tippy-arrow {
+        @apply text-gray-800 dark:text-gray-300;
+    }
+}
+
+.tippy-box[data-theme="typist-bubble"] {
+    .tippy-content {
+        @apply p-1;
+    }
+}
