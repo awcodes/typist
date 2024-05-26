@@ -3,15 +3,17 @@
 namespace Awcodes\Typist;
 
 use Awcodes\Typist\Testing\TestsTypist;
+use BladeUI\Icons\Exceptions\CannotRegisterIconSet;
 use BladeUI\Icons\Factory;
 use Filament\Support\Assets\AlpineComponent;
-use Filament\Support\Assets\Asset;
 use Filament\Support\Assets\Css;
 use Filament\Support\Facades\FilamentAsset;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Blade;
 use Livewire\Features\SupportTesting\Testable;
+use ReflectionException;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -24,11 +26,6 @@ class TypistServiceProvider extends PackageServiceProvider
 
     public function configurePackage(Package $package): void
     {
-        /*
-         * This class is a Package Service Provider
-         *
-         * More info: https://github.com/spatie/laravel-package-tools
-         */
         $package->name(static::$name)
             ->hasViews()
             ->hasTranslations()
@@ -36,12 +33,16 @@ class TypistServiceProvider extends PackageServiceProvider
             ->hasInstallCommand(function (InstallCommand $command) {
                 $command
                     ->publishConfigFile()
-                    ->publishMigrations()
-                    ->askToRunMigrations()
                     ->askToStarRepoOnGitHub('awcodes/typist');
             });
     }
 
+    /**
+     * @throws BindingResolutionException
+     * @throws CannotRegisterIconSet
+     * @throws BindingResolutionException
+     * @throws CannotRegisterIconSet
+     */
     public function packageRegistered(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/typist-icons.php', 'typist-icons');
@@ -57,6 +58,9 @@ class TypistServiceProvider extends PackageServiceProvider
         });
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function packageBooted(): void
     {
         FilamentAsset::register(
@@ -88,9 +92,6 @@ class TypistServiceProvider extends PackageServiceProvider
         return 'awcodes/typist';
     }
 
-    /**
-     * @return array<Asset>
-     */
     protected function getAssets(): array
     {
         return [
