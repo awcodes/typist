@@ -2,6 +2,7 @@
 
 namespace Awcodes\Typist;
 
+use Awcodes\Typist\Concerns\InteractsWithBlocks;
 use Awcodes\Typist\Concerns\InteractsWithMedia;
 use Awcodes\Typist\Support\ToolbarGroup;
 use Closure;
@@ -17,6 +18,7 @@ class TypistEditor extends Field
 {
     use HasPlaceholder;
     use HasExtraInputAttributes;
+    use InteractsWithBlocks;
     use InteractsWithMedia;
 
     protected string $view = 'typist::typist-editor';
@@ -25,11 +27,19 @@ class TypistEditor extends Field
 
     protected array | Closure $mergeTags = [];
 
-    protected array | Closure $blocks = [];
-
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->afterStateHydrated(function (TypistEditor $component, $state) {
+            if (! $state) {
+                return null;
+            }
+
+            $state = $this->renderBlockViews($state, $component);
+
+            $component->state($state);
+        });
 
         $this->afterStateUpdated(function (TypistEditor $component, Component $livewire): void {
             $livewire->validateOnly($component->getStatePath());
@@ -40,7 +50,7 @@ class TypistEditor extends Field
                 return null;
             }
 
-            return $state;
+            return $this->sanitizeBlocksBeforeSave($state);
         });
 
         $this->registerListeners([]);
@@ -50,17 +60,9 @@ class TypistEditor extends Field
 
     public function getActionsToRegister(): array
     {
-        return collect(File::allFiles(__DIR__ . '/Actions'))
-            ->map(
-                fn ($file) => Str::of($file->getRelativePathname())
-                    ->before('.php')
-                    ->replace('/', '\\')
-                    ->start('Awcodes\\Typist\\Actions\\')
-                    ->toString()
-            )
-            ->filter(fn ($action) => is_subclass_of($action, Action::class))
+        return collect(\Awcodes\Typist\Facades\Typist::getActions())
             ->map(function ($action) {
-                return fn (): Action => $action::make(class_basename($action));
+                return fn (): Action => $action;
             })
             ->all();
     }
@@ -140,17 +142,5 @@ class TypistEditor extends Field
     public function getMergeTags(): array
     {
         return $this->evaluate($this->mergeTags) ?? [];
-    }
-
-    public function blocks(array | Closure $blocks): static
-    {
-        $this->blocks = $blocks;
-
-        return $this;
-    }
-
-    public function getBlocks(): array
-    {
-        return $this->evaluate($this->blocks) ?? [];
     }
 }

@@ -70,10 +70,10 @@ class TypistAction extends Action
         return $this;
     }
 
-    public function getRenderView(): ?string
+    public function getRenderView(array $data = []): ?string
     {
         return $this->evaluate($this->renderView)
-            ? view($this->renderView)
+            ? view($this->renderView, $data)
             : null;
     }
 
@@ -84,10 +84,10 @@ class TypistAction extends Action
         return $this;
     }
 
-    public function getEditorView(): ?string
+    public function getEditorView(array $data = []): ?string
     {
         return $this->evaluate($this->editorView)
-            ? view($this->editorView)
+            ? view($this->editorView, $data)
             : null;
     }
 }

@@ -6,6 +6,8 @@ use Awcodes\Typist\TypistManager;
 use Illuminate\Support\Facades\Facade;
 
 /**
+ * @method array getActions()
+ *
  * @see TypistManager
  */
 class Typist extends Facade

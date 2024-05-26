@@ -2,27 +2,24 @@
 
 namespace Awcodes\Typist\Tiptap\Nodes;
 
-use Awcodes\Typist\ScribbleManager;
+use Awcodes\Typist\Facades\Typist;
 use Tiptap\Core\Node;
 
-class ScribbleBlock extends Node
+class TypistBlock extends Node
 {
-    public static $name = 'scribbleBlock';
+    public static $name = 'typistBlock';
 
     public function addAttributes(): array
     {
         return [
-            'id' => [
-                'default' => null,
-            ],
-            'type' => [
-                'default' => 'block',
-            ],
             'identifier' => [
                 'default' => null,
             ],
             'values' => [
                 'default' => [],
+            ],
+            'view' => [
+                'default' => null,
             ],
         ];
     }
@@ -31,7 +28,7 @@ class ScribbleBlock extends Node
     {
         return [
             [
-                'tag' => 'scribble-block',
+                'tag' => 'typist-block',
                 'getAttrs' => function ($DOMNode) {
                     return json_decode($DOMNode->nodeValue, true);
                 },
@@ -45,15 +42,15 @@ class ScribbleBlock extends Node
         $view = null;
 
         if ($data) {
-            foreach (app(ScribbleManager::class)->getRegisteredTools() as $tool) {
-                if ($tool->getIdentifier() === $data['identifier']) {
-                    $view = $tool->getRenderedView((array) $data['values']);
+            foreach (Typist::getActions() as $action) {
+                if ($action->getName() === $data['identifier']) {
+                    $view = $action->getRenderView((array) $data['values']);
                 }
             }
         }
 
         return [
-            'content' => '<div class="scribble-block">' . $view . '</div>',
+            'content' => '<div class="typist-block">' . $view . '</div>',
         ];
     }
 }

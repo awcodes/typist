@@ -32,11 +32,14 @@ class Alert extends TypistAction
                 Components\Checkbox::make('dismissible'),
                 Components\Textarea::make('message'),
             ])
-            ->action(function (TypistEditor $component, array $arguments, array $data): void {
+            ->action(function (TypistEditor $component, array $arguments, array $data, $action): void {
                 $statePath = $component->getStatePath();
-                $values = $data;
-                $view = view('typist::components.alert', $data)->toHtml();
-                $data = Js::from(['identifier' => $this->getName(), 'values' => $values, 'view' => $view]);
+
+                $data = Js::from([
+                    'identifier' => $this->getName(),
+                    'values' => $data,
+                    'view' => $action->getEditorView($data),
+                ]);
 
                 $component->getLivewire()->js(<<<JS
                     window.editors['$statePath'].chain().focus().insertBlock($data).run()
@@ -45,6 +48,8 @@ class Alert extends TypistAction
             ->after(function (TypistEditor $component): void {
                 $component->getLivewire()->dispatch('focus-editor', statePath: $component->getStatePath());
             })
-            ->active('typistBlock', ['identifier' => $this->getName()]);
+            ->active('typistBlock', ['identifier' => $this->getName()])
+            ->editorView('typist::components.alert')
+            ->renderView('typist::components.alert');
     }
 }
