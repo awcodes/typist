@@ -160,10 +160,10 @@ class Faker
 
     public function grid(array $cols = [1, 1, 1]): static
     {
-        $this->output .= '<div class="scribble-grid" data-type="responsive" data-columns="' . count($cols) . '" style="grid-template-columns: repeat(' . count($cols) . ', 1fr);" data-stack-at="md">';
+        $this->output .= '<div class="typist-grid" data-type="responsive" data-columns="' . count($cols) . '" style="grid-template-columns: repeat(' . count($cols) . ', 1fr);" data-stack-at="md">';
 
         foreach ($cols as $col) {
-            $this->output .= '<div class="scribble-grid-column" data-col-span="' . $col . '" style="grid-column: span 1;"><h2>' . Str::title($this->faker->words(rand(3, 8), true)) . '</h2><p>' . $this->faker->paragraph() . '</p></div>';
+            $this->output .= '<div class="typist-grid-column" data-col-span="' . $col . '" style="grid-column: span 1;"><h2>' . Str::title($this->faker->words(rand(3, 8), true)) . '</h2><p>' . $this->faker->paragraph() . '</p></div>';
         }
 
         $this->output .= '</div>';
@@ -171,9 +171,9 @@ class Faker
         return $this;
     }
 
-    public function block(string $type = 'scribbleBlock', string $identifier = 'scribble-block', ?array $values = []): static
+    public function block(string $identifier = 'AlertAction', ?array $values = []): static
     {
-        $this->output .= '<scribble-block>' . json_encode(['type' => $type, 'identifier' => $identifier, 'values' => $values]) . '</scribble-block>';
+        $this->output .= '<typist-block>' . json_encode(['identifier' => $identifier, 'values' => $values]) . '</typist-block>';
 
         return $this;
     }
