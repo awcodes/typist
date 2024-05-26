@@ -2,7 +2,6 @@
 
 namespace Awcodes\Typist\Support;
 
-use Awcodes\Typist\Facades\Typist;
 use Awcodes\Typist\Tiptap\Extensions as CoreExtensions;
 use Awcodes\Typist\Tiptap\Marks as CoreMarks;
 use Awcodes\Typist\Tiptap\Nodes as CoreNodes;

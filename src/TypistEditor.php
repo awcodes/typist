@@ -10,14 +10,12 @@ use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Concerns\HasExtraInputAttributes;
 use Filament\Forms\Components\Field;
 use Filament\Support\Concerns\HasPlaceholder;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 use Livewire\Component;
 
 class TypistEditor extends Field
 {
-    use HasPlaceholder;
     use HasExtraInputAttributes;
+    use HasPlaceholder;
     use InteractsWithBlocks;
     use InteractsWithMedia;
 

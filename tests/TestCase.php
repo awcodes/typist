@@ -2,6 +2,7 @@
 
 namespace Awcodes\Typist\Tests;
 
+use Awcodes\Typist\TypistServiceProvider;
 use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
 use BladeUI\Icons\BladeIconsServiceProvider;
 use Filament\Actions\ActionsServiceProvider;
@@ -16,7 +17,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
-use Awcodes\Typist\TypistServiceProvider;
 
 class TestCase extends Orchestra
 {
