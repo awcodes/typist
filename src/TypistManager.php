@@ -45,4 +45,9 @@ class TypistManager
     {
         return $this->actions ?? [];
     }
+
+    public function getAction(string $name): ?Action
+    {
+        return $this->getActions()[$name] ?? null;
+    }
 }

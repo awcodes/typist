@@ -24,10 +24,11 @@ import MediaExtension from './extensions/MediaExtension.js'
 import { isEqual } from "lodash";
 import { BubbleMenu } from '@tiptap/extension-bubble-menu'
 import Block from './extensions/Block.js'
+import SlashExtension from './extensions/SlashExtension.js'
 
 window.editors = []
 
-export default function typist({state, statePath, placeholder, mergeTags = []}) {
+export default function typist({state, statePath, placeholder, mergeTags = [], suggestions = []}) {
     let editor
 
     return {
@@ -62,6 +63,10 @@ export default function typist({state, statePath, placeholder, mergeTags = []}) 
                     DetailsSummary,
                     MergeTag.configure({
                         mergeTags
+                    }),
+                    SlashExtension.configure({
+                        suggestions,
+                        appendTo: _this.$root
                     }),
                     Subscript,
                     Superscript,

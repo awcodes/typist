@@ -2,9 +2,6 @@
 
 namespace Awcodes\Typist;
 
-use Awcodes\Typist\Concerns\InteractsWithBlocks;
-use Awcodes\Typist\Concerns\InteractsWithMedia;
-use Awcodes\Typist\Support\ToolbarGroup;
 use Closure;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Concerns\HasExtraInputAttributes;
@@ -14,16 +11,19 @@ use Livewire\Component;
 
 class TypistEditor extends Field
 {
+    use Concerns\HasBubbleMenus;
+    use Concerns\HasControls;
+    use Concerns\HasMergeTags;
+    use Concerns\HasSuggestions;
+    use Concerns\HasToolbar;
+    use Concerns\InteractsWithBlocks;
+    use Concerns\InteractsWithMedia;
     use HasExtraInputAttributes;
     use HasPlaceholder;
-    use InteractsWithBlocks;
-    use InteractsWithMedia;
 
     protected string $view = 'typist::typist-editor';
 
     protected array | Closure | null $headingLevels = null;
-
-    protected array | Closure $mergeTags = [];
 
     protected function setUp(): void
     {
@@ -51,7 +51,13 @@ class TypistEditor extends Field
             return $this->sanitizeBlocksBeforeSave($state);
         });
 
-        $this->registerListeners([]);
+        $this->registerListeners([
+            'typist::handleAction' => [
+                function (TypistEditor $component, string $name) {
+                    $component->getLivewire()->mountFormComponentAction($component->getStatePath(), $name);
+                },
+            ],
+        ]);
 
         $this->registerActions($this->getActionsToRegister());
     }
@@ -60,62 +66,11 @@ class TypistEditor extends Field
     {
         return collect(\Awcodes\Typist\Facades\Typist::getActions())
             ->map(function ($action) {
+                $this->prepareAction($action);
+
                 return fn (): Action => $action;
             })
             ->all();
-    }
-
-    public function getToolbar(): array
-    {
-        return [
-            ToolbarGroup::make([
-                $this->getAction('ParagraphAction'),
-                $this->getAction('HeadingOneAction'),
-                $this->getAction('HeadingTwoAction'),
-                $this->getAction('HeadingThreeAction'),
-                $this->getAction('HeadingFourAction'),
-                $this->getAction('HeadingFiveAction'),
-                $this->getAction('HeadingSixAction'),
-            ]),
-            $this->getAction('BoldAction'),
-            $this->getAction('ItalicAction'),
-            $this->getAction('StrikeAction'),
-            $this->getAction('UnderlineAction'),
-            $this->getAction('LinkAction'),
-            $this->getAction('MediaAction'),
-            $this->getAction('BulletListAction'),
-            $this->getAction('OrderedListAction'),
-            $this->getAction('BlockquoteAction'),
-            $this->getAction('HorizontalRuleAction'),
-            $this->getAction('CodeBlockAction'),
-            $this->getAction('CodeAction'),
-            $this->getAction('DetailsAction'),
-            $this->getAction('GridAction'),
-            $this->getAction('AlignStartAction'),
-            $this->getAction('AlignCenterAction'),
-            $this->getAction('AlignEndAction'),
-            $this->getAction('AlertAction'),
-        ];
-    }
-
-    public function getControls(): array
-    {
-        return [
-            $this->getAction('UndoAction'),
-            $this->getAction('RedoAction'),
-            $this->getAction('ClearContentAction'),
-            $this->getAction('SidebarAction'),
-        ];
-    }
-
-    public function getBubbleTools(): array
-    {
-        return [
-            $this->getAction('LinkAction'),
-            $this->getAction('UnlinkAction'),
-            $this->getAction('MediaAction'),
-            $this->getAction('RemoveMediaAction'),
-        ];
     }
 
     public function headingLevels(array | Closure $levels): static
@@ -128,17 +83,5 @@ class TypistEditor extends Field
     public function getHeadingLevels(): array
     {
         return $this->evaluate($this->headingLevels) ?? [1, 2, 3, 4, 5, 6];
-    }
-
-    public function mergeTags(array | Closure $mergeTags): static
-    {
-        $this->mergeTags = $mergeTags;
-
-        return $this;
-    }
-
-    public function getMergeTags(): array
-    {
-        return $this->evaluate($this->mergeTags) ?? [];
     }
 }

@@ -7,5 +7,4 @@
     :size="$getSize()"
     class="fi-ac-icon-btn-action"
     :active="$getActive()"
-    :statePath="$getComponent()->getStatePath()"
 />

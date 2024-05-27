@@ -14,6 +14,7 @@
             statePath: @js($statePath),
             placeholder: @js($getPlaceholder()),
             mergeTags: @js($mergeTags),
+            suggestions: @js($getSuggestions())
         })"
         id="{{ 'typist-wrapper-' . $statePath }}"
         @class([
@@ -28,8 +29,8 @@
             <div class="typist-toolbar" x-bind:class="{
                 'focused': isFocused
             }">
-                <x-typist::actions class="typist-toolbar-start" :actions="$getToolbar()" />
-                <x-typist::actions class="typist-toolbar-end" :actions="$getControls()" />
+                <x-typist::toolbar-actions class="typist-toolbar-start" :actions="$getToolbar()" />
+                <x-typist::toolbar-actions class="typist-toolbar-end" :actions="$getControls()" />
             </div>
         </template>
 
@@ -48,15 +49,9 @@
                         this.$wire.mountFormComponentAction('{{ $statePath }}', action, attrs)
                     }
                 }" x-on:selection-update.window="updatedAt = Date.now()">
-                    <div class="typist-bubble-menu" x-show="isActive('link', updatedAt)" x-cloak>
-                        <span x-text="getAttrs('link', updatedAt).href" class="max-w-xs truncate overflow-hidden whitespace-nowrap"></span>
-                        {{ $getAction('LinkAction')->active(null)->alpineClickHandler("openModal('LinkAction', 'link')") }}
-                        {{ $getAction('UnlinkAction')->active(null) }}
-                    </div>
-                    <div class="typist-bubble-menu" x-show="isActive('media', updatedAt)" x-cloak>
-                        {{ $getAction('MediaAction')->active(null)->alpineClickHandler("openModal('MediaAction', 'media')") }}
-                        {{ $getAction('RemoveMediaAction')->active(null) }}
-                    </div>
+                    @foreach($getBubbleMenus() as $bubbleMenu)
+                        <x-dynamic-component :component="$bubbleMenu->getView()" :menu="$bubbleMenu" />
+                    @endforeach
                 </div>
             </div>
         </div>

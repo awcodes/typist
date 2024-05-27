@@ -4,9 +4,7 @@ namespace Awcodes\Typist;
 
 use Filament\Forms\Components\Actions\Action;
 use Filament\Support\Concerns\HasExtraAlpineAttributes;
-use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Js;
-use Illuminate\Support\Str;
 
 class TypistAction extends Action
 {
@@ -27,16 +25,6 @@ class TypistAction extends Action
         parent::setUp();
 
         $this->color('gray');
-    }
-
-    public function getName(): ?string
-    {
-        return (string) Str::of($this->evaluate($this->name))->before('Action')->append('Action');
-    }
-
-    public function getLabel(): string | Htmlable | null
-    {
-        return (string) Str::of(parent::getLabel())->before('action');
     }
 
     public function active(?string $name = null, array $attributes = []): static

@@ -1,19 +1,19 @@
 import { Extension } from '@tiptap/core'
 import Suggestion from '@tiptap/suggestion'
-import CommandsList from '../components/CommandsList.svelte'
 import tippy from 'tippy.js'
 import { PluginKey } from '@tiptap/pm/state'
+import { convertValues } from '../utils.js'
 
 export default Extension.create({
     name: 'slashExtension',
 
     addOptions() {
         return {
-            tools: {
+            suggestions: {
                 default: [],
             },
-            statePath: {
-                default: null,
+            appendTo: {
+                default: document.body
             }
         }
     },
@@ -24,12 +24,16 @@ export default Extension.create({
                 editor: this.editor,
                 char: '/',
                 command: ({ editor, range, props }) => {
-                    props.command({ editor, range })
+                    editor
+                        .chain()
+                        .focus()
+                        .deleteRange(range)
+                        .run()
                 },
                 startOfLine: true,
                 pluginKey: new PluginKey('slashExtension'),
                 items: ({ query }) => {
-                    return this.options.tools.filter(item => item.label.toLowerCase().includes(query.toLowerCase()))
+                    return this.options.suggestions.filter(item => item.label.toLowerCase().includes(query.toLowerCase()))
                 },
                 render: () => {
                     let component
@@ -41,61 +45,115 @@ export default Extension.create({
                                 return
                             }
 
-                            const element = document.createElement('div')
+                            const html = `
+                                <div
+                                    x-data='{
 
-                            component = new CommandsList({
-                                target: element,
-                                props: {
-                                    items: props.items,
-                                    editor: props.editor,
-                                    range: props.range,
-                                    statePath: this.options.statePath,
-                                }
-                            })
+                                        items: ${JSON.stringify(props.items)},
+
+                                        selectedIndex: 0,
+
+                                        init: function () {
+                                            this.$el.parentElement.addEventListener(
+                                                "suggestions-key-down",
+                                                (event) => this.onKeyDown(event.detail),
+                                            );
+
+                                            this.$el.parentElement.addEventListener(
+                                                "suggestions-update-items",
+                                                (event) => (items = event.detail),
+                                            );
+                                        },
+
+                                        onKeyDown: function (event) {
+                                            if (event.key === "ArrowUp") {
+                                                event.preventDefault();
+                                                this.selectedIndex = ((this.selectedIndex + this.items.length) - 1) % this.items.length;
+
+                                                return true;
+                                            };
+
+                                            if (event.key === "ArrowDown") {
+                                                event.preventDefault();
+                                                this.selectedIndex = (this.selectedIndex + 1) % this.items.length;
+
+                                                return true;
+                                            };
+
+                                            if (event.key === "Enter") {
+                                                event.preventDefault();
+                                                this.selectItem(this.selectedIndex);
+
+                                                return true;
+                                            };
+
+                                            return false;
+                                        },
+
+                                        selectItem: function (index) {
+                                            const item = this.items[index];
+
+                                            if (! item) {
+                                                return;
+                                            };
+
+                                            this.$wire.dispatchFormEvent("typist::handleAction", item.name);
+                                            $el.parentElement.dispatchEvent(new CustomEvent("suggestions-select", { detail: { item } }));
+                                        },
+
+                                    }'
+                                    class="typist-suggestions"
+                                >
+                                    <template x-for="(item, index) in items" :key="index">
+                                        <button
+                                            type="button"
+                                            x-on:click="selectItem(index)"
+                                            :class="{ 'bg-primary-500': index === selectedIndex }"
+                                            class="typist-suggestion-item"
+                                        >
+                                            <span x-html="item.icon"></span>
+                                            <span x-text="item.label"></span>
+                                        </button>
+                                    </template>
+                                </div>
+                            `
+
+                            component = document.createElement('div');
+                            component.innerHTML = html;
+                            component.addEventListener('suggestions-select', (event) => {
+                                props.command({ ...event.detail.item });
+                            });
 
                             popup = tippy('body', {
                                 getReferenceClientRect: props.clientRect,
-                                appendTo: () => document.body,
-                                content: component.$$.root,
+                                appendTo: this.options.appendTo,
+                                content: component,
+                                allowHTML: true,
                                 showOnCreate: true,
                                 interactive: true,
                                 trigger: 'manual',
                                 placement: 'bottom-start',
-                                theme: 'scribble-panel',
-                                arrow: false,
-                                zIndex: 40,
-                            })
+                            });
                         },
                         onUpdate(props) {
-                            component.$set({
-                                items: props.items,
-                                editor: props.editor,
-                                range: props.range,
-                            })
+                            if (!props.items.length) {
+                                popup[0].hide();
 
-                            component.resetIndex()
-
-                            if (!props.clientRect) {
-                                return
+                                return;
                             }
 
-                            popup[0].setProps({
-                                getReferenceClientRect: props.clientRect
-                            })
+                            popup[0].show();
+
+                            component.dispatchEvent(new CustomEvent('suggestions-update-items', { detail: props.items }));
                         },
+
                         onKeyDown(props) {
-                            if (props.event.key === 'Escape') {
-                                popup[0].hide()
-
-                                return true
-                            }
-
-                            return component.onKeyDown(props)
+                            component.dispatchEvent(new CustomEvent('suggestions-key-down', { detail: props.event }));
                         },
+
                         onExit() {
-                            popup[0].destroy()
-                            component.$destroy()
-                        }
+                            popup[0].destroy();
+                        },
                     }
                 }
             }),

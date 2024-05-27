@@ -1,4 +1,5 @@
 import { Node, NodePos } from '@tiptap/core'
+import { convertValues } from '../utils.js'
 
 export default Node.create({
     name: 'typistBlock',
@@ -102,21 +103,6 @@ export default Node.create({
     addNodeView() {
         return ({ editor, node }) => {
             const statePath = editor.storage.statePathExtension.statePath
-
-            function convertValues(payload) {
-                let string = '{'
-                const keys = Object.keys(payload)
-                const values = Object.values(payload)
-                values.forEach((value, index) => {
-                    if (typeof value === 'object') {
-                        convertValues(value)
-                    } else {
-                        string += `${keys[index]}: '${value}',`
-                    }
-                })
-                string += '}'
-                return string;
-            }
 
             const container = document.createElement('div')
             const controls = `
