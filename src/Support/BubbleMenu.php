@@ -5,7 +5,6 @@ namespace Awcodes\Typist\Support;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\StaticAction;
 use Filament\Support\Enums\ActionSize;
-use Filament\Support\Enums\IconPosition;
 
 class BubbleMenu extends ActionGroup
 {

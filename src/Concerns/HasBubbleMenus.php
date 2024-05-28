@@ -2,7 +2,6 @@
 
 namespace Awcodes\Typist\Concerns;
 
-use Awcodes\Typist\Facades\Typist;
 use Awcodes\Typist\Support\BubbleMenu;
 use Closure;
 

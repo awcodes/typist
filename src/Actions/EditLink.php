@@ -2,9 +2,7 @@
 
 namespace Awcodes\Typist\Actions;
 
-use Awcodes\Typist\TypistAction;
 use Awcodes\Typist\TypistEditor;
-use Filament\Forms\Components;
 use Illuminate\Support\Js;
 
 class EditLink extends Link

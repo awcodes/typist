@@ -19,5 +19,4 @@ trait HasMergeTags
     {
         return $this->evaluate($this->mergeTags) ?? [];
     }
-
 }
