@@ -11,9 +11,9 @@ class OrderedList extends TypistAction
         parent::setUp();
 
         $this
-            ->icon('typist-list-ordered')
+            ->icon(icon: 'typist-list-ordered')
             ->iconButton()
-            ->alpineClickHandler("handleAction('toggleOrderedList')")
-            ->active('unorderedList');
+            ->command(name: 'toggleOrderedList')
+            ->active(name: 'unorderedList');
     }
 }

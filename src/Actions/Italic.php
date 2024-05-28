@@ -11,9 +11,9 @@ class Italic extends TypistAction
         parent::setUp();
 
         $this
-            ->icon('typist-italic')
+            ->icon(icon: 'typist-italic')
             ->iconButton()
-            ->alpineClickHandler('handleAction(\'toggleItalic\')')
-            ->active('italic');
+            ->command(name: 'toggleItalic')
+            ->active(name: 'italic');
     }
 }

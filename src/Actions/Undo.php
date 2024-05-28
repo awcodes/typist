@@ -11,8 +11,8 @@ class Undo extends TypistAction
         parent::setUp();
 
         $this
-            ->icon('typist-undo')
+            ->icon(icon: 'typist-undo')
             ->iconButton()
-            ->alpineClickHandler("handleAction('undo')");
+            ->command(name: 'undo');
     }
 }

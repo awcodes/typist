@@ -11,9 +11,9 @@ class CodeBlock extends TypistAction
         parent::setUp();
 
         $this
-            ->icon('typist-code-block')
+            ->icon(icon: 'typist-code-block')
             ->iconButton()
-            ->alpineClickHandler("handleAction('toggleCodeBlock')")
-            ->active('codeBlock');
+            ->command(name: 'toggleCodeBlock')
+            ->active(name: 'codeBlock');
     }
 }

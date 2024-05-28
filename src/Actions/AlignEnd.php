@@ -11,9 +11,9 @@ class AlignEnd extends TypistAction
         parent::setUp();
 
         $this
-            ->icon('typist-align-end')
+            ->icon(icon: 'typist-align-end')
             ->iconButton()
-            ->alpineClickHandler("handleAction('setTextAlign', 'end')")
+            ->command(name: 'setTextAlign', attributes: 'end')
             ->active(attributes: ['textAlign' => 'end']);
     }
 }

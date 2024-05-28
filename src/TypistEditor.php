@@ -51,13 +51,7 @@ class TypistEditor extends Field
             return $this->sanitizeBlocksBeforeSave($state);
         });
 
-        $this->registerListeners([
-            'typist::handleAction' => [
-                function (TypistEditor $component, string $name) {
-                    $component->getLivewire()->mountFormComponentAction($component->getStatePath(), $name);
-                },
-            ],
-        ]);
+        $this->registerListeners([]);
 
         $this->registerActions($this->getActionsToRegister());
     }

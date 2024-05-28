@@ -11,9 +11,9 @@ class AlignJustify extends TypistAction
         parent::setUp();
 
         $this
-            ->icon('typist-align-justify')
+            ->icon(icon: 'typist-align-justify')
             ->iconButton()
-            ->alpineClickHandler("handleAction('setTextAlign', 'justify')")
+            ->command(name: 'setTextAlign', attributes: 'justify')
             ->active(attributes: ['textAlign' => 'justify']);
     }
 }

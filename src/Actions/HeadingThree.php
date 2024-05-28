@@ -12,9 +12,10 @@ class HeadingThree extends TypistAction
         parent::setUp();
 
         $this
-            ->icon('typist-heading-three')
+            ->icon(icon: 'typist-heading-three')
             ->iconButton()
-            ->alpineClickHandler("handleAction('toggleHeading', {level: 3}); close()")
+            ->command(name: 'toggleHeading', attributes: ['level' => 3])
+            ->close()
             ->visible(function (TypistEditor $component) {
                 return in_array(3, $component->getHeadingLevels());
             })

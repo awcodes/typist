@@ -24,6 +24,7 @@
         x-on:click.away="isFocused = false"
         x-on:focus-editor.window="focusEditor($event)"
         x-on:dragged-merge-tag.stop="insertMergeTag($event)"
+        x-on:handle-suggestion.window="handleSuggestion($event)"
     >
         <template x-if="isLoaded()">
             <div class="typist-toolbar" x-bind:class="{
@@ -45,8 +46,7 @@
                         return window.editors['{{ $statePath }}'].getAttributes(name)
                     },
                     openModal(action, name) {
-                        const attrs = this.getAttrs(name)
-                        this.$wire.mountFormComponentAction('{{ $statePath }}', action, attrs)
+                        this.$wire.mountFormComponentAction('{{ $statePath }}', action, this.getAttrs(name))
                     }
                 }" x-on:selection-update.window="updatedAt = Date.now()">
                     @foreach($getBubbleMenus() as $bubbleMenu)

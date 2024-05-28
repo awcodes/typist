@@ -24,11 +24,24 @@ export default Extension.create({
                 editor: this.editor,
                 char: '/',
                 command: ({ editor, range, props }) => {
+                    const nodeAfter = editor.view.state.selection.$to.nodeAfter
+                    const overrideSpace = nodeAfter?.text?.startsWith(' ')
+
+                    if (overrideSpace) {
+                        range.to += 1
+                    }
+
                     editor
                         .chain()
-                        .focus()
                         .deleteRange(range)
                         .run()
+
+                    window.dispatchEvent(new CustomEvent('handle-suggestion', {
+                        detail: {
+                            item: props,
+                            statePath: editor.storage.statePathExtension.statePath,
+                        }
+                    }))
                 },
                 startOfLine: true,
                 pluginKey: new PluginKey('slashExtension'),
@@ -97,7 +110,6 @@ export default Extension.create({
                                                 return;
                                             };
 
-                                            this.$wire.dispatchFormEvent("typist::handleAction", item.name);
                                             $el.parentElement.dispatchEvent(new CustomEvent("suggestions-select", { detail: { item } }));
                                         },
 
@@ -107,7 +119,7 @@ export default Extension.create({
                                     <template x-for="(item, index) in items" :key="index">
                                         <button
                                             type="button"
-                                            x-on:click="selectItem(index)"
+                                            x-on:click.prevent="selectItem(index)"
                                             :class="{ 'bg-primary-500': index === selectedIndex }"
                                             class="typist-suggestion-item"
                                         >
@@ -126,7 +138,7 @@ export default Extension.create({
 
                             popup = tippy('body', {
                                 getReferenceClientRect: props.clientRect,
-                                appendTo: this.options.appendTo,
+                                appendTo: document.body,
                                 content: component,
                                 allowHTML: true,
                                 showOnCreate: true,

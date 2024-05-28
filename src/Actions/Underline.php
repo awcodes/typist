@@ -11,9 +11,9 @@ class Underline extends TypistAction
         parent::setUp();
 
         $this
-            ->icon('typist-underline')
+            ->icon(icon: 'typist-underline')
             ->iconButton()
-            ->alpineClickHandler("handleAction('toggleUnderline')")
-            ->active('underline');
+            ->command(name: 'toggleUnderline')
+            ->active(name: 'underline');
     }
 }

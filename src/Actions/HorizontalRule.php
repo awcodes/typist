@@ -11,8 +11,8 @@ class HorizontalRule extends TypistAction
         parent::setUp();
 
         $this
-            ->icon('typist-hr')
+            ->icon(icon: 'typist-hr')
             ->iconButton()
-            ->alpineClickHandler("handleAction('setHorizontalRule')");
+            ->command(name: 'setHorizontalRule');
     }
 }

@@ -11,8 +11,8 @@ class Redo extends TypistAction
         parent::setUp();
 
         $this
-            ->icon('typist-redo')
+            ->icon(icon: 'typist-redo')
             ->iconButton()
-            ->alpineClickHandler("handleAction('redo')");
+            ->command(name: 'redo');
     }
 }

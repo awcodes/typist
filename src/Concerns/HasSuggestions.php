@@ -31,14 +31,13 @@ trait HasSuggestions
 
         return collect($suggestions)
             ->transform(function ($suggestion) {
-                $instance = get_class($suggestion);
-                $instance = $instance::make($suggestion->getName())->component($this);
-
                 return [
-                    'name' => $instance->getName() ?? 'group',
-                    'label' => $instance->getLabel(),
-                    'icon' => Blade::render("@svg('{$instance->getIcon()}', 'w-5 h-5')"),
-                    'actionType' => $instance->getAlpineClickHandler() ? 'alpine' : 'livewire',
+                    'name' => $suggestion->getName() ?? 'group',
+                    'label' => $suggestion->getLabel(),
+                    'icon' => Blade::render("@svg('{$suggestion->getIcon()}', 'w-5 h-5')"),
+                    'actionType' => $suggestion->getAlpineClickHandler() ? 'alpine' : 'livewire',
+                    'commandName' => $suggestion->getCommandName(),
+                    'commandAttributes' => $suggestion->getCommandAttributes(),
                 ];
             })->all();
     }
@@ -46,15 +45,15 @@ trait HasSuggestions
     public function getDefaultSuggestions(): array
     {
         return [
-            Typist::getAction('Media'),
-            Typist::getAction('BulletList'),
-            Typist::getAction('OrderedList'),
-            Typist::getAction('Blockquote'),
-            Typist::getAction('HorizontalRule'),
-            Typist::getAction('CodeBlock'),
-            Typist::getAction('Details'),
-            Typist::getAction('Grid'),
-            Typist::getAction('Alert'),
+            $this->getAction('Media'),
+            $this->getAction('BulletList'),
+            $this->getAction('OrderedList'),
+            $this->getAction('Blockquote'),
+            $this->getAction('HorizontalRule'),
+            $this->getAction('CodeBlock'),
+            $this->getAction('Details'),
+            $this->getAction('Grid'),
+            $this->getAction('Alert'),
         ];
     }
 }

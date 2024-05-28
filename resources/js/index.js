@@ -146,7 +146,19 @@ export default function typist({state, statePath, placeholder, mergeTags = [], s
             return window.editors[statePath] ?? editor;
         },
         handleAction(command, args = null) {
-            editor.chain()[command](args).focus().run()
+            editor.chain().focus()[command](args).run()
+        },
+        handleSuggestion(event) {
+            let path = window.editors[event.detail.statePath].storage.statePathExtension.statePath
+            if (event.detail.statePath === path) {
+                if (event.detail.item.actionType === "alpine") {
+                    this.$nextTick(() => {
+                        this.handleAction(event.detail.item.commandName, event.detail.item.commandAttributes);
+                    })
+                } else {
+                    this.$wire.mountFormComponentAction(path, event.detail.item.name);
+                }
+            }
         },
         isActive(attrs) {
             return editor.isActive(attrs)

@@ -16,9 +16,6 @@ class Link extends TypistAction
         $this
             ->icon('typist-link')
             ->iconButton()
-            ->fillForm(function (array $arguments) {
-                return $arguments;
-            })
             ->form([
                 Components\Grid::make(['md' => 3])
                     ->schema([
@@ -44,9 +41,10 @@ class Link extends TypistAction
             ])
             ->action(function (TypistEditor $component, array $arguments, array $data): void {
                 $statePath = $component->getStatePath();
+                ray($statePath);
                 $data = Js::from($data);
                 $component->getLivewire()->js(<<<JS
-                    window.editors['$statePath'].chain().focus().extendMarkRange('link').setLink($data).run()
+                    window.editors['$statePath'].chain().focus().toggleLink($data).run()
                 JS);
             })
             ->after(function (TypistEditor $component): void {

@@ -11,9 +11,9 @@ class Details extends TypistAction
         parent::setUp();
 
         $this
-            ->icon('typist-details')
+            ->icon(icon: 'typist-details')
             ->iconButton()
-            ->alpineClickHandler("handleAction('setDetails')")
-            ->active('details');
+            ->command(name: 'setDetails')
+            ->active(name: 'details');
     }
 }
