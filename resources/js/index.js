@@ -180,6 +180,15 @@ export default function typist({state, statePath, placeholder, mergeTags = [], s
                 this.updatedAt = Date.now()
             }
         },
+        blur() {
+            const tippy = this.$el.querySelectorAll('[data-tippy-content]')
+            if (tippy) {
+                tippy.forEach((item) => item.destroy())
+            }
+
+            this.isFocused = false
+            this.updatedAt = Date.now()
+        },
         insertMergeTag(event) {
             editor.commands.insertMergeTag({
                 tag: event.detail.tag,

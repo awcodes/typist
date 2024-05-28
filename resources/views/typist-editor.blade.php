@@ -21,7 +21,7 @@
             'typist-wrapper',
             'invalid' => $errors->has($statePath),
         ])
-        x-on:click.away="isFocused = false"
+        x-on:click.away="blur()"
         x-on:focus-editor.window="focusEditor($event)"
         x-on:dragged-merge-tag.stop="insertMergeTag($event)"
         x-on:handle-suggestion.window="handleSuggestion($event)"
@@ -50,7 +50,7 @@
                     }
                 }" x-on:selection-update.window="updatedAt = Date.now()">
                     @foreach($getBubbleMenus() as $bubbleMenu)
-                        <x-dynamic-component :component="$bubbleMenu->getView()" :menu="$bubbleMenu" />
+                        <x-dynamic-component :component="$bubbleMenu->getView()" :menu="$bubbleMenu" :editor="$field" />
                     @endforeach
                 </div>
             </div>
