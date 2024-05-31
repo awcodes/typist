@@ -6,7 +6,7 @@ export function convertValues(payload) {
         if (value && typeof value === 'object') {
             convertValues(value)
         } else {
-            const newValue = value ? `"${value}"` : value
+            const newValue = value ? `\u0022${value}\u0022` : value
             string += `${keys[index]}: ${newValue},`
         }
     })

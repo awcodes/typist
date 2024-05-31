@@ -2,6 +2,7 @@
 
 namespace Awcodes\Typist;
 
+use Closure;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Support\Concerns\HasExtraAlpineAttributes;
 use Illuminate\Support\Js;
@@ -11,13 +12,13 @@ class TypistAction extends Action
     use Concerns\HasTiptapCommands;
     use HasExtraAlpineAttributes;
 
-    public const ICON_BUTTON_VIEW = 'typist::components.icon-button-action';
-
     protected ?string $active = null;
 
     protected ?string $renderView = null;
 
     protected ?string $editorView = null;
+
+    protected bool | Closure | null $showInSidebar = null;
 
     protected function setUp(): void
     {
@@ -26,7 +27,7 @@ class TypistAction extends Action
         $this->color('gray');
     }
 
-    public function active(?string $name = null, array $attributes = []): static
+    public function active(?string $name = null, string | array $attributes = []): static
     {
         $string = '';
 
@@ -64,6 +65,14 @@ class TypistAction extends Action
             : null;
     }
 
+    public function getExtraAttributes(): array
+    {
+        return array_merge(
+            parent::getExtraAttributes(),
+            $this->getActive() ? ['x-bind:class' => '{ \'is-active\': isActive(' . $this->getActive() . ', updatedAt)}'] : [],
+        );
+    }
+
     public function editorView(string $view): static
     {
         $this->editorView = $view;
@@ -80,15 +89,15 @@ class TypistAction extends Action
 
     public function getLivewireClickHandler(): ?string
     {
-        if ($this->hasTiptapCommands()) {
-            return null;
-        }
-
-        return parent::getLivewireClickHandler();
+        return null;
     }
 
     public function getAlpineClickHandler(): ?string
     {
+        if ($this->evaluate($this->alpineClickHandler)) {
+            return parent::getAlpineClickHandler();
+        }
+
         if ($this->hasTiptapCommands()) {
             $attributes = $this->getCommandAttributes();
 
@@ -98,7 +107,7 @@ class TypistAction extends Action
                 $attributes = '"' . $attributes . '"';
             }
 
-            $handler = 'handleAction("' . $this->getCommandName() . '", ' . $attributes . ')';
+            $handler = 'handleCommand("' . $this->getCommandName() . '", ' . $attributes . ')';
 
             if ($this->shouldClose()) {
                 $handler .= '; close();';
@@ -107,6 +116,18 @@ class TypistAction extends Action
             return $handler;
         }
 
-        return parent::getAlpineClickHandler();
+        return 'handleLivewire("' . $this->getName() . '")';
+    }
+
+    public function showInSidebar(bool | Closure $condition = true): static
+    {
+        $this->showInSidebar = $condition;
+
+        return $this;
+    }
+
+    public function shouldShowInSidebar(): bool
+    {
+        return $this->evaluate($this->showInSidebar) ?? false;
     }
 }
