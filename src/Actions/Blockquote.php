@@ -11,9 +11,9 @@ class Blockquote extends TypistAction
         parent::setUp();
 
         $this
-            ->icon('typist-blockquote')
+            ->icon(icon: 'typist-blockquote')
             ->iconButton()
-            ->alpineClickHandler("handleAction('toggleBlockquote')")
-            ->active('blockquote');
+            ->command(name: 'toggleBlockquote')
+            ->active(name: 'blockquote');
     }
 }

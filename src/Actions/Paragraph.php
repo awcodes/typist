@@ -11,9 +11,9 @@ class Paragraph extends TypistAction
         parent::setUp();
 
         $this
-            ->icon('typist-paragraph')
+            ->icon(icon: 'typist-paragraph')
             ->iconButton()
-            ->alpineClickHandler("handleAction('setParagraph'); close()")
-            ->active('paragraph');
+            ->command(name: 'setParagraph')
+            ->active(name: 'paragraph');
     }
 }

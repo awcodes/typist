@@ -11,9 +11,9 @@ class Bold extends TypistAction
         parent::setUp();
 
         $this
-            ->icon('typist-bold')
+            ->icon(icon: 'typist-bold')
             ->iconButton()
-            ->alpineClickHandler("handleAction('toggleBold')")
-            ->active('bold');
+            ->command(name: 'toggleBold')
+            ->active(name: 'bold');
     }
 }

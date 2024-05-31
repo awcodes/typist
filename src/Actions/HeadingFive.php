@@ -12,9 +12,10 @@ class HeadingFive extends TypistAction
         parent::setUp();
 
         $this
-            ->icon('typist-heading-five')
+            ->icon(icon: 'typist-heading-five')
             ->iconButton()
-            ->alpineClickHandler("handleAction('toggleHeading', {level: 5}); close()")
+            ->command(name: 'toggleHeading', attributes: ['level' => 5])
+            ->close()
             ->visible(function (TypistEditor $component) {
                 return in_array(5, $component->getHeadingLevels());
             })

@@ -11,8 +11,8 @@ class AlignStart extends TypistAction
         parent::setUp();
 
         $this
-            ->icon('typist-align-start')
+            ->icon(icon: 'typist-align-start')
             ->iconButton()
-            ->alpineClickHandler("handleAction('setTextAlign', 'start')");
+            ->command(name: 'setTextAlign', attributes: 'start');
     }
 }

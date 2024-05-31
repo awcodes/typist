@@ -171,7 +171,7 @@ class Faker
         return $this;
     }
 
-    public function block(string $identifier = 'AlertAction', ?array $values = []): static
+    public function block(string $identifier = 'Alert', ?array $values = []): static
     {
         $this->output .= '<typist-block>' . json_encode(['identifier' => $identifier, 'values' => $values]) . '</typist-block>';
 

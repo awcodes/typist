@@ -14,22 +14,24 @@
             statePath: @js($statePath),
             placeholder: @js($getPlaceholder()),
             mergeTags: @js($mergeTags),
+            suggestions: @js($getSuggestions())
         })"
         id="{{ 'typist-wrapper-' . $statePath }}"
         @class([
             'typist-wrapper',
             'invalid' => $errors->has($statePath),
         ])
-        x-on:click.away="isFocused = false"
+        x-on:click.away="blur()"
         x-on:focus-editor.window="focusEditor($event)"
         x-on:dragged-merge-tag.stop="insertMergeTag($event)"
+        x-on:handle-suggestion.window="handleSuggestion($event)"
     >
         <template x-if="isLoaded()">
             <div class="typist-toolbar" x-bind:class="{
                 'focused': isFocused
             }">
-                <x-typist::actions class="typist-toolbar-start" :actions="$getToolbar()" />
-                <x-typist::actions class="typist-toolbar-end" :actions="$getControls()" />
+                <x-typist::toolbar-actions class="typist-toolbar-start" :actions="$getToolbar()" />
+                <x-typist::toolbar-actions class="typist-toolbar-end" :actions="$getControls()" />
             </div>
         </template>
 
@@ -44,19 +46,12 @@
                         return window.editors['{{ $statePath }}'].getAttributes(name)
                     },
                     openModal(action, name) {
-                        const attrs = this.getAttrs(name)
-                        this.$wire.mountFormComponentAction('{{ $statePath }}', action, attrs)
+                        this.$wire.mountFormComponentAction('{{ $statePath }}', action, this.getAttrs(name))
                     }
                 }" x-on:selection-update.window="updatedAt = Date.now()">
-                    <div class="typist-bubble-menu" x-show="isActive('link', updatedAt)" x-cloak>
-                        <span x-text="getAttrs('link', updatedAt).href" class="max-w-xs truncate overflow-hidden whitespace-nowrap"></span>
-                        {{ $getAction('LinkAction')->active(null)->alpineClickHandler("openModal('LinkAction', 'link')") }}
-                        {{ $getAction('UnlinkAction')->active(null) }}
-                    </div>
-                    <div class="typist-bubble-menu" x-show="isActive('media', updatedAt)" x-cloak>
-                        {{ $getAction('MediaAction')->active(null)->alpineClickHandler("openModal('MediaAction', 'media')") }}
-                        {{ $getAction('RemoveMediaAction')->active(null) }}
-                    </div>
+                    @foreach($getBubbleMenus() as $bubbleMenu)
+                        <x-dynamic-component :component="$bubbleMenu->getView()" :menu="$bubbleMenu" :editor="$field" />
+                    @endforeach
                 </div>
             </div>
         </div>

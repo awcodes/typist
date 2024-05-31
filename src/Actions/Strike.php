@@ -11,9 +11,9 @@ class Strike extends TypistAction
         parent::setUp();
 
         $this
-            ->icon('typist-strike')
+            ->icon(icon: 'typist-strike')
             ->iconButton()
-            ->alpineClickHandler("handleAction('toggleStrike')")
-            ->active('strike');
+            ->command(name: 'toggleStrike')
+            ->active(name: 'strike');
     }
 }

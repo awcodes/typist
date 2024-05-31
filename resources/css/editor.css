@@ -256,6 +256,14 @@
     }
 }
 
+.typist-suggestions {
+    @apply flex flex-col;
+
+    .typist-suggestion-item {
+        @apply flex items-center gap-2 block w-full text-left rounded px-2 py-1;
+    }
+}
+
 .typist-bubble-menu {
     @apply flex items-center gap-2 relative text-gray-200 dark:text-gray-800;
 

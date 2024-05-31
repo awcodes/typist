@@ -11,8 +11,8 @@ class ClearContent extends TypistAction
         parent::setUp();
 
         $this
-            ->icon('typist-erase')
+            ->icon(icon: 'typist-erase')
             ->iconButton()
-            ->alpineClickHandler("handleAction('clearContent', true)");
+            ->command(name: 'clearContent', attributes: true);
     }
 }

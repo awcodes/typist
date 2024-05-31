@@ -11,9 +11,9 @@ class AlignCenter extends TypistAction
         parent::setUp();
 
         $this
-            ->icon('typist-align-center')
+            ->icon(icon: 'typist-align-center')
             ->iconButton()
-            ->alpineClickHandler("handleAction('setTextAlign', 'center')")
+            ->command(name: 'setTextAlign', attributes: 'center')
             ->active(attributes: ['textAlign' => 'center']);
     }
 }

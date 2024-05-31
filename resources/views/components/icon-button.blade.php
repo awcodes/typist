@@ -19,7 +19,6 @@
     'label' => null,
     'loadingIndicator' => true,
     'size' => ActionSize::Medium,
-    'statePath' => null,
     'spaMode' => null,
     'tag' => 'button',
     'target' => null,

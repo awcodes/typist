@@ -12,7 +12,7 @@ class Unlink extends TypistAction
         parent::setUp();
 
         $this
-            ->icon('typist-unlink')
+            ->icon(icon: 'typist-unlink')
             ->iconButton()
             ->alpineClickHandler(function (TypistEditor $component) {
                 $statePath = $component->getStatePath();

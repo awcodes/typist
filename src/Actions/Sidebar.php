@@ -12,8 +12,8 @@ class Sidebar extends TypistAction
         parent::setUp();
 
         $this
-            ->label('Toggle Sidebar')
-            ->icon('typist-sidebar')
+            ->label(label: 'Toggle Sidebar')
+            ->icon(icon: 'typist-sidebar')
             ->iconButton()
             ->alpineClickHandler('toggleSidebar($event)')
             ->visible(function (TypistEditor $component) {

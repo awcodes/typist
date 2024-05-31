@@ -11,9 +11,9 @@ class Code extends TypistAction
         parent::setUp();
 
         $this
-            ->icon('typist-code')
+            ->icon(icon: 'typist-code')
             ->iconButton()
-            ->alpineClickHandler("handleAction('toggleCode')")
-            ->active('code');
+            ->command(name: 'toggleCode')
+            ->active(name: 'code');
     }
 }

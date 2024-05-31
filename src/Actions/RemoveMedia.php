@@ -11,8 +11,8 @@ class RemoveMedia extends TypistAction
         parent::setUp();
 
         $this
-            ->icon('typist-trash')
+            ->icon(icon: 'typist-trash')
             ->iconButton()
-            ->alpineClickHandler("handleAction('deleteSelection')");
+            ->command(name: 'deleteSelection');
     }
 }

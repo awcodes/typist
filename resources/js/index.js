@@ -24,10 +24,11 @@ import MediaExtension from './extensions/MediaExtension.js'
 import { isEqual } from "lodash";
 import { BubbleMenu } from '@tiptap/extension-bubble-menu'
 import Block from './extensions/Block.js'
+import SlashExtension from './extensions/SlashExtension.js'
 
 window.editors = []
 
-export default function typist({state, statePath, placeholder, mergeTags = []}) {
+export default function typist({state, statePath, placeholder, mergeTags = [], suggestions = []}) {
     let editor
 
     return {
@@ -62,6 +63,10 @@ export default function typist({state, statePath, placeholder, mergeTags = []}) 
                     DetailsSummary,
                     MergeTag.configure({
                         mergeTags
+                    }),
+                    SlashExtension.configure({
+                        suggestions,
+                        appendTo: _this.$root
                     }),
                     Subscript,
                     Superscript,
@@ -141,7 +146,19 @@ export default function typist({state, statePath, placeholder, mergeTags = []}) 
             return window.editors[statePath] ?? editor;
         },
         handleAction(command, args = null) {
-            editor.chain()[command](args).focus().run()
+            editor.chain().focus()[command](args).run()
+        },
+        handleSuggestion(event) {
+            let path = window.editors[event.detail.statePath].storage.statePathExtension.statePath
+            if (event.detail.statePath === path) {
+                if (event.detail.item.actionType === "alpine") {
+                    this.$nextTick(() => {
+                        this.handleAction(event.detail.item.commandName, event.detail.item.commandAttributes);
+                    })
+                } else {
+                    this.$wire.mountFormComponentAction(path, event.detail.item.name);
+                }
+            }
         },
         isActive(attrs) {
             return editor.isActive(attrs)
@@ -162,6 +179,15 @@ export default function typist({state, statePath, placeholder, mergeTags = []}) 
                 setTimeout(() => window.editors[event.detail.statePath].commands.focus(), 200)
                 this.updatedAt = Date.now()
             }
+        },
+        blur() {
+            const tippy = this.$el.querySelectorAll('[data-tippy-content]')
+            if (tippy) {
+                tippy.forEach((item) => item.destroy())
+            }
+
+            this.isFocused = false
+            this.updatedAt = Date.now()
         },
         insertMergeTag(event) {
             editor.commands.insertMergeTag({

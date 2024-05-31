@@ -11,9 +11,9 @@ class BulletList extends TypistAction
         parent::setUp();
 
         $this
-            ->icon('typist-list-unordered')
+            ->icon(icon: 'typist-list-unordered')
             ->iconButton()
-            ->alpineClickHandler("handleAction('toggleBulletList')")
-            ->active('bulletList');
+            ->command(name: 'toggleBulletList')
+            ->active(name: 'bulletList');
     }
 }
