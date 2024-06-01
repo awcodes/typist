@@ -66,7 +66,7 @@ export default function typist({state, statePath, placeholder, mergeTags = [], s
                     }),
                     SlashExtension.configure({
                         suggestions,
-                        appendTo: _this.$root
+                        appendTo: _this.$refs.element
                     }),
                     Subscript,
                     Superscript,
@@ -88,8 +88,8 @@ export default function typist({state, statePath, placeholder, mergeTags = [], s
                             placement: 'top',
                             theme: 'typist-bubble',
                             interactive: true,
-                            appendTo: _this.$root,
-                            zIndex: 10,
+                            appendTo: _this.$refs.element,
+                            zIndex: 0,
                         },
                         shouldShow: ({ editor, from, to }) => {
                             if (
@@ -143,25 +143,44 @@ export default function typist({state, statePath, placeholder, mergeTags = [], s
             });
         },
         isLoaded() {
-            return window.editors[statePath] ?? editor;
+            return editor;
         },
-        handleAction(command, args = null) {
+        handleCommand(command, args = null) {
             editor.chain().focus()[command](args).run()
         },
+        handleLivewire(actionName, data = []) {
+            this.$wire.mountFormComponentAction(this.statePath, actionName, data)
+        },
         handleSuggestion(event) {
-            let path = window.editors[event.detail.statePath].storage.statePathExtension.statePath
+            let path = editor.storage.statePathExtension.statePath
             if (event.detail.statePath === path) {
                 if (event.detail.item.actionType === "alpine") {
                     this.$nextTick(() => {
-                        this.handleAction(event.detail.item.commandName, event.detail.item.commandAttributes);
+                        editor
+                            .chain()
+                            .focus(event.detail.range.from)[event.detail.item.commandName](event.detail.item.commandAttributes)
+                            .selectNodeForward()
+                            .deleteSelection()
+                            .setTextSelection(event.detail.range.to)
+                            .run()
                     })
                 } else {
+                    this.$nextTick(() => {
+                        editor
+                            .chain()
+                            .focus(event.detail.range.from)
+                            .selectNodeForward()
+                            .deleteSelection()
+                            .setTextSelection(event.detail.range.from)
+                            .run()
+                    })
+
                     this.$wire.mountFormComponentAction(path, event.detail.item.name);
                 }
             }
         },
-        isActive(attrs) {
-            return editor.isActive(attrs)
+        isActive(name, attrs) {
+            return editor.isActive(name, attrs)
         },
         toggleFullscreen(event) {
             this.fullscreen = !this.fullscreen

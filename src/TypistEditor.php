@@ -60,11 +60,9 @@ class TypistEditor extends Field
     {
         return collect(\Awcodes\Typist\Facades\Typist::getActions())
             ->map(function ($action) {
-                $this->prepareAction($action);
-
                 return fn (): Action => $action;
             })
-            ->all();
+            ->toArray();
     }
 
     public function headingLevels(array | Closure $levels): static

@@ -33,13 +33,17 @@ export default Extension.create({
 
                     editor
                         .chain()
+                        .focus()
                         .deleteRange(range)
                         .run()
+
+                    window.getSelection()?.collapseToEnd()
 
                     window.dispatchEvent(new CustomEvent('handle-suggestion', {
                         detail: {
                             item: props,
                             statePath: editor.storage.statePathExtension.statePath,
+                            range: range
                         }
                     }))
                 },
@@ -130,10 +134,10 @@ export default Extension.create({
                                 </div>
                             `
 
-                            component = document.createElement('div');
-                            component.innerHTML = html;
+                            component = document.createElement('div')
+                            component.innerHTML = html
                             component.addEventListener('suggestions-select', (event) => {
-                                props.command({ ...event.detail.item });
+                                props.command({ ...event.detail.item })
                             });
 
                             popup = tippy('body', {
@@ -145,30 +149,30 @@ export default Extension.create({
                                 interactive: true,
                                 trigger: 'manual',
                                 placement: 'bottom-start',
-                            });
+                            })
                         },
                         onUpdate(props) {
                             if (!props.items.length) {
-                                popup[0].hide();
+                                popup[0].hide()
 
                                 return;
                             }
 
                             popup[0].show();
 
-                            component.dispatchEvent(new CustomEvent('suggestions-update-items', { detail: props.items }));
+                            component.dispatchEvent(new CustomEvent('suggestions-update-items', { detail: props.items }))
                         },
 
                         onKeyDown(props) {
-                            component.dispatchEvent(new CustomEvent('suggestions-key-down', { detail: props.event }));
+                            component.dispatchEvent(new CustomEvent('suggestions-key-down', { detail: props.event }))
                         },
 
                         onExit() {
-                            popup[0].destroy();
+                            popup[0].destroy()
                         },
                     }
                 }
             }),
         ]
-    }
+    },
 })

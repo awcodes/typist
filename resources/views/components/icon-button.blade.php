@@ -151,11 +151,6 @@
                 ->class([$buttonClasses])
                 ->style([$buttonStyles])
         }}
-        @if ($active)
-            x-bind:class="{
-                'is-active': isActive({!! $active !!}, updatedAt)
-            }"
-        @endif
     >
         @if ($label)
             <span class="sr-only">

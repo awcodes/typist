@@ -57,15 +57,17 @@
         </div>
 
         <div class="typist-content">
-            <div
-                x-ref="element"
-                {{
-                    \Filament\Support\prepare_inherited_attributes($getExtraInputAttributeBag())
-                        ->class([
-                            'typist-editor prose dark:prose-invert max-w-none',
-                        ])
-                }}
-            ></div>
+            <div class="typist-editor-wrapper">
+                <div
+                    x-ref="element"
+                    {{
+                        \Filament\Support\prepare_inherited_attributes($getExtraInputAttributeBag())
+                            ->class([
+                                'typist-editor prose dark:prose-invert max-w-none',
+                            ])
+                    }}
+                ></div>
+            </div>
 
             @if ((! $isDisabled) && (filled($mergeTags)))
                 <x-typist::sidebar :merge-tags="$mergeTags" />

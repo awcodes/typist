@@ -41,7 +41,6 @@ class Link extends TypistAction
             ])
             ->action(function (TypistEditor $component, array $arguments, array $data): void {
                 $statePath = $component->getStatePath();
-                ray($statePath);
                 $data = Js::from($data);
                 $component->getLivewire()->js(<<<JS
                     window.editors['$statePath'].chain().focus().toggleLink($data).run()
