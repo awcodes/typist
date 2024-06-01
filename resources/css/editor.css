@@ -41,7 +41,7 @@
     }
 
     .typist-editor-wrapper {
-        @apply relative h-full overflow-hidden;
+        @apply relative h-full w-full overflow-hidden;
     }
 
     .typist-editor {
