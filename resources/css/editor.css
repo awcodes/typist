@@ -264,6 +264,10 @@
     }
 }
 
+.typist-wrapper.fullscreen {
+    @apply fixed inset-0 bg-white dark:bg-gray-900 z-20;
+}
+
 .typist-suggestions {
     @apply flex flex-col;
 
