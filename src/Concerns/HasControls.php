@@ -29,6 +29,8 @@ trait HasControls
             Typist::getAction('Undo'),
             Typist::getAction('Redo'),
             Typist::getAction('ClearContent'),
+            Typist::getAction('EnterFullscreen'),
+            Typist::getAction('ExitFullscreen'),
             Typist::getAction('Sidebar'),
         ];
     }

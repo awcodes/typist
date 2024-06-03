@@ -21,6 +21,9 @@
             'typist-wrapper',
             'invalid' => $errors->has($statePath),
         ])
+        x-bind:class="{
+            'fullscreen': fullscreen
+        }"
         x-on:click.away="blur()"
         x-on:focus-editor.window="focusEditor($event)"
         x-on:dragged-merge-tag.stop="insertMergeTag($event)"
