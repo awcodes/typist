@@ -15,6 +15,7 @@ class Grid extends TypistAction
         parent::setUp();
 
         $this
+            ->label(trans('typist::typist.grid'))
             ->icon('typist-grid')
             ->iconButton()
             ->fillForm([

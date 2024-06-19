@@ -2,6 +2,7 @@
     $statePath = $getStatePath();
     $isDisabled = $isDisabled();
     $mergeTags = $getMergeTags();
+    $sidebarActions = $getSidebarActions();
 @endphp
 <x-dynamic-component :component="$getFieldWrapperView()" :field="$field">
     <div
@@ -14,7 +15,7 @@
             statePath: @js($statePath),
             placeholder: @js($getPlaceholder()),
             mergeTags: @js($mergeTags),
-            suggestions: @js($getSuggestions())
+            suggestions: @js($getSuggestionsForTiptap())
         })"
         id="{{ 'typist-wrapper-' . $statePath }}"
         @class([
@@ -24,40 +25,38 @@
         x-bind:class="{
             'fullscreen': fullscreen
         }"
-        x-on:click.away="blur()"
+        x-init="$nextTick(() => { init() })"
+        x-on:click.away="blurEditor()"
         x-on:focus-editor.window="focusEditor($event)"
         x-on:dragged-merge-tag.stop="insertMergeTag($event)"
+        x-on:dragged-block.stop="insertBlock($event)"
         x-on:handle-suggestion.window="handleSuggestion($event)"
     >
-        <template x-if="isLoaded()">
+        <template x-if="editor()">
             <div class="typist-toolbar" x-bind:class="{
                 'focused': isFocused
             }">
-                <x-typist::toolbar-actions class="typist-toolbar-start" :actions="$getToolbar()" />
-                <x-typist::toolbar-actions class="typist-toolbar-end" :actions="$getControls()" />
+                <x-typist::toolbar-actions class="typist-toolbar-start" :actions="$getToolbar()" :field="$field" />
+                <x-typist::toolbar-actions class="typist-toolbar-end" :actions="$getControls()" :field="$field" />
             </div>
         </template>
 
-        <div>
-            <div x-ref="bubbleMenu" class="typist-bubble-menu-wrapper">
-                <div x-data="{
-                    updatedAt: Date.now(),
-                    isActive(attrs) {
-                        return window.editors['{{ $statePath }}'].isActive(attrs)
-                    },
-                    getAttrs(name) {
-                        return window.editors['{{ $statePath }}'].getAttributes(name)
-                    },
-                    openModal(action, name) {
-                        this.$wire.mountFormComponentAction('{{ $statePath }}', action, this.getAttrs(name))
-                    }
-                }" x-on:selection-update.window="updatedAt = Date.now()">
-                    @foreach($getBubbleMenus() as $bubbleMenu)
-                        <x-dynamic-component :component="$bubbleMenu->getView()" :menu="$bubbleMenu" :editor="$field" />
-                    @endforeach
+        <template x-if="editor()">
+            <div>
+                <div x-ref="bubbleMenu" class="typist-bubble-menu-wrapper">
+                    <div x-data="{
+                        updatedAt: Date.now(),
+                        openModal(action, name) {
+                            this.$wire.mountFormComponentAction('{{ $statePath }}', action, editor().getAttributes(name))
+                        }
+                    }" x-on:selection-update.window="updatedAt = Date.now()">
+                        @foreach($getBubbleMenus() as $bubbleMenu)
+                            <x-dynamic-component :component="$bubbleMenu->getView()" :menu="$bubbleMenu" :field="$field" />
+                        @endforeach
+                    </div>
                 </div>
             </div>
-        </div>
+        </template>
 
         <div class="typist-content">
             <div class="typist-editor-wrapper">
@@ -72,12 +71,15 @@
                 ></div>
             </div>
 
-            @if ((! $isDisabled) && (filled($mergeTags)))
-                <x-typist::sidebar :merge-tags="$mergeTags" />
+            @if (
+                (! $isSidebarHidden()) &&
+                (! $isDisabled) && (filled($mergeTags) || filled($sidebarActions))
+            )
+                <x-typist::sidebar :merge-tags="$mergeTags" :actions="$sidebarActions" />
             @endif
         </div>
 
-        <template x-if="isLoaded()">
+        <template x-if="editor()">
             <div class="typist-footer">
                 <div>
                     <p class="text-xs">Word Count: <span x-text="wordCount"></span>

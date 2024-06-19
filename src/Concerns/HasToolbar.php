@@ -2,23 +2,44 @@
 
 namespace Awcodes\Typist\Concerns;
 
-use Awcodes\Typist\Facades\Typist;
+use Awcodes\Typist\Actions;
 use Awcodes\Typist\Support\ToolbarGroup;
 use Closure;
+use Filament\Actions\ActionGroup;
 use Filament\Forms\Components\Actions\Action;
 
 trait HasToolbar
 {
     protected array | Closure | null $toolbar = null;
 
+    protected bool | Closure | null $mergeToolbarActions = null;
+
     /**
      * @param  array<ToolbarGroup|Action> | Closure  $actions
      */
-    public function toolbar(array | Closure $actions): static
+    public function toolbar(array | Closure $actions, bool | Closure $merge = true): static
     {
         $this->toolbar = $actions;
+        $this->mergeToolbarActions = $merge;
 
         return $this;
+    }
+
+    public function getToolbarActions(): array
+    {
+        $flatActions = [];
+
+        collect($this->getToolbar())->each(function ($action) use (&$flatActions) {
+            if (is_subclass_of($action, ActionGroup::class)) {
+                foreach ($action->getActions() as $action) {
+                    $flatActions[] = $action;
+                }
+            } else {
+                $flatActions[] = $action;
+            }
+        });
+
+        return $flatActions;
     }
 
     /**
@@ -26,34 +47,47 @@ trait HasToolbar
      */
     public function getToolbar(): array
     {
-        return $this->evaluate($this->toolbar) ?? [
+        if ($this->evaluate($this->mergeToolbarActions)) {
+            return [
+                ...$this->getDefaultToolbarActions(),
+                ...$this->evaluate($this->toolbar),
+            ];
+        }
+
+        return $this->evaluate($this->toolbar) ?? $this->getDefaultToolbarActions();
+    }
+
+    public function getDefaultToolbarActions(): array
+    {
+        return [
             ToolbarGroup::make([
-                Typist::getAction('Paragraph'),
-                Typist::getAction('HeadingOne'),
-                Typist::getAction('HeadingTwo'),
-                Typist::getAction('HeadingThree'),
-                Typist::getAction('HeadingFour'),
-                Typist::getAction('HeadingFive'),
-                Typist::getAction('HeadingSix'),
+                Actions\Paragraph::make('toolbarParagraph'),
+                Actions\HeadingOne::make('toolbarHeadingOne'),
+                Actions\HeadingTwo::make('toolbarHeadingTwo'),
+                Actions\HeadingThree::make('toolbarHeadingThree'),
+                Actions\HeadingFour::make('toolbarHeadingFour'),
+                Actions\HeadingFive::make('toolbarHeadingFive'),
+                Actions\HeadingSix::make('toolbarHeadingSix'),
             ]),
-            Typist::getAction('Bold'),
-            Typist::getAction('Italic'),
-            Typist::getAction('Strike'),
-            Typist::getAction('Underline'),
-            Typist::getAction('Link'),
-            Typist::getAction('Media'),
-            Typist::getAction('BulletList'),
-            Typist::getAction('OrderedList'),
-            Typist::getAction('Blockquote'),
-            Typist::getAction('HorizontalRule'),
-            Typist::getAction('CodeBlock'),
-            Typist::getAction('Code'),
-            Typist::getAction('Details'),
-            Typist::getAction('Grid'),
-            Typist::getAction('AlignStart'),
-            Typist::getAction('AlignCenter'),
-            Typist::getAction('AlignEnd'),
-            Typist::getAction('Alert'),
+            Actions\Bold::make('toolbarBold'),
+            Actions\Italic::make('toolbarItalic'),
+            Actions\Strike::make('toolbarStrike'),
+            Actions\Underline::make('toolbarUnderline'),
+            Actions\Link::make('toolbarLink'),
+            Actions\Media::make('toolbarMedia'),
+            Actions\BulletList::make('toolbarBulletList'),
+            Actions\OrderedList::make('toolbarOrderedList'),
+            Actions\Blockquote::make('toolbarBlockquote'),
+            Actions\HorizontalRule::make('toolbarHorizontalRule'),
+            Actions\Code::make('toolbarCode'),
+            Actions\CodeBlock::make('toolbarCodeBlock'),
+            Actions\Details::make('toolbarDetails'),
+            Actions\Grid::make('toolbarGrid'),
+            Actions\Table::make('toolbarTable'),
+            Actions\AlignStart::make('toolbarAlignStart'),
+            Actions\AlignCenter::make('toolbarAlignCenter'),
+            Actions\AlignEnd::make('toolbarAlignEnd'),
+            Actions\AlignJustify::make('toolbarAlignJustify'),
         ];
     }
 }

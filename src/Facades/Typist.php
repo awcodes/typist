@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @method array getActions()
  * @method Action | null getAction(string $name)
+ * @method static static registerActionPath(string $in, string $for)
  *
  * @see TypistManager
  */

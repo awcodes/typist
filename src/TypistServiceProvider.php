@@ -78,8 +78,8 @@ class TypistServiceProvider extends PackageServiceProvider
 
         app(TypistManager::class)
             ->registerActionPath(
-                path: __DIR__ . '/Actions',
-                namespace: 'Awcodes\\Typist\\Actions'
+                in: __DIR__ . '/Actions',
+                for: 'Awcodes\\Typist\\Actions'
             );
 
         Blade::directive('typist', fn ($expression) => "<?php echo typist({$expression})->toHtml(); ?>");

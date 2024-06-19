@@ -1,5 +1,4 @@
 import { Editor } from '@tiptap/core'
-import StarterKit from '@tiptap/starter-kit'
 import StatePathExtension from './extensions/StatePathExtension.js'
 import LinkExtension from './extensions/LinkExtension.js'
 import ClassExtension from './extensions/ClassExtension.js'
@@ -25,93 +24,69 @@ import { isEqual } from "lodash";
 import { BubbleMenu } from '@tiptap/extension-bubble-menu'
 import Block from './extensions/Block.js'
 import SlashExtension from './extensions/SlashExtension.js'
+import {Placeholder} from "@tiptap/extension-placeholder";
+import {Document} from "@tiptap/extension-document";
+import {Text} from "@tiptap/extension-text";
+import {Paragraph} from "@tiptap/extension-paragraph";
+import {Dropcursor} from "@tiptap/extension-dropcursor";
+import {Gapcursor} from "@tiptap/extension-gapcursor";
+import {HardBreak} from "@tiptap/extension-hard-break";
+import {Heading} from "@tiptap/extension-heading";
+import {Bold} from "@tiptap/extension-bold";
+import {Italic} from "@tiptap/extension-italic";
+import {Strike} from "@tiptap/extension-strike";
+import {BulletList} from "@tiptap/extension-bullet-list";
+import {OrderedList} from "@tiptap/extension-ordered-list";
+import {Code} from "@tiptap/extension-code";
+import {CodeBlock} from "@tiptap/extension-code-block";
+import {ListItem} from "@tiptap/extension-list-item";
 
-window.editors = []
+window.editors = [];
 
-export default function typist({state, statePath, placeholder, mergeTags = [], suggestions = []}) {
+export default function typist({state, statePath, placeholder = null, mergeTags = [], suggestions = []}) {
     let editor
 
     return {
         updatedAt: Date.now(),
         state: state,
         statePath: statePath,
-        placeholder: placeholder ?? "press '/' for blocks",
+        placeholder: placeholder,
         fullscreen: false,
         isFocused: false,
         sidebarOpen: true,
         wordCount: 0,
         init() {
+            // TODO: figure out why this is necessary for Repeaters and Builders
+            let existing = this.$refs.element.querySelector('.tiptap');
+            if (existing) {
+                existing.remove();
+                editor = null;
+            }
+
+            if (editor) {
+                this.state = editor.getJSON();
+                editor = null;
+            }
+
             const _this = this
 
-            window.editors[statePath] = editor = new Editor({
+            window.editors[this.statePath] = editor = new Editor({
                 element: this.$refs.element,
-                extensions: [
-                    StatePathExtension.configure({
-                        statePath: statePath
-                    }),
-                    DragAndDropExtension,
-                    ClassExtension,
-                    IdExtension,
-                    StarterKit,
-                    Block,
-                    LinkExtension,
-                    MediaExtension,
-                    Grid,
-                    GridColumn,
-                    Details,
-                    DetailsContent,
-                    DetailsSummary,
-                    MergeTag.configure({
-                        mergeTags
-                    }),
-                    SlashExtension.configure({
-                        suggestions,
-                        appendTo: _this.$refs.element
-                    }),
-                    Subscript,
-                    Superscript,
-                    Table.configure({
-                        resizable: true,
-                    }),
-                    TableRow,
-                    TableHeader,
-                    TableCell,
-                    TextAlignExtension.configure({
-                        types: ['heading', 'paragraph']
-                    }),
-                    TextStyle,
-                    Underline,
-                    BubbleMenu.configure({
-                        element: _this.$refs.bubbleMenu,
-                        tippyOptions: {
-                            maxWidth: 'none',
-                            placement: 'top',
-                            theme: 'typist-bubble',
-                            interactive: true,
-                            appendTo: _this.$refs.element,
-                            zIndex: 0,
-                        },
-                        shouldShow: ({ editor, from, to }) => {
-                            if (
-                                editor.isActive('typistBlock') ||
-                                editor.isActive('slashExtension')
-                            ) {
-                                return false
+                extensions: this.getExtensions(),
+                content: this.state,
+                editorProps: {
+                    handlePaste(view, event, slice) {
+                        slice.content.descendants(node => {
+                            if (node.type.name === 'typistBlock') {
+                                node.attrs.statePath = _this.statePath
+                                node.attrs.data = JSON.parse(node.attrs.data)
                             }
-
-                            if (
-                                editor.isActive('link') ||
-                                editor.isActive('media')
-                            ) {
-                                return true
-                            }
-                        },
-                    })
-                ],
-                content: window.editors[statePath]?.getJSON() ?? this.state,
+                        });
+                    }
+                },
                 onCreate({ editor }) {
-                    _this.updatedAt = Date.now()
                     _this.wordCount = editor.getText().trim().split(' ').length;
+                    _this.updatedAt = Date.now()
                 },
                 onUpdate({ editor }) {
                     _this.updatedAt = Date.now()
@@ -128,9 +103,34 @@ export default function typist({state, statePath, placeholder, mergeTags = [], s
                 }
             })
 
+            let sortableEl = this.$el.parentElement.closest("[x-sortable]");
+            if (sortableEl) {
+                window.Sortable.utils.on(sortableEl, "start", () => {
+                    let editors = document.querySelectorAll('.typist-wrapper');
+
+                    if (editors.length === 0) return;
+
+                    editors.forEach((editor) => {
+                        editor._x_dataStack[0].editor().setEditable(false);
+                        editor._x_dataStack[0].editor().options.element.style.pointerEvents = 'none';
+                    });
+                });
+
+                window.Sortable.utils.on(sortableEl, "end", () => {
+                    let editors = document.querySelectorAll('.typist-wrapper');
+
+                    if (editors.length === 0) return;
+
+                    editors.forEach((editor) => {
+                        editor._x_dataStack[0].editor().setEditable(true);
+                        editor._x_dataStack[0].editor().options.element.style.pointerEvents = 'all';
+                    });
+                });
+            }
+
             this.$watch('isFocused', (value) => {
                 if (value === false) {
-                    this.$el.querySelectorAll('.is-active')?.forEach((item) => item.classList.remove('is-active'))
+                    this.blurEditor()
                 }
             })
 
@@ -142,18 +142,17 @@ export default function typist({state, statePath, placeholder, mergeTags = [], s
                 }
             });
         },
-        isLoaded() {
+        editor() {
             return editor;
         },
         handleCommand(command, args = null) {
             editor.chain().focus()[command](args).run()
         },
-        handleLivewire(actionName, data = []) {
+        handleLivewire(actionName, data = {}) {
             this.$wire.mountFormComponentAction(this.statePath, actionName, data)
         },
         handleSuggestion(event) {
-            let path = editor.storage.statePathExtension.statePath
-            if (event.detail.statePath === path) {
+            if (event.detail.statePath === editor.commands.getStatePath()) {
                 if (event.detail.item.actionType === "alpine") {
                     this.$nextTick(() => {
                         editor
@@ -175,32 +174,33 @@ export default function typist({state, statePath, placeholder, mergeTags = [], s
                             .run()
                     })
 
-                    this.$wire.mountFormComponentAction(path, event.detail.item.name);
+                    this.$wire.mountFormComponentAction(event.detail.statePath, event.detail.item.name);
                 }
             }
         },
         isActive(name, attrs) {
             return editor.isActive(name, attrs)
         },
-        toggleFullscreen(event) {
+        toggleFullscreen() {
             this.fullscreen = !this.fullscreen
             editor.commands.focus()
             this.updatedAt = Date.now()
         },
-        toggleSidebar(event) {
+        toggleSidebar() {
             this.sidebarOpen = ! this.sidebarOpen
             editor.commands.focus()
             this.updatedAt = Date.now()
         },
         focusEditor(event) {
-            let path = window.editors[event.detail.statePath].storage.statePathExtension.statePath
-            if (event.detail.statePath === path) {
-                setTimeout(() => window.editors[event.detail.statePath].commands.focus(), 200)
+            if (event.detail.statePath === this.editor().commands.getStatePath()) {
+                setTimeout(() => this.editor().commands.focus(), 200)
                 this.updatedAt = Date.now()
             }
         },
-        blur() {
+        blurEditor() {
             const tippy = this.$el.querySelectorAll('[data-tippy-content]')
+            this.$el.querySelectorAll('.is-active')?.forEach((item) => item.classList.remove('is-active'))
+
             if (tippy) {
                 tippy.forEach((item) => item.destroy())
             }
@@ -220,5 +220,97 @@ export default function typist({state, statePath, placeholder, mergeTags = [], s
 
             this.updatedAt = Date.now()
         },
+        insertBlock(event) {
+            this.handleLivewire(event.detail.name, {
+                coordinates: event.detail.coordinates,
+            })
+
+            this.updatedAt = Date.now()
+        },
+        getExtensions() {
+            return [
+                Block,
+                Bold,
+                BubbleMenu.configure({
+                    element: this.$refs.bubbleMenu,
+                    tippyOptions: {
+                        duration: [500, 0],
+                        maxWidth: 'none',
+                        placement: 'top',
+                        theme: 'typist-bubble',
+                        interactive: true,
+                        appendTo: this.$refs.element,
+                        zIndex: 0,
+                        arrow: false,
+                    },
+                    shouldShow: ({ editor, from, to }) => {
+                        if (
+                            editor.isActive('typistBlock') ||
+                            editor.isActive('slashExtension')
+                        ) {
+                            return false
+                        }
+
+                        if (
+                            editor.isActive('link') ||
+                            editor.isActive('media')
+                        ) {
+                            return true
+                        }
+                    },
+                }),
+                BulletList,
+                ClassExtension,
+                Code,
+                CodeBlock,
+                Details,
+                DetailsContent,
+                DetailsSummary,
+                Document,
+                DragAndDropExtension,
+                Dropcursor,
+                Gapcursor,
+                Grid,
+                GridColumn,
+                HardBreak,
+                Heading,
+                History,
+                IdExtension,
+                Italic,
+                ListItem,
+                LinkExtension,
+                MediaExtension,
+                MergeTag.configure({
+                    mergeTags
+                }),
+                OrderedList,
+                Paragraph,
+                Placeholder.configure({
+                    placeholder: this.placeholder
+                }),
+                SlashExtension.configure({
+                    suggestions,
+                    appendTo: this.$refs.element
+                }),
+                StatePathExtension.configure({
+                    statePath: statePath
+                }),
+                Strike,
+                Subscript,
+                Superscript,
+                Table.configure({
+                    resizable: true,
+                }),
+                TableRow,
+                TableHeader,
+                TableCell,
+                Text,
+                TextAlignExtension.configure({
+                    types: ['heading', 'paragraph']
+                }),
+                TextStyle,
+                Underline,
+            ]
+        }
     }
 }

@@ -6,17 +6,29 @@ use Closure;
 
 trait HasMergeTags
 {
-    protected array | Closure $mergeTags = [];
+    protected array | Closure | null $mergeTags = null;
 
-    public function mergeTags(array | Closure $mergeTags): static
+    protected bool | Closure | null $shouldShowInSidebar = null;
+
+    public function mergeTags(array | Closure $tags, bool | Closure $showInSidebar = true): static
     {
-        $this->mergeTags = $mergeTags;
+        $this->mergeTags = $tags;
+        $this->shouldShowInSidebar = $showInSidebar;
 
         return $this;
     }
 
     public function getMergeTags(): array
     {
-        return $this->evaluate($this->mergeTags) ?? [];
+        if ($this->shouldShowInSidebar()) {
+            return $this->evaluate($this->mergeTags) ?? [];
+        }
+
+        return [];
+    }
+
+    public function shouldShowInSidebar(): bool
+    {
+        return $this->evaluate($this->shouldShowInSidebar) ?? true;
     }
 }

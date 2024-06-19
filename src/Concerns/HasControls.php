@@ -2,7 +2,7 @@
 
 namespace Awcodes\Typist\Concerns;
 
-use Awcodes\Typist\Facades\Typist;
+use Awcodes\Typist\Actions;
 use Closure;
 use Filament\Forms\Components\Actions\Action;
 
@@ -26,12 +26,12 @@ trait HasControls
     public function getControls(): array
     {
         return $this->evaluate($this->controls) ?? [
-            Typist::getAction('Undo'),
-            Typist::getAction('Redo'),
-            Typist::getAction('ClearContent'),
-            Typist::getAction('EnterFullscreen'),
-            Typist::getAction('ExitFullscreen'),
-            Typist::getAction('Sidebar'),
+            Actions\Undo::make('controlsUndo'),
+            Actions\Redo::make('controlsRedo'),
+            Actions\ClearContent::make('controlsClearContent'),
+            Actions\EnterFullscreen::make('controlsEnterFullscreen'),
+            Actions\ExitFullscreen::make('controlsExitFullscreen'),
+            Actions\Sidebar::make('controlsSidebar'),
         ];
     }
 }

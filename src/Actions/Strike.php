@@ -11,6 +11,7 @@ class Strike extends TypistAction
         parent::setUp();
 
         $this
+            ->label(trans('typist::typist.strike'))
             ->icon(icon: 'typist-strike')
             ->iconButton()
             ->command(name: 'toggleStrike')

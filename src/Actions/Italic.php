@@ -11,6 +11,7 @@ class Italic extends TypistAction
         parent::setUp();
 
         $this
+            ->label(trans('typist::typist.italic'))
             ->icon(icon: 'typist-italic')
             ->iconButton()
             ->command(name: 'toggleItalic')

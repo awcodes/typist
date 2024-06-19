@@ -14,6 +14,7 @@ class TypistEditor extends Field
     use Concerns\HasBubbleMenus;
     use Concerns\HasControls;
     use Concerns\HasMergeTags;
+    use Concerns\HasSidebar;
     use Concerns\HasSuggestions;
     use Concerns\HasToolbar;
     use Concerns\InteractsWithBlocks;
@@ -58,7 +59,13 @@ class TypistEditor extends Field
 
     public function getActionsToRegister(): array
     {
-        return collect(\Awcodes\Typist\Facades\Typist::getActions())
+        return collect([
+            ...$this->getToolbarActions(),
+            ...$this->getControls(),
+            ...$this->getSuggestions(),
+            ...$this->getBubbleMenuActions(),
+            ...$this->getSidebarActions(),
+        ])
             ->map(function ($action) {
                 return fn (): Action => $action;
             })

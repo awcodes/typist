@@ -13,18 +13,18 @@ class TypistManager
 
     protected array $registeredActionPaths = [];
 
-    public function registerActionPath(string $path, string $namespace): static
+    public function registerActionPath(string $in, string $for): static
     {
-        if (! File::isDirectory($path) || in_array($path, $this->registeredActionPaths)) {
+        if (! File::isDirectory($in) || in_array($in, $this->registeredActionPaths)) {
             return $this;
         }
 
-        $actions = collect(File::allFiles($path))
+        $actions = collect(File::allFiles($in))
             ->map(
                 fn ($file) => Str::of($file->getRelativePathname())
                     ->before('.php')
                     ->replace('/', '\\')
-                    ->start($namespace . '\\')
+                    ->start($for . '\\')
                     ->toString()
             )
             ->filter(fn ($action) => is_subclass_of($action, Action::class))
@@ -35,8 +35,8 @@ class TypistManager
             })
             ->all();
 
-        $this->actions = [...$actions];
-        $this->registeredActionPaths[] = $path;
+        $this->actions = [...$this->actions, ...$actions];
+        $this->registeredActionPaths[] = $in;
 
         return $this;
     }

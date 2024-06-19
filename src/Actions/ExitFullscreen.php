@@ -11,9 +11,10 @@ class ExitFullscreen extends TypistAction
         parent::setUp();
 
         $this
+            ->label(trans('typist::typist.exit_fullscreen'))
             ->icon(icon: 'typist-fullscreen-exit')
             ->iconButton()
-            ->alpineClickHandler('fullscreen = ! fullscreen')
+            ->alpineClickHandler('toggleFullscreen($event)')
             ->extraAttributes([
                 'x-show' => 'fullscreen',
             ]);

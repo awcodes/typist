@@ -11,6 +11,7 @@ class Code extends TypistAction
         parent::setUp();
 
         $this
+            ->label(trans('typist::typist.code'))
             ->icon(icon: 'typist-code')
             ->iconButton()
             ->command(name: 'toggleCode')

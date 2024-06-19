@@ -2,6 +2,7 @@
 
 namespace Awcodes\Typist\Concerns;
 
+use Awcodes\Typist\Actions;
 use Awcodes\Typist\Support\SuggestionGroup;
 use Closure;
 use Filament\Forms\Components\Actions\Action;
@@ -12,12 +13,15 @@ trait HasSuggestions
 {
     protected array | Closure | null $suggestions = null;
 
+    protected bool | Closure | null $mergeSuggestionActions = null;
+
     /**
      * @param  array<SuggestionGroup|Action> | Closure  $actions
      */
-    public function suggestions(array | Closure $actions): static
+    public function suggestions(array | Closure $actions, bool | Closure $merge = true): static
     {
         $this->suggestions = $actions;
+        $this->mergeSuggestionActions = $merge;
 
         return $this;
     }
@@ -27,9 +31,21 @@ trait HasSuggestions
      */
     public function getSuggestions(): array
     {
+        if ($this->evaluate($this->mergeSuggestionActions)) {
+            return [
+                ...$this->getDefaultSuggestions(),
+                ...$this->evaluate($this->suggestions),
+            ];
+        }
+
+        return $this->evaluate($this->suggestions) ?? $this->getDefaultSuggestions();
+    }
+
+    public function getSuggestionsForTiptap(): array
+    {
         $suggestions = $this->evaluate($this->suggestions) ?? $this->getDefaultSuggestions();
 
-        return collect($suggestions)
+        return collect($this->getSuggestions())
             ->transform(function ($suggestion) {
                 return [
                     'name' => $suggestion->getName() ?? 'group',
@@ -45,15 +61,15 @@ trait HasSuggestions
     public function getDefaultSuggestions(): array
     {
         return [
-            $this->getAction('Media'),
-            $this->getAction('BulletList'),
-            $this->getAction('OrderedList'),
-            $this->getAction('Blockquote'),
-            $this->getAction('HorizontalRule'),
-            $this->getAction('CodeBlock'),
-            $this->getAction('Details'),
-            $this->getAction('Grid'),
-            $this->getAction('Alert'),
+            Actions\Media::make('suggestMedia'),
+            Actions\BulletList::make('suggestBulletList'),
+            Actions\OrderedList::make('suggestOrderedList'),
+            Actions\Blockquote::make('suggestBlockquote'),
+            Actions\HorizontalRule::make('suggestHorizontalRule'),
+            Actions\CodeBlock::make('suggestCodeBlock'),
+            Actions\Details::make('suggestDetails'),
+            Actions\Grid::make('suggestGrid'),
+            Actions\Table::make('suggestTable'),
         ];
     }
 }

@@ -12,12 +12,13 @@ class Sidebar extends TypistAction
         parent::setUp();
 
         $this
-            ->label(label: 'Toggle Sidebar')
+            ->label(trans('typist::typist.sidebar'))
             ->icon(icon: 'typist-sidebar')
             ->iconButton()
             ->alpineClickHandler('toggleSidebar($event)')
             ->visible(function (TypistEditor $component) {
-                return filled($component->getMergeTags());
+                return (! $component->isSidebarHidden()) &&
+                (! $component->isDisabled()) && (filled($component->getMergeTags()) || filled($component->getSidebarActions()));
             });
     }
 }

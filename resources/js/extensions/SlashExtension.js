@@ -2,7 +2,6 @@ import { Extension } from '@tiptap/core'
 import Suggestion from '@tiptap/suggestion'
 import tippy from 'tippy.js'
 import { PluginKey } from '@tiptap/pm/state'
-import { convertValues } from '../utils.js'
 
 export default Extension.create({
     name: 'slashExtension',
@@ -78,7 +77,7 @@ export default Extension.create({
 
                                             this.$el.parentElement.addEventListener(
                                                 "suggestions-update-items",
-                                                (event) => (items = event.detail),
+                                                (event) => (this.items = event.detail),
                                             );
                                         },
 

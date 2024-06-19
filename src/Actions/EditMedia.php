@@ -12,6 +12,8 @@ class EditMedia extends Media
         parent::setUp();
 
         $this
+            ->label(trans('typist::typist.edit_media'))
+            ->alpineClickHandler("openModal('" . $this->getName() . "', 'media')")
             ->fillForm(function (TypistEditor $component, array $arguments) {
                 $source = isset($arguments['src']) && $arguments['src'] !== ''
                     ? $component->getDirectory() . Str::of($arguments['src'])

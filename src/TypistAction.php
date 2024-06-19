@@ -2,7 +2,6 @@
 
 namespace Awcodes\Typist;
 
-use Closure;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Support\Concerns\HasExtraAlpineAttributes;
 use Illuminate\Support\Js;
@@ -17,8 +16,6 @@ class TypistAction extends Action
     protected ?string $renderView = null;
 
     protected ?string $editorView = null;
-
-    protected bool | Closure | null $showInSidebar = null;
 
     protected function setUp(): void
     {
@@ -117,17 +114,5 @@ class TypistAction extends Action
         }
 
         return 'handleLivewire("' . $this->getName() . '")';
-    }
-
-    public function showInSidebar(bool | Closure $condition = true): static
-    {
-        $this->showInSidebar = $condition;
-
-        return $this;
-    }
-
-    public function shouldShowInSidebar(): bool
-    {
-        return $this->evaluate($this->showInSidebar) ?? false;
     }
 }

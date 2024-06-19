@@ -11,6 +11,7 @@ class Details extends TypistAction
         parent::setUp();
 
         $this
+            ->label(trans('typist::typist.details'))
             ->icon(icon: 'typist-details')
             ->iconButton()
             ->command(name: 'setDetails')

@@ -168,7 +168,7 @@ export default Node.create({
 
                                             this.$el.parentElement.addEventListener(
                                                 'merge-tags-update-items',
-                                                (event) => (items = event.detail),
+                                                (event) => (this.items = event.detail),
                                             );
                                         },
 

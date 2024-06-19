@@ -21,7 +21,7 @@ export default Extension.create({
                         if (event.dataTransfer.getData('block')) {
                             event.target.dispatchEvent(new CustomEvent('dragged-block', {
                                 detail: {
-                                    tool: event.dataTransfer.getData('block'),
+                                    name: event.dataTransfer.getData('block'),
                                     coordinates,
                                 },
                                 bubbles: true,

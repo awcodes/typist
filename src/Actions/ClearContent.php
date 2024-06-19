@@ -11,6 +11,7 @@ class ClearContent extends TypistAction
         parent::setUp();
 
         $this
+            ->label(trans('typist::typist.clear_content'))
             ->icon(icon: 'typist-erase')
             ->iconButton()
             ->command(name: 'clearContent', attributes: true);

@@ -11,6 +11,7 @@ class Paragraph extends TypistAction
         parent::setUp();
 
         $this
+            ->label(trans('typist::typist.paragraph'))
             ->icon(icon: 'typist-paragraph')
             ->iconButton()
             ->command(name: 'setParagraph')

@@ -2,16 +2,6 @@
 
 // config for Awcodes/Typist
 return [
-    /*
-        |-----------------------------------------------------------------
-        | Media Settings
-        |-----------------------------------------------------------------
-        |
-        | The following options allow you to adjust the behavior of
-        | media uploads handled by Scribble.
-        |
-        */
-
     'media' => [
         'accepted_file_types' => ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml', 'application/pdf'],
         'disk' => env('FILAMENT_FILESYSTEM_DISK', 'public'),

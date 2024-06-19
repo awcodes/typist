@@ -11,6 +11,7 @@ class BulletList extends TypistAction
         parent::setUp();
 
         $this
+            ->label(trans('typist::typist.bullet_list'))
             ->icon(icon: 'typist-list-unordered')
             ->iconButton()
             ->command(name: 'toggleBulletList')

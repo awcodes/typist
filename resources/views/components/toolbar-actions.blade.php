@@ -1,12 +1,20 @@
 @props([
     'actions' => null,
+    'field' => null,
 ])
 
 <div {{ $attributes }}>
 @foreach ($actions as $action)
     @if ($action instanceof \Filament\Actions\ActionGroup)
+        @php
+            $action->livewire($this);
+            $nestedActions = [];
+            foreach ($action->getActions() as $nestedAction) {
+                $nestedActions[] = $field->getAction($nestedAction->getName());
+            }
+        @endphp
         <x-filament-actions::group
-            :actions="$action->getActions()"
+            :actions="$nestedActions"
             :icon="$action->getIcon()"
             :button="$action->isButton()"
             :label="$action->getLabel()"
@@ -16,6 +24,9 @@
             :icon-position="$action->getIconPosition()"
         ></x-filament-actions::group>
     @else
+        @php
+            $action = $field->getAction($action->getName());
+        @endphp
         @if($action->isVisible())
             {{ $action }}
         @endif

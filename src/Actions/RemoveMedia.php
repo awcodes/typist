@@ -11,6 +11,7 @@ class RemoveMedia extends TypistAction
         parent::setUp();
 
         $this
+            ->label(trans('typist::typist.remove_media'))
             ->icon(icon: 'typist-trash')
             ->iconButton()
             ->command(name: 'deleteSelection');
