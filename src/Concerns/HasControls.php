@@ -26,12 +26,12 @@ trait HasControls
     public function getControls(): array
     {
         return $this->evaluate($this->controls) ?? [
-            Actions\Undo::make('controlsUndo'),
-            Actions\Redo::make('controlsRedo'),
-            Actions\ClearContent::make('controlsClearContent'),
-            Actions\EnterFullscreen::make('controlsEnterFullscreen'),
-            Actions\ExitFullscreen::make('controlsExitFullscreen'),
-            Actions\Sidebar::make('controlsSidebar'),
+            Actions\Undo::make('Undo'),
+            Actions\Redo::make('Redo'),
+            Actions\ClearContent::make('ClearContent'),
+            Actions\EnterFullscreen::make('EnterFullscreen'),
+            Actions\ExitFullscreen::make('ExitFullscreen'),
+            Actions\Sidebar::make('Sidebar'),
         ];
     }
 }

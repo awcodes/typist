@@ -17,6 +17,7 @@ class Link extends TypistAction
             ->label(trans('typist::typist.link'))
             ->icon('typist-link')
             ->iconButton()
+            ->active('link')
             ->form([
                 Components\Grid::make(['md' => 3])
                     ->schema([
@@ -42,14 +43,22 @@ class Link extends TypistAction
             ])
             ->action(function (TypistEditor $component, array $arguments, array $data): void {
                 $statePath = $component->getStatePath();
+
                 $data = Js::from($data);
+
+                $coords = Js::from([
+                    'from' => $arguments['coordinates']['anchor'] ?? 1,
+                    'to' => $arguments['coordinates']['head'] ?? 1,
+                ]);
+
                 $component->getLivewire()->js(<<<JS
-                    window.editors['$statePath'].chain().focus().toggleLink($data).run()
+                    Alpine.nextTick(() => {
+                        window.editors['$statePath'].chain().focus().setTextSelection($coords).setLink($data).run()
+                    })
                 JS);
             })
             ->after(function (TypistEditor $component): void {
                 $component->getLivewire()->dispatch('focus-editor', statePath: $component->getStatePath());
-            })
-            ->active('link');
+            });
     }
 }

@@ -17,6 +17,7 @@
             mergeTags: @js($mergeTags),
             suggestions: @js($getSuggestionsForTiptap())
         })"
+        x-init="$nextTick(() => { init() })"
         id="{{ 'typist-wrapper-' . $statePath }}"
         @class([
             'typist-wrapper',
@@ -25,7 +26,6 @@
         x-bind:class="{
             'fullscreen': fullscreen
         }"
-        x-init="$nextTick(() => { init() })"
         x-on:click.away="blurEditor()"
         x-on:focus-editor.window="focusEditor($event)"
         x-on:dragged-merge-tag.stop="insertMergeTag($event)"
@@ -47,7 +47,11 @@
                     <div x-data="{
                         updatedAt: Date.now(),
                         openModal(action, name) {
-                            this.$wire.mountFormComponentAction('{{ $statePath }}', action, editor().getAttributes(name))
+                            let data = {
+                                coordinates: editor().view.state.selection,
+                                ...editor().getAttributes(name),
+                            }
+                            this.$wire.mountFormComponentAction('{{ $statePath }}', action, data)
                         }
                     }" x-on:selection-update.window="updatedAt = Date.now()">
                         @foreach($getBubbleMenus() as $bubbleMenu)

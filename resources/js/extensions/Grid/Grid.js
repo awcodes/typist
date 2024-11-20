@@ -63,10 +63,10 @@ export default Node.create({
                         if (dispatch) {
                             const offset = tr.selection.anchor + 1
 
-                            if (! [null, undefined].includes(coordinates?.pos)) {
-                                tr.replaceRangeWith(coordinates.pos, coordinates.pos, node)
+                            if (! [null, undefined].includes(coordinates?.from)) {
+                                tr.replaceRangeWith(coordinates.from, coordinates.to, node)
                                     .scrollIntoView()
-                                    .setSelection(TextSelection.near(tr.doc.resolve(offset)))
+                                    .setSelection(TextSelection.near(tr.doc.resolve(coordinates.from)))
                             } else {
                                 tr.replaceSelectionWith(node)
                                     .scrollIntoView()

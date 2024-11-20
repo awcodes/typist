@@ -13,6 +13,7 @@ class EditMedia extends Media
 
         $this
             ->label(trans('typist::typist.edit_media'))
+            ->active(null)
             ->alpineClickHandler("openModal('" . $this->getName() . "', 'media')")
             ->fillForm(function (TypistEditor $component, array $arguments) {
                 $source = isset($arguments['src']) && $arguments['src'] !== ''
@@ -23,7 +24,6 @@ class EditMedia extends Media
                 $arguments['src'] = $source;
 
                 return $arguments;
-            })
-            ->active(null);
+            });
     }
 }

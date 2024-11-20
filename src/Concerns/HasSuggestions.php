@@ -38,7 +38,14 @@ trait HasSuggestions
             ];
         }
 
-        return $this->evaluate($this->suggestions) ?? $this->getDefaultSuggestions();
+        return collect($this->evaluate($this->suggestions) ?? $this->getDefaultSuggestions())
+            ->map(function ($suggestion) {
+                $suggestion->name('suggestion_' . $suggestion->getName());
+                ray($suggestion);
+
+                return $suggestion;
+            })
+            ->toArray();
     }
 
     public function getSuggestionsForTiptap(): array
@@ -61,15 +68,15 @@ trait HasSuggestions
     public function getDefaultSuggestions(): array
     {
         return [
-            Actions\Media::make('suggestMedia'),
-            Actions\BulletList::make('suggestBulletList'),
-            Actions\OrderedList::make('suggestOrderedList'),
-            Actions\Blockquote::make('suggestBlockquote'),
-            Actions\HorizontalRule::make('suggestHorizontalRule'),
-            Actions\CodeBlock::make('suggestCodeBlock'),
-            Actions\Details::make('suggestDetails'),
-            Actions\Grid::make('suggestGrid'),
-            Actions\Table::make('suggestTable'),
+            Actions\Media::make('Media'),
+            Actions\BulletList::make('BulletList'),
+            Actions\OrderedList::make('OrderedList'),
+            Actions\Blockquote::make('Blockquote'),
+            Actions\HorizontalRule::make('HorizontalRule'),
+            Actions\CodeBlock::make('CodeBlock'),
+            Actions\Details::make('Details'),
+            Actions\Grid::make('Grid'),
+            Actions\Table::make('Table'),
         ];
     }
 }

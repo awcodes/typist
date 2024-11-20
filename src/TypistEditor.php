@@ -60,15 +60,31 @@ class TypistEditor extends Field
     public function getActionsToRegister(): array
     {
         return collect([
-            ...$this->getToolbarActions(),
             ...$this->getControls(),
             ...$this->getSuggestions(),
             ...$this->getBubbleMenuActions(),
             ...$this->getSidebarActions(),
+            ...$this->getToolbarActions(),
         ])
             ->map(function ($action) {
                 return fn (): Action => $action;
             })
+            ->toArray();
+    }
+
+    public function getAllowedExtensions(): array
+    {
+        return collect([
+            ...$this->getControls(),
+            ...$this->getSuggestions(),
+            ...$this->getBubbleMenuActions(),
+            ...$this->getSidebarActions(),
+            ...$this->getToolbarActions(),
+        ])
+            ->map(function ($action) {
+                return $action->getName();
+            })
+            ->unique()
             ->toArray();
     }
 

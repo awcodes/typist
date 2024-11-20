@@ -46,12 +46,12 @@ trait HasBubbleMenus
     {
         return [
             BubbleMenu::make([
-                Actions\EditLink::make('bubbleEditLink'),
-                Actions\Unlink::make('bubbleUnlink'),
+                Actions\EditLink::make('EditLink'),
+                Actions\Unlink::make('Unlink'),
             ])->view('typist::bubble-link'),
             BubbleMenu::make([
-                Actions\EditMedia::make('bubbleEditMedia'),
-                Actions\RemoveMedia::make('bubbleRemoveMedia'),
+                Actions\EditMedia::make('EditMedia'),
+                Actions\RemoveMedia::make('RemoveMedia'),
             ])->view('typist::bubble-media'),
         ];
     }

@@ -18,6 +18,7 @@ class Grid extends TypistAction
             ->label(trans('typist::typist.grid'))
             ->icon('typist-grid')
             ->iconButton()
+            ->active('grid')
             ->fillForm([
                 'columns' => 2,
                 'stack_at' => 'md',
@@ -72,14 +73,22 @@ class Grid extends TypistAction
             ])
             ->action(function (TypistEditor $component, array $arguments, array $data): void {
                 $statePath = $component->getStatePath();
+
+                $data['coordinates'] = [
+                    'from' => $arguments['coordinates']['anchor'] ?? 1,
+                    'to' => $arguments['coordinates']['head'] ?? 1,
+                ];
+
                 $data = Js::from($data);
+
                 $component->getLivewire()->js(<<<JS
-                    window.editors['$statePath'].chain().focus().insertGrid($data).run()
+                    Alpine.nextTick(() => {
+                        window.editors['$statePath'].chain().focus().insertGrid($data).run()
+                    })
                 JS);
             })
             ->after(function (TypistEditor $component): void {
                 $component->getLivewire()->dispatch('focus-editor', statePath: $component->getStatePath());
-            })
-            ->active('grid');
+            });
     }
 }

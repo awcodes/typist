@@ -1,14 +1,14 @@
 import { Editor } from '@tiptap/core'
-import StatePathExtension from './extensions/StatePathExtension.js'
-import LinkExtension from './extensions/LinkExtension.js'
-import ClassExtension from './extensions/ClassExtension.js'
-import IdExtension from './extensions/IdExtension.js'
+import StatePath from './extensions/StatePath.js'
+import Link from './extensions/Link.js'
+import Classes from './extensions/Classes.js'
+import Ids from './extensions/Ids.js'
 import MergeTag from './extensions/MergeTag.js'
-import DragAndDropExtension from './extensions/DragAndDropExtension.js'
+import DragAndDrop from './extensions/DragAndDrop.js'
 import { Underline } from '@tiptap/extension-underline'
 import { Subscript } from '@tiptap/extension-subscript'
 import { Superscript } from '@tiptap/extension-superscript'
-import TextAlignExtension from './extensions/TextAlignExtension.js'
+import TextAlign from './extensions/TextAlign.js'
 import { Table } from '@tiptap/extension-table'
 import { TableRow } from '@tiptap/extension-table-row'
 import { TableHeader } from '@tiptap/extension-table-header'
@@ -19,11 +19,10 @@ import GridColumn from './extensions/Grid/GridColumn.js'
 import Details from './extensions/Details/Details.js'
 import DetailsContent from './extensions/Details/DetailsContent.js'
 import DetailsSummary from './extensions/Details/DetailsSummary.js'
-import MediaExtension from './extensions/MediaExtension.js'
-import { isEqual } from "lodash";
+import Media from './extensions/Media.js'
 import { BubbleMenu } from '@tiptap/extension-bubble-menu'
 import Block from './extensions/Block.js'
-import SlashExtension from './extensions/SlashExtension.js'
+import SlashMenu from './extensions/SlashMenu.js'
 import {Placeholder} from "@tiptap/extension-placeholder";
 import {Document} from "@tiptap/extension-document";
 import {Text} from "@tiptap/extension-text";
@@ -40,8 +39,20 @@ import {OrderedList} from "@tiptap/extension-ordered-list";
 import {Code} from "@tiptap/extension-code";
 import {CodeBlock} from "@tiptap/extension-code-block";
 import {ListItem} from "@tiptap/extension-list-item";
+import {History} from "@tiptap/extension-history";
+import Lead from "./extensions/Lead.js";
+import Small from "./extensions/Small.js";
+import {Blockquote} from "@tiptap/extension-blockquote";
+import CustomCommands from "./extensions/CustomCommands.js";
+import {HorizontalRule} from "@tiptap/extension-horizontal-rule";
+import { common, createLowlight } from 'lowlight'
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
+import hljs from 'highlight.js/lib/core';
+
+const lowlight = createLowlight(common)
 
 window.editors = [];
+window.tiptapExtensions = [];
 
 export default function typist({state, statePath, placeholder = null, mergeTags = [], suggestions = []}) {
     let editor
@@ -55,6 +66,7 @@ export default function typist({state, statePath, placeholder = null, mergeTags 
         isFocused: false,
         sidebarOpen: true,
         wordCount: 0,
+        updatedFromEditor: false,
         init() {
             // TODO: figure out why this is necessary for Repeaters and Builders
             let existing = this.$refs.element.querySelector('.tiptap');
@@ -78,8 +90,9 @@ export default function typist({state, statePath, placeholder = null, mergeTags 
                     handlePaste(view, event, slice) {
                         slice.content.descendants(node => {
                             if (node.type.name === 'typistBlock') {
-                                node.attrs.statePath = _this.statePath
-                                node.attrs.data = JSON.parse(node.attrs.data)
+                                const parser = new DOMParser()
+                                const doc = parser.parseFromString(node.attrs.view, 'text/html')
+                                node.attrs.view = doc.documentElement.textContent
                             }
                         });
                     }
@@ -89,13 +102,18 @@ export default function typist({state, statePath, placeholder = null, mergeTags 
                     _this.updatedAt = Date.now()
                 },
                 onUpdate({ editor }) {
-                    _this.updatedAt = Date.now()
-                    _this.state = editor.getJSON()
+                    window.dispatchEvent(new CustomEvent('updatedEditor', {
+                        detail: {
+                            statePath: _this.statePath,
+                            content: editor.getJSON(),
+                        }
+                    }));
                     _this.wordCount = editor.getText().trim().split(' ').length;
+                    _this.updatedAt = Date.now()
                 },
                 onSelectionUpdate({ editor }) {
-                    _this.updatedAt = Date.now()
                     _this.$dispatch('selection-update')
+                    _this.updatedAt = Date.now()
                 },
                 onFocus({ editor }) {
                     _this.isFocused = editor.isFocused
@@ -106,25 +124,11 @@ export default function typist({state, statePath, placeholder = null, mergeTags 
             let sortableEl = this.$el.parentElement.closest("[x-sortable]");
             if (sortableEl) {
                 window.Sortable.utils.on(sortableEl, "start", () => {
-                    let editors = document.querySelectorAll('.typist-wrapper');
-
-                    if (editors.length === 0) return;
-
-                    editors.forEach((editor) => {
-                        editor._x_dataStack[0].editor().setEditable(false);
-                        editor._x_dataStack[0].editor().options.element.style.pointerEvents = 'none';
-                    });
+                    sortableEl.classList.add('sorting')
                 });
 
                 window.Sortable.utils.on(sortableEl, "end", () => {
-                    let editors = document.querySelectorAll('.typist-wrapper');
-
-                    if (editors.length === 0) return;
-
-                    editors.forEach((editor) => {
-                        editor._x_dataStack[0].editor().setEditable(true);
-                        editor._x_dataStack[0].editor().options.element.style.pointerEvents = 'all';
-                    });
+                    sortableEl.classList.remove('sorting')
                 });
             }
 
@@ -135,12 +139,30 @@ export default function typist({state, statePath, placeholder = null, mergeTags 
             })
 
             this.$watch('state', (newState, oldState) => {
-                if (typeof newState !== "undefined") {
-                    if (! isEqual(oldState, Alpine.raw(newState))) {
-                        editor.commands.focus()
-                    }
+                if (! this.updatedFromEditor && JSON.stringify(newState) !== JSON.stringify(oldState)) {
+                    window.dispatchEvent(new CustomEvent('updateContent', {
+                        detail: {
+                            statePath: statePath,
+                            newContent: newState,
+                        }
+                    }));
+
+                    this.updatedFromEditor = false
                 }
             });
+
+            window.addEventListener('updatedEditor', event => {
+                if (event.detail.statePath === this.statePath) {
+                    this.updatedFromEditor = true
+                    this.state = event.detail.content
+                }
+            })
+
+            window.addEventListener('updateContent', event => {
+                if (event.detail.statePath === this.statePath) {
+                    editor.chain().setContent(event.detail.newContent).run()
+                }
+            })
         },
         editor() {
             return editor;
@@ -149,6 +171,11 @@ export default function typist({state, statePath, placeholder = null, mergeTags 
             editor.chain().focus()[command](args).run()
         },
         handleLivewire(actionName, data = {}) {
+            data = {
+                coordinates: editor.view.state.selection,
+                ...data,
+            }
+
             this.$wire.mountFormComponentAction(this.statePath, actionName, data)
         },
         handleSuggestion(event) {
@@ -174,7 +201,7 @@ export default function typist({state, statePath, placeholder = null, mergeTags 
                             .run()
                     })
 
-                    this.$wire.mountFormComponentAction(event.detail.statePath, event.detail.item.name);
+                    this.$wire.mountFormComponentAction(event.detail.statePath, event.detail.item.name, {coordinates: editor.view.state.selection});
                 }
             }
         },
@@ -228,9 +255,8 @@ export default function typist({state, statePath, placeholder = null, mergeTags 
             this.updatedAt = Date.now()
         },
         getExtensions() {
-            return [
+            const coreExtensions = [
                 Block,
-                Bold,
                 BubbleMenu.configure({
                     element: this.$refs.bubbleMenu,
                     tippyOptions: {
@@ -259,42 +285,132 @@ export default function typist({state, statePath, placeholder = null, mergeTags 
                         }
                     },
                 }),
-                BulletList,
-                ClassExtension,
-                Code,
-                CodeBlock,
-                Details,
-                DetailsContent,
-                DetailsSummary,
+                Classes,
+                CustomCommands,
                 Document,
-                DragAndDropExtension,
+                DragAndDrop,
                 Dropcursor,
                 Gapcursor,
-                Grid,
-                GridColumn,
                 HardBreak,
-                Heading,
                 History,
-                IdExtension,
-                Italic,
-                ListItem,
-                LinkExtension,
-                MediaExtension,
+                Ids,
                 MergeTag.configure({
                     mergeTags
                 }),
-                OrderedList,
                 Paragraph,
                 Placeholder.configure({
                     placeholder: this.placeholder
                 }),
-                SlashExtension.configure({
+                SlashMenu.configure({
                     suggestions,
                     appendTo: this.$refs.element
                 }),
-                StatePathExtension.configure({
+                StatePath.configure({
                     statePath: statePath
                 }),
+                Text,
+                TextStyle,
+            ];
+
+            return [
+                ...coreExtensions,
+                Blockquote,
+                Bold,
+                BulletList,
+                Code,
+                CodeBlockLowlight
+                    .extend({
+                        addNodeView() {
+                            return ({ node, editor, extension, getPos }) => {
+                                const languages = lowlight.listLanguages();
+                                const { view } = editor
+
+                                // Create the container for the code block and dropdown
+                                const container = document.createElement('div');
+                                container.classList.add('code-block-container');
+
+                                // Create the dropdown for language selection
+                                const select = document.createElement('select');
+                                select.classList.add('language-select');
+                                select.contentEditable = 'false';
+
+                                languages.forEach(lang => {
+                                    const option = document.createElement('option');
+                                    option.value = lang;
+                                    option.textContent = lang;
+                                    option.selected = lang === node.attrs.language;
+                                    select.appendChild(option);
+                                });
+
+                                // Handle language change
+                                select.addEventListener('change', (event) => {
+                                    if (typeof getPos === 'function') {
+                                        view.dispatch(view.state.tr.setNodeMarkup(getPos(), undefined,{
+                                            language: event.target.value
+                                        }))
+                                    }
+                                });
+
+                                // Create the pre and code elements for the code block
+                                const pre = document.createElement('pre');
+                                const code = document.createElement('code');
+                                code.textContent = node.textContent;
+                                code.classList.add(`${extension.options.languageClassPrefix}${node.attrs.language}`)
+                                pre.appendChild(code);
+
+                                // Apply syntax highlighting
+                                if (node.attrs.language) {
+                                    const highlighted = lowlight.highlight(node.attrs.language, node.textContent);
+                                    code.innerHTML = highlighted.value;
+                                }
+
+                                // Append the select and pre to the container
+                                container.appendChild(select);
+                                container.appendChild(pre);
+
+                                return {
+                                    dom: container,
+                                    contentDOM: code,
+                                    update(updatedNode) {
+                                        if (updatedNode.type !== node.type) return false;
+
+                                        // Update language select value
+                                        const currentLanguage = updatedNode.attrs.language;
+                                        select.value = currentLanguage;
+
+                                        // Update code block content and highlight
+                                        code.textContent = updatedNode.textContent;
+                                        if (currentLanguage) {
+                                            const highlighted = lowlight.highlight(currentLanguage, updatedNode.textContent);
+                                            code.innerHTML = highlighted.value;
+                                        } else {
+                                            code.textContent = updatedNode.textContent;
+                                        }
+
+                                        code.removeAttribute('class')
+                                        code.classList.add(`${extension.options.languageClassPrefix}${updatedNode.attrs.language}`)
+
+                                        return true;
+                                    },
+                                };
+                            };
+                        },
+                    })
+                    .configure({lowlight}),
+                Details,
+                DetailsContent,
+                DetailsSummary,
+                Grid,
+                GridColumn,
+                Heading,
+                HorizontalRule,
+                Italic,
+                Lead,
+                ListItem,
+                Link,
+                Media,
+                OrderedList,
+                Small,
                 Strike,
                 Subscript,
                 Superscript,
@@ -304,12 +420,11 @@ export default function typist({state, statePath, placeholder = null, mergeTags 
                 TableRow,
                 TableHeader,
                 TableCell,
-                Text,
-                TextAlignExtension.configure({
-                    types: ['heading', 'paragraph']
+                TextAlign.configure({
+                    types: ['heading', 'paragraph', 'media']
                 }),
-                TextStyle,
                 Underline,
+                ...window.tiptapExtensions,
             ]
         }
     }

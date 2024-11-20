@@ -1,0 +1,175 @@
+:root {
+    --color-scribble-comment: #57606a;
+    --color-scribble-constant: #0550ae;
+    --color-scribble-constant-other-reference-link: #0a3069;
+    --color-scribble-entity: #6639ba;
+    --color-scribble-storage-modifier-import: #24292f;
+    --color-scribble-entity-tag: #0550ae;
+    --color-scribble-keyword: #cf222e;
+    --color-scribble-string: #0a3069;
+    --color-scribble-variable: #953800;
+    --color-scribble-brackethighlighter-unmatched: #82071e;
+    --color-scribble-brackethighlighter-angle: #57606a;
+    --color-scribble-invalid-illegal-text: #f6f8fa;
+    --color-scribble-invalid-illegal-bg: #82071e;
+    --color-scribble-carriage-return-text: #f6f8fa;
+    --color-scribble-carriage-return-bg: #cf222e;
+    --color-scribble-string-regexp: #116329;
+    --color-scribble-markup-list: #3b2300;
+    --color-scribble-markup-heading: #0550ae;
+    --color-scribble-markup-italic: #24292f;
+    --color-scribble-markup-bold: #24292f;
+    --color-scribble-markup-deleted-text: #82071e;
+    --color-scribble-markup-deleted-bg: #ffebe9;
+    --color-scribble-markup-inserted-text: #116329;
+    --color-scribble-markup-inserted-bg: #dafbe1;
+    --color-scribble-markup-changed-text: #953800;
+    --color-scribble-markup-changed-bg: #ffd8b5;
+    --color-scribble-markup-ignored-text: #eaeef2;
+    --color-scribble-markup-ignored-bg: #0550ae;
+    --color-scribble-meta-diff-range: #8250df;
+    --color-scribble-sublimelinter-gutter-mark: #8c959f;
+}
+
+.dark {
+    --color-scribble-comment: #8b949e;
+    --color-scribble-constant: #79c0ff;
+    --color-scribble-constant-other-reference-link: #0a3069;
+    --color-scribble-entity: #d2a8ff;
+    --color-scribble-storage-modifier-import: #c9d1d9;
+    --color-scribble-entity-tag: #7ee787;
+    --color-scribble-keyword: #ff7b72;
+    --color-scribble-string: #a5d6ff;
+    --color-scribble-variable: #ffa657;
+    --color-scribble-brackethighlighter-unmatched: #82071e;
+    --color-scribble-brackethighlighter-angle: #57606a;
+    --color-scribble-invalid-illegal-text: #f6f8fa;
+    --color-scribble-invalid-illegal-bg: #82071e;
+    --color-scribble-carriage-return-text: #f6f8fa;
+    --color-scribble-carriage-return-bg: #cf222e;
+    --color-scribble-string-regexp: #116329;
+    --color-scribble-markup-list: #f2cc60;
+    --color-scribble-markup-heading: #1f6feb;
+    --color-scribble-markup-italic: #c9d1d9;
+    --color-scribble-markup-bold: #c9d1d9;
+    --color-scribble-markup-deleted-text: #ffdcd7;
+    --color-scribble-markup-deleted-bg: #67060c;
+    --color-scribble-markup-inserted-text: #aff5b4;
+    --color-scribble-markup-inserted-bg: #033a16;
+    --color-scribble-markup-changed-text: #953800;
+    --color-scribble-markup-changed-bg: #ffd8b5;
+    --color-scribble-markup-ignored-text: #eaeef2;
+    --color-scribble-markup-ignored-bg: #0550ae;
+    --color-scribble-meta-diff-range: #8250df;
+    --color-scribble-sublimelinter-gutter-mark: #8c959f;
+}
+
+.tiptap pre {
+    color: #24292e;
+    background: theme('colors.gray.100');
+    font-family: theme('fontFamily.mono'), monospace;
+}
+
+.dark .tiptap pre {
+    color: #c9d1d9;
+    background: theme('colors.gray.800');
+    font-family: theme('fontFamily.mono'), monospace;
+}
+
+.tiptap code {
+    .hljs-doctag,
+    .hljs-keyword,
+    .hljs-meta .hljs-keyword,
+    .hljs-template-tag,
+    .hljs-template-variable,
+    .hljs-type,
+    .hljs-variable.language_ {
+        color: var(--color-scribble-keyword);
+    }
+
+    .hljs-title,
+    .hljs-title.class_,
+    .hljs-title.class_.inherited__,
+    .hljs-title.function_ {
+        color: var(--color-scribble-entity);
+    }
+
+    .hljs-attr,
+    .hljs-attribute,
+    .hljs-literal,
+    .hljs-meta,
+    .hljs-number,
+    .hljs-operator,
+    .hljs-variable,
+    .hljs-selector-attr,
+    .hljs-selector-class,
+    .hljs-selector-id {
+        color: var(--color-scribble-constant);
+    }
+
+    .hljs-regexp,
+    .hljs-string,
+    .hljs-meta .hljs-string {
+        color: var(--color-scribble-string);
+    }
+
+    .hljs-built_in,
+    .hljs-symbol {
+        color: var(--color-scribble-variable);
+    }
+
+    .hljs-comment,
+    .hljs-code,
+    .hljs-formula {
+        color: var(--color-scribble-comment);
+    }
+
+    .hljs-name,
+    .hljs-quote,
+    .hljs-selector-tag,
+    .hljs-selector-pseudo {
+        color: var(--color-scribble-entity-tag);
+    }
+
+    .hljs-subst {
+        color: var(--color-scribble-storage-modifier-import);
+    }
+
+    .hljs-section {
+        color: var(--color-scribble-markup-heading);
+        font-weight: bold;
+    }
+
+    .hljs-bullet {
+        color: var(--color-scribble-markup-list);
+    }
+
+    .hljs-emphasis {
+        color: var(--color-scribble-markup-italic);
+        font-style: italic;
+    }
+
+    .hljs-strong {
+        color: var(--color-scribble-markup-bold);
+        font-weight: bold;
+    }
+
+    .hljs-addition {
+        color: var(--color-scribble-markup-inserted-text);
+        background-color: var(--color-scribble-markup-inserted-bg);
+    }
+
+    .hljs-deletion {
+        color: var(--color-scribble-markup-deleted-text);
+        background-color: var(--color-scribble-markup-deleted-bg);
+    }
+
+    .hljs-char.escape_,
+    .hljs-link,
+    .hljs-params,
+    .hljs-property,
+    .hljs-punctuation,
+    .hljs-tag {
+        /* purposely ignored */
+    }
+}

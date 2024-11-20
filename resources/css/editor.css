@@ -2,11 +2,9 @@
     @apply relative h-full flex flex-col ring-1 ring-gray-950/10 rounded-lg shadow-sm ring-1 transition bg-white dark:ring-white/20 dark:bg-white/5;
 
     .typist-toolbar {
-        @apply p-1 flex items-center justify-between border-b border-gray-950/10 pointer-events-none opacity-50 dark:border-white/5;
+        @apply p-1 flex items-center justify-between border-b border-gray-950/10 dark:border-white/5;
 
         &.focused {
-            @apply pointer-events-auto opacity-100 transition;
-
             .fi-ac-action.is-active {
                 @apply text-primary-600 dark:text-primary-500
             }
@@ -53,7 +51,7 @@
     }
 
     .tiptap {
-        @apply p-4 text-gray-950 dark:text-white dark:placeholder:text-gray-500 bg-white/0 ps-3 pe-3;
+        @apply p-4 text-gray-950 dark:text-white dark:placeholder:text-gray-500 bg-white/0 ps-3 pe-3 min-h-full;
 
         &.ProseMirror-focused {
             @apply outline-none;
@@ -98,7 +96,7 @@
         }
 
         a {
-            @apply text-info-500;
+            @apply text-info-500 dark:text-info-400;
         }
 
         .typist-grid {
@@ -165,6 +163,14 @@
                 > * + * {
                     margin-block-start: 1rem;
                 }
+            }
+        }
+
+        .code-block-container {
+            @apply relative;
+
+            .language-select {
+                @apply absolute top-0 right-0 text-sm rounded-sm py-1 px-3 bg-gray-950 border-none ring-1 outline-none focus:ring-primary-600 ring-gray-950/10 dark:ring-white/20 dark:focus-within:ring-primary-500;;
             }
         }
 
@@ -248,14 +254,10 @@
     }
 
     .typist-sidebar {
-        @apply hidden shrink-0 p-2 space-y-2 max-w-sm md:flex flex-col h-full pointer-events-none opacity-50 border-s border-gray-950/10 bg-gray-50 dark:border-white/5 dark:bg-gray-950/20;
+        @apply hidden shrink-0 p-2 space-y-2 max-w-sm md:flex flex-col h-full border-s border-gray-950/10 bg-gray-50 dark:border-white/5 dark:bg-gray-950/20;
 
         .typist-sidebar-item {
-            @apply cursor-move flex items-center gap-2 rounded border text-xs px-3 py-2 bg-white dark:bg-gray-800 dark:border-gray-700;
-        }
-
-        &.focused {
-            @apply pointer-events-auto opacity-100 transition;
+            @apply cursor-move flex items-center justify-center gap-2 rounded border text-xs px-3 py-2 bg-white dark:bg-gray-800 dark:border-gray-700;
         }
     }
 

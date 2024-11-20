@@ -24,6 +24,7 @@ class Media extends TypistAction
             ->label(trans('typist::typist.media'))
             ->icon('typist-media')
             ->iconButton()
+            ->active('media')
             ->fillForm(function (TypistEditor $component, array $arguments) {
                 $source = isset($arguments['src']) && $arguments['src'] !== ''
                     ? $component->getDirectory() . Str::of($arguments['src'])
@@ -117,7 +118,11 @@ class Media extends TypistAction
                                         'end' => 'End',
                                     ])
                                     ->grouped()
-                                    ->default('start'),
+                                    ->afterStateHydrated(function (Components\ToggleButtons $component, $state) {
+                                        if (! $state) {
+                                            $component->state('start');
+                                        }
+                                    }),
                                 Components\Checkbox::make('loading')
                                     ->label('Lazy Load')
                                     ->dehydrateStateUsing(function ($state): ?string {
@@ -151,15 +156,20 @@ class Media extends TypistAction
                 $data = Js::from([
                     ...$data,
                     'src' => $source,
+                    'coordinates' => [
+                        'from' => $arguments['coordinates']['anchor'] ?? 1,
+                        'to' => $arguments['coordinates']['head'] ?? $arguments['coordinates']['anchor'] + 1,
+                    ],
                 ]);
 
                 $component->getLivewire()->js(<<<JS
-                    window.editors['$statePath'].chain().focus().setMedia($data).run()
+                    Alpine.nextTick(() => {
+                        window.editors['$statePath'].chain().focus().setMedia($data).run()
+                    })
                 JS);
             })
             ->after(function (TypistEditor $component): void {
                 $component->getLivewire()->dispatch('focus-editor', statePath: $component->getStatePath());
-            })
-            ->active('media');
+            });
     }
 }

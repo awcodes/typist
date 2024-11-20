@@ -30,11 +30,14 @@ class TextAlignExtension extends Extension
                             return InlineStyle::getAttribute($DOMNode, 'text-align') ?? $this->options['defaultAlignment'];
                         },
                         'renderHTML' => function ($attributes) {
-                            if ($attributes->textAlign === $this->options['defaultAlignment']) {
+                            if (
+                                property_exists($attributes, 'style') && str_contains($attributes->style, 'text-align')
+                                || $attributes->textAlign === $this->options['defaultAlignment']
+                            ) {
                                 return null;
                             }
 
-                            return ['style' => "text-align: {$attributes->textAlign}"];
+                            return ['style' => "text-align: {$attributes->textAlign};"];
                         },
                     ],
                 ],
