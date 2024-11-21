@@ -20,7 +20,16 @@
         }
 
         .fi-ac-btn-group {
-            @apply bg-transparent ring-0 ps-2 pe-1 text-gray-400 dark:text-gray-400;
+            @apply shadow-none bg-transparent ring-0 ps-2 pe-1 text-gray-600 dark:text-gray-400;
+
+            .fi-btn-icon {
+                @apply w-3 h-3 mt-1;
+            }
+
+            &:hover,
+            &:focus {
+                @apply text-primary-500 dark:text-primary-600;
+            }
         }
 
         .fi-ac-action:not(.fi-ac-grouped-action) {
@@ -166,14 +175,6 @@
             }
         }
 
-        .code-block-container {
-            @apply relative;
-
-            .language-select {
-                @apply absolute top-0 right-0 text-sm rounded-sm py-1 px-3 bg-gray-950 border-none ring-1 outline-none focus:ring-primary-600 ring-gray-950/10 dark:ring-white/20 dark:focus-within:ring-primary-500;;
-            }
-        }
-
         table {
             @apply border-collapse m-0 overflow-hidden w-full relative table-fixed;
         }
@@ -235,8 +236,16 @@
             min-height: 2rem;
         }
 
+        .code-block-container {
+            @apply relative;
+
+            .language-select {
+                @apply text-white text-sm rounded-sm py-1 px-3 bg-transparent border-none ring-1 outline-none focus:ring-primary-600 ring-white/20 dark:focus-within:ring-primary-500;;
+            }
+        }
+
         .typist-block-controls {
-            @apply transition absolute top-0 right-0 p-1 rounded-bl-lg flex items-center bg-gray-950;
+            @apply transition absolute top-0 right-0 p-1 rounded-bl-lg flex items-center bg-gray-700 dark:bg-gray-950;
             z-index: 1;
 
             button {
@@ -262,7 +271,7 @@
     }
 
     .typist-footer {
-        @apply p-2 text-xs text-gray-400 flex items-center justify-between border-t border-gray-950/10 dark:border-white/5 dark:text-gray-500;
+        @apply p-2 text-xs text-gray-500 flex items-center justify-between border-t border-gray-950/10 dark:border-white/5;
     }
 }
 

@@ -6,6 +6,7 @@ use Filament\Actions\ActionGroup;
 use Filament\Actions\StaticAction;
 use Filament\Support\Enums\ActionSize;
 use Filament\Support\Enums\IconPosition;
+use Filament\Support\Enums\IconSize;
 
 class ToolbarGroup extends ActionGroup
 {

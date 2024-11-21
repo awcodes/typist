@@ -76,6 +76,8 @@ trait HasToolbar
                 Actions\Underline::make('Underline'),
                 Actions\Lead::make('Lead'),
                 Actions\Small::make('Small'),
+                Actions\Color::make('Color'),
+                Actions\Highlight::make('Highlight'),
             ])->label('Styling'),
             ToolbarGroup::make([
                 Actions\Link::make('Link'),

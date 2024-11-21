@@ -37,7 +37,6 @@ import {Strike} from "@tiptap/extension-strike";
 import {BulletList} from "@tiptap/extension-bullet-list";
 import {OrderedList} from "@tiptap/extension-ordered-list";
 import {Code} from "@tiptap/extension-code";
-import {CodeBlock} from "@tiptap/extension-code-block";
 import {ListItem} from "@tiptap/extension-list-item";
 import {History} from "@tiptap/extension-history";
 import Lead from "./extensions/Lead.js";
@@ -45,11 +44,10 @@ import Small from "./extensions/Small.js";
 import {Blockquote} from "@tiptap/extension-blockquote";
 import CustomCommands from "./extensions/CustomCommands.js";
 import {HorizontalRule} from "@tiptap/extension-horizontal-rule";
-import { common, createLowlight } from 'lowlight'
-import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
-import hljs from 'highlight.js/lib/core';
-
-const lowlight = createLowlight(common)
+import CodeBlockLowlight from './extensions/CodeBlock.js'
+import lowlight from "./extensions/Lowlight.js";
+import {Color} from "@tiptap/extension-color";
+import {Highlight} from "@tiptap/extension-highlight";
 
 window.editors = [];
 window.tiptapExtensions = [];
@@ -318,91 +316,15 @@ export default function typist({state, statePath, placeholder = null, mergeTags 
                 Bold,
                 BulletList,
                 Code,
-                CodeBlockLowlight
-                    .extend({
-                        addNodeView() {
-                            return ({ node, editor, extension, getPos }) => {
-                                const languages = lowlight.listLanguages();
-                                const { view } = editor
-
-                                // Create the container for the code block and dropdown
-                                const container = document.createElement('div');
-                                container.classList.add('code-block-container');
-
-                                // Create the dropdown for language selection
-                                const select = document.createElement('select');
-                                select.classList.add('language-select');
-                                select.contentEditable = 'false';
-
-                                languages.forEach(lang => {
-                                    const option = document.createElement('option');
-                                    option.value = lang;
-                                    option.textContent = lang;
-                                    option.selected = lang === node.attrs.language;
-                                    select.appendChild(option);
-                                });
-
-                                // Handle language change
-                                select.addEventListener('change', (event) => {
-                                    if (typeof getPos === 'function') {
-                                        view.dispatch(view.state.tr.setNodeMarkup(getPos(), undefined,{
-                                            language: event.target.value
-                                        }))
-                                    }
-                                });
-
-                                // Create the pre and code elements for the code block
-                                const pre = document.createElement('pre');
-                                const code = document.createElement('code');
-                                code.textContent = node.textContent;
-                                code.classList.add(`${extension.options.languageClassPrefix}${node.attrs.language}`)
-                                pre.appendChild(code);
-
-                                // Apply syntax highlighting
-                                if (node.attrs.language) {
-                                    const highlighted = lowlight.highlight(node.attrs.language, node.textContent);
-                                    code.innerHTML = highlighted.value;
-                                }
-
-                                // Append the select and pre to the container
-                                container.appendChild(select);
-                                container.appendChild(pre);
-
-                                return {
-                                    dom: container,
-                                    contentDOM: code,
-                                    update(updatedNode) {
-                                        if (updatedNode.type !== node.type) return false;
-
-                                        // Update language select value
-                                        const currentLanguage = updatedNode.attrs.language;
-                                        select.value = currentLanguage;
-
-                                        // Update code block content and highlight
-                                        code.textContent = updatedNode.textContent;
-                                        if (currentLanguage) {
-                                            const highlighted = lowlight.highlight(currentLanguage, updatedNode.textContent);
-                                            code.innerHTML = highlighted.value;
-                                        } else {
-                                            code.textContent = updatedNode.textContent;
-                                        }
-
-                                        code.removeAttribute('class')
-                                        code.classList.add(`${extension.options.languageClassPrefix}${updatedNode.attrs.language}`)
-
-                                        return true;
-                                    },
-                                };
-                            };
-                        },
-                    })
-                    .configure({lowlight}),
+                CodeBlockLowlight.configure({lowlight}),
+                Color,
                 Details,
                 DetailsContent,
                 DetailsSummary,
                 Grid,
                 GridColumn,
                 Heading,
+                Highlight,
                 HorizontalRule,
                 Italic,
                 Lead,
