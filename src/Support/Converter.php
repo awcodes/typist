@@ -72,8 +72,6 @@ class Converter
                 new ClassExtension,
                 new IdExtension,
                 new ListItem,
-                //                new ScribbleBlock(),
-                //                new MergeTag(),
                 ...$this->getExtensions(),
             ],
         ]);

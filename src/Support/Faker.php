@@ -14,7 +14,7 @@ class Faker
 
     public static function make(): static
     {
-        $static = new static();
+        $static = new static;
         $static->faker = Factory::create();
 
         return $static;
@@ -22,7 +22,7 @@ class Faker
 
     public function heading(int | string | null $level = 2): static
     {
-        $this->output .= '<h' . $level . '>' . Str::title($this->faker->words(rand(3, 8), true)) . '</h' . $level . '>';
+        $this->output .= '<h' . $level . '>' . Str::title($this->faker->words(mt_rand(3, 8), true)) . '</h' . $level . '>';
 
         return $this;
     }
@@ -38,15 +38,15 @@ class Faker
     {
         if ($withRandomLinks) {
             $this->output .= '<p>' . collect($this->faker->paragraphs($count))->map(function ($paragraph) {
-                $paragraphWords = explode(' ', $paragraph);
-                $key = array_rand($paragraphWords);
+                $pos = mt_rand(3, strlen($paragraph));
 
-                $paragraphWords[$key] = '<a href="' . $this->faker->url() . '">' . $this->faker->words(rand(3, 8), true) . '</a>';
+                $start = substr($paragraph, 0, $pos);
+                $end = substr($paragraph, $pos);
 
-                return implode(' ', $paragraphWords);
+                $link = ' <a href="' . $this->faker->url() . '">' . $this->faker->words(mt_rand(3, 8), true) . '</a> ';
+
+                return $start . $link . $end;
             })->implode('</p><p>') . '</p>';
-
-            return $this;
         } else {
             $this->output .= '<p>' . collect($this->faker->paragraphs($count))->implode('</p><p>') . '</p>';
         }
@@ -88,7 +88,7 @@ class Faker
 
     public function link(): static
     {
-        $this->output .= '<a href="' . $this->faker->url() . '">' . $this->faker->words(rand(3, 8), true) . '</a>';
+        $this->output .= '<a href="' . $this->faker->url() . '">' . $this->faker->words(mt_rand(3, 8), true) . '</a>';
 
         return $this;
     }
@@ -123,7 +123,7 @@ class Faker
 
     public function codeBlock(?string $className = 'hljs'): static
     {
-        $this->output .= "<pre class=\"{$className}\"><code>export default function testComponent({\n\n\tstate,\n\n}) {\n\n\treturn {\n\n\t\tstate,\n\n\t\tinit: function () {\n\n\t\t\t// Initialise the Alpine component here, if you need to.\n\n\t\t},\n\n\t}\n\n}</code></pre>";
+        $this->output .= "<pre><code class=\"{$className}\">export default function testComponent({\n\n\tstate,\n\n}) {\n\n\treturn {\n\n\t\tstate,\n\n\t\tinit: function () {\n\n\t\t\t// Initialise the Alpine component here, if you need to.\n\n\t\t},\n\n\t}\n\n}</code></pre>";
 
         return $this;
     }
@@ -151,7 +151,7 @@ class Faker
 
     public function table(?int $cols = null): static
     {
-        $cols = $cols ?? rand(3, 8);
+        $cols = $cols ?? mt_rand(3, 8);
 
         $this->output .= '<table><thead><tr><th>' . collect($this->faker->words($cols))->implode('</th><th>') . '</th></tr></thead><tbody><tr><td>' . collect($this->faker->words($cols))->implode('</td><td>') . '</td></tr><tr><td>' . collect($this->faker->words($cols))->implode('</td><td>') . '</td></tr></tbody></table>';
 
@@ -160,10 +160,10 @@ class Faker
 
     public function grid(array $cols = [1, 1, 1]): static
     {
-        $this->output .= '<div class="typist-grid" data-type="responsive" data-columns="' . count($cols) . '" style="grid-template-columns: repeat(' . count($cols) . ', 1fr);" data-stack-at="md">';
+        $this->output .= '<div class="scribble-grid" data-type="responsive" data-columns="' . count($cols) . '" style="grid-template-columns: repeat(' . count($cols) . ', 1fr);" data-stack-at="md">';
 
         foreach ($cols as $col) {
-            $this->output .= '<div class="typist-grid-column" data-col-span="' . $col . '" style="grid-column: span 1;"><h2>' . Str::title($this->faker->words(rand(3, 8), true)) . '</h2><p>' . $this->faker->paragraph() . '</p></div>';
+            $this->output .= '<div class="scribble-grid-column" data-col-span="' . $col . '" style="grid-column: span 1;"><h2>' . Str::title($this->faker->words(mt_rand(3, 8), true)) . '</h2><p>' . $this->faker->paragraph() . '</p></div>';
         }
 
         $this->output .= '</div>';
