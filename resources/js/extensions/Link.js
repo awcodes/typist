@@ -5,6 +5,7 @@ export default Link.extend({
 
     addOptions() {
         return {
+            ...this.parent?.(),
             openOnClick: false,
             linkOnPaste: true,
             autolink: false,

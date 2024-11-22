@@ -47,11 +47,19 @@ import CodeBlockLowlight from './extensions/CodeBlock.js'
 import lowlight from "./extensions/Lowlight.js";
 import {Color} from "@tiptap/extension-color";
 import {Highlight} from "@tiptap/extension-highlight";
+import Mentions from './extensions/Mentions.js';
 
 window.editors = [];
 window.tiptapExtensions = [];
 
-export default function typist({state, statePath, placeholder = null, mergeTags = [], suggestions = []}) {
+export default function typist({
+    state,
+    statePath,
+    placeholder = null,
+    mergeTags = [],
+    suggestions = [],
+    mentions = [],
+}) {
     let editor = null;
 
     return {
@@ -252,6 +260,7 @@ export default function typist({state, statePath, placeholder = null, mergeTags 
             this.updatedAt = Date.now()
         },
         getExtensions() {
+
             const coreExtensions = [
                 Block,
                 Classes,
@@ -263,9 +272,6 @@ export default function typist({state, statePath, placeholder = null, mergeTags 
                 HardBreak,
                 History,
                 Ids,
-                MergeTag.configure({
-                    mergeTags
-                }),
                 Paragraph,
                 Placeholder.configure({
                     placeholder: this.placeholder
@@ -280,6 +286,14 @@ export default function typist({state, statePath, placeholder = null, mergeTags 
                 Text,
                 TextStyle,
             ];
+
+            if (mergeTags.length) {
+                coreExtensions.push(MergeTag.configure({mergeTags}))
+            }
+
+            if (mentions.length) {
+                coreExtensions.push(Mentions.configure({mentions}))
+            }
 
             return [
                 ...coreExtensions,

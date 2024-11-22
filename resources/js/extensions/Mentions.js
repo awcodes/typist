@@ -4,7 +4,7 @@ import tippy from 'tippy.js'
 import { PluginKey } from '@tiptap/pm/state'
 
 export default Node.create({
-    name: 'mergeTag',
+    name: 'mentions',
 
     group: 'inline',
 
@@ -47,19 +47,19 @@ export default Node.create({
                 { 'data-type': this.name },
                 HTMLAttributes
             ),
-            `{{ ${node.attrs.id} }}`,
+            `@${node.attrs.id}`,
         ]
     },
 
     renderText({ node }) {
-        return `{{ ${node.attrs.id} }}`
+        return `@${node.attrs.id} `
     },
 
     addKeyboardShortcuts() {
         return {
             Backspace: () =>
                 this.editor.commands.command(({ tr, state }) => {
-                    let isMergeTag = false
+                    let isMention = false
                     const { selection } = state
                     const { empty, anchor } = selection
 
@@ -69,9 +69,9 @@ export default Node.create({
 
                     state.doc.nodesBetween(anchor - 1, anchor, (node, pos) => {
                         if (node.type.name === this.name) {
-                            isMergeTag = true
+                            isMention = true
                             tr.insertText(
-                                '{{',
+                                '@',
                                 pos,
                                 pos + node.nodeSize
                             )
@@ -80,28 +80,8 @@ export default Node.create({
                         }
                     })
 
-                    return isMergeTag
+                    return isMention
                 })
-        }
-    },
-
-    addCommands() {
-        return {
-            insertMergeTag: (attributes) => ({ chain, state }) => {
-                const currentChain = chain()
-
-                if (! [null, undefined].includes(attributes.coordinates?.pos)) {
-                    currentChain.insertContentAt(
-                        { from: attributes.coordinates.pos, to: attributes.coordinates.pos },
-                        [
-                            { type: this.name, attrs: { id: attributes.tag } },
-                            { type: 'text', text: ' ' },
-                        ],
-                    )
-
-                    return currentChain
-                }
-            },
         }
     },
 
@@ -109,10 +89,11 @@ export default Node.create({
         return [
             Suggestion({
                 editor: this.editor,
-                char: '{{',
-                items: ({ query }) => this.options.mergeTags.filter(item => item.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5),
-                pluginKey: new PluginKey('mergeTag'),
+                char: '@',
+                items: ({ query }) => this.options.mentions.filter(item => item.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5),
+                pluginKey: new PluginKey('mentions'),
                 command: ({ editor, range, props }) => {
+                    range.to = editor.view.state.selection.$to.pos
                     const nodeAfter = editor.view.state.selection.$to.nodeAfter
                     const overrideSpace = nodeAfter?.text?.startsWith(' ')
 
@@ -135,7 +116,7 @@ export default Node.create({
                         ])
                         .run()
 
-                    window.getSelection()?.collapseToEnd()
+                    editor.view.dom.ownerDocument.defaultView?.getSelection()?.collapseToEnd()
                 },
                 allow: ({ state, range }) => {
                     const $from = state.doc.resolve(range.from)
@@ -159,12 +140,12 @@ export default Node.create({
                                         selectedIndex: 0,
                                         init: function () {
                                             this.$el.parentElement.addEventListener(
-                                                'merge-tags-key-down',
+                                                'mentions-key-down',
                                                 (event) => this.onKeyDown(event.detail),
                                             );
 
                                             this.$el.parentElement.addEventListener(
-                                                'merge-tags-update-items',
+                                                'mentions-update-items',
                                                 (event) => (this.items = event.detail),
                                             );
                                         },
@@ -199,17 +180,18 @@ export default Node.create({
                                                 return;
                                             };
 
-                                            $el.parentElement.dispatchEvent(new CustomEvent('merge-tags-select', { detail: { item } }));
+                                            $el.parentElement.dispatchEvent(new CustomEvent('mentions-select', { detail: { item } }));
                                         },
                                     }"
-                                    class="typist-merge-tags"
+                                    class="typist-mentions"
                                 >
                                     <template x-for="(item, index) in items" :key="index">
                                         <button
+                                            type="button"
                                             x-text="item"
                                             x-on:click="selectItem(index)"
                                             :class="{'bg-primary-600': index === selectedIndex}"
-                                            class="typist-merge-tag-item"
+                                            class="block w-full text-left rounded px-2 py-1"
                                         ></button>
                                     </template>
                                 </div>
@@ -217,7 +199,7 @@ export default Node.create({
 
                             component = document.createElement('div');
                             component.innerHTML = html;
-                            component.addEventListener('merge-tags-select', (event) => {
+                            component.addEventListener('mentions-select', (event) => {
                                 props.command({ id: event.detail.item });
                             });
 
@@ -229,7 +211,7 @@ export default Node.create({
                                 showOnCreate: true,
                                 interactive: true,
                                 trigger: 'manual',
-                                theme: 'typist-merge-tags',
+                                theme: 'typist-mentions',
                                 placement: 'bottom-start',
                             });
                         },
@@ -243,11 +225,11 @@ export default Node.create({
 
                             popup[0].show();
 
-                            component.dispatchEvent(new CustomEvent('merge-tags-update-items', { detail: props.items }));
+                            component.dispatchEvent(new CustomEvent('mentions-update-items', { detail: props.items }));
                         },
 
                         onKeyDown(props) {
-                            component.dispatchEvent(new CustomEvent('merge-tags-key-down', { detail: props.event }));
+                            component.dispatchEvent(new CustomEvent('mentions-key-down', { detail: props.event }));
                         },
 
                         onExit() {

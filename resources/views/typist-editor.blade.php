@@ -15,7 +15,8 @@
             statePath: @js($statePath),
             placeholder: @js($getPlaceholder()),
             mergeTags: @js($mergeTags),
-            suggestions: @js($getSuggestionsForTiptap())
+            suggestions: @js($getSuggestionsForTiptap()),
+            mentions: @js($getMentions())
         })"
         id="{{ 'typist-wrapper-' . $statePath }}"
         @class([

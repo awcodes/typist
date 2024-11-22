@@ -150,8 +150,9 @@
             }
         }
 
-        span[data-type="mergeTag"] {
-            @apply bg-primary-500/30 dark:bg-primary-500/50;
+        span[data-type="mergeTag"],
+        span[data-type="mentions"]{
+            @apply bg-gray-100 dark:bg-gray-800 px-2 py-1 mx-1 rounded;
         }
 
         div[data-type="details"] {
@@ -279,14 +280,6 @@
     @apply fixed inset-0 bg-white dark:bg-gray-900 z-20;
 }
 
-.typist-suggestions {
-    @apply flex flex-col;
-
-    .typist-suggestion-item {
-        @apply flex items-center gap-2 block w-full text-left rounded px-2 py-1;
-    }
-}
-
 .typist-bubble-menu-wrapper {
     @apply absolute top-0 inset-x-0 z-10 isolate bg-gray-200 dark:bg-gray-700;
 
@@ -312,15 +305,27 @@
 }
 
 .tippy-box[data-theme*="typist-"] {
-    @apply bg-gray-800 dark:bg-gray-300 shadow-md;
+    @apply bg-gray-300 dark:bg-gray-700 shadow-md;
 
-    .tippy-arrow {
-        @apply text-gray-800 dark:text-gray-300;
-    }
-}
-
-.tippy-box[data-theme="typist-bubble"] {
     .tippy-content {
         @apply p-1;
+    }
+
+    .tippy-arrow {
+        @apply text-gray-300 dark:text-gray-700;
+    }
+
+    .typist-merge-tags {
+        .typist-merge-tag-item {
+            @apply block w-full min-w-32 text-left rounded px-2 py-1;
+        }
+    }
+
+    .typist-suggestions {
+        @apply flex flex-col;
+
+        .typist-suggestion-item {
+            @apply flex items-center gap-2 block w-full text-left rounded px-2 py-1;
+        }
     }
 }

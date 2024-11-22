@@ -65,11 +65,8 @@ export default Extension.create({
                             const html = `
                                 <div
                                     x-data='{
-
                                         items: ${JSON.stringify(props.items)},
-
                                         selectedIndex: 0,
-
                                         init: function () {
                                             this.$el.parentElement.addEventListener(
                                                 "suggestions-key-down",
@@ -81,7 +78,6 @@ export default Extension.create({
                                                 (event) => (this.items = event.detail),
                                             );
                                         },
-
                                         onKeyDown: function (event) {
                                             if (event.key === "ArrowUp") {
                                                 event.preventDefault();
@@ -106,7 +102,6 @@ export default Extension.create({
 
                                             return false;
                                         },
-
                                         selectItem: function (index) {
                                             const item = this.items[index];
 
@@ -116,7 +111,6 @@ export default Extension.create({
 
                                             $el.parentElement.dispatchEvent(new CustomEvent("suggestions-select", { detail: { item } }));
                                         },
-
                                     }'
                                     class="typist-suggestions"
                                 >
@@ -124,7 +118,7 @@ export default Extension.create({
                                         <button
                                             type="button"
                                             x-on:click.prevent="selectItem(index)"
-                                            :class="{ 'bg-primary-500': index === selectedIndex }"
+                                            :class="{'bg-primary-600': index === selectedIndex}"
                                             class="typist-suggestion-item"
                                         >
                                             <span x-html="item.icon"></span>
@@ -148,6 +142,7 @@ export default Extension.create({
                                 showOnCreate: true,
                                 interactive: true,
                                 trigger: 'manual',
+                                theme: 'typist-suggestions',
                                 placement: 'bottom-start',
                             })
                         },
