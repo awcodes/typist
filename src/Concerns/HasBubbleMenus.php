@@ -53,6 +53,17 @@ trait HasBubbleMenus
                 Actions\EditMedia::make('EditMedia'),
                 Actions\RemoveMedia::make('RemoveMedia'),
             ])->view('typist::bubble-media'),
+            BubbleMenu::make([
+                Actions\Table\AddColumnBefore::make('AddColumnBefore'),
+                Actions\Table\AddColumnAfter::make('AddColumnAfter'),
+                Actions\Table\DeleteColumn::make('DeleteColumn'),
+                Actions\Table\AddRowBefore::make('AddRowBefore'),
+                Actions\Table\AddRowAfter::make('AddRowAfter'),
+                Actions\Table\DeleteRow::make('DeleteRow'),
+                Actions\Table\MergeCells::make('MergeCells'),
+                Actions\Table\SplitCell::make('SplitCells'),
+                Actions\Table\DeleteTable::make('DeleteTable'),
+            ])->view('typist::bubble-table'),
         ];
     }
 }
