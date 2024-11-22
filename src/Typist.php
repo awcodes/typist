@@ -2,6 +2,4 @@
 
 namespace Awcodes\Typist;
 
-class Typist
-{
-}
+class Typist {}

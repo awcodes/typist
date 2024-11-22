@@ -2,7 +2,6 @@
 
 namespace Awcodes\Typist\Concerns;
 
-use Awcodes\Typist\Facades\Typist;
 use Closure;
 use Filament\Forms\Components\Actions\Action;
 

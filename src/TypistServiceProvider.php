@@ -54,7 +54,7 @@ class TypistServiceProvider extends PackageServiceProvider
         });
 
         $this->app->singleton(TypistManager::class, function () {
-            return new TypistManager();
+            return new TypistManager;
         });
     }
 
@@ -84,7 +84,7 @@ class TypistServiceProvider extends PackageServiceProvider
 
         Blade::directive('typist', fn ($expression) => "<?php echo typist({$expression})->toHtml(); ?>");
 
-        Testable::mixin(new TestsTypist());
+        Testable::mixin(new TestsTypist);
     }
 
     protected function getAssetPackageName(): ?string
