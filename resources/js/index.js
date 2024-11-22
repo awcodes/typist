@@ -20,7 +20,6 @@ import Details from './extensions/Details/Details.js'
 import DetailsContent from './extensions/Details/DetailsContent.js'
 import DetailsSummary from './extensions/Details/DetailsSummary.js'
 import Media from './extensions/Media.js'
-import { BubbleMenu } from '@tiptap/extension-bubble-menu'
 import Block from './extensions/Block.js'
 import SlashMenu from './extensions/SlashMenu.js'
 import {Placeholder} from "@tiptap/extension-placeholder";
@@ -53,7 +52,7 @@ window.editors = [];
 window.tiptapExtensions = [];
 
 export default function typist({state, statePath, placeholder = null, mergeTags = [], suggestions = []}) {
-    let editor
+    let editor = null;
 
     return {
         updatedAt: Date.now(),
@@ -255,34 +254,6 @@ export default function typist({state, statePath, placeholder = null, mergeTags 
         getExtensions() {
             const coreExtensions = [
                 Block,
-                BubbleMenu.configure({
-                    element: this.$refs.bubbleMenu,
-                    tippyOptions: {
-                        duration: [500, 0],
-                        maxWidth: 'none',
-                        placement: 'top',
-                        theme: 'typist-bubble',
-                        interactive: true,
-                        appendTo: this.$refs.element,
-                        zIndex: 0,
-                        arrow: false,
-                    },
-                    shouldShow: ({ editor, from, to }) => {
-                        if (
-                            editor.isActive('typistBlock') ||
-                            editor.isActive('slashExtension')
-                        ) {
-                            return false
-                        }
-
-                        if (
-                            editor.isActive('link') ||
-                            editor.isActive('media')
-                        ) {
-                            return true
-                        }
-                    },
-                }),
                 Classes,
                 CustomCommands,
                 Document,

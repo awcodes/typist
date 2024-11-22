@@ -13,6 +13,7 @@ class EditLink extends Link
 
         $this
             ->label(trans('typist::typist.edit_link'))
+            ->icon('typist-edit')
             ->active(null)
             ->fillForm(function (array $arguments) {
                 return $arguments;

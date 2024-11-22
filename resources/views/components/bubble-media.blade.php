@@ -3,7 +3,8 @@
     'field' => null,
 ])
 
-<div class="typist-bubble-menu" x-show="editor().isActive('media', updatedAt)" x-cloak>
+<div class="typist-bubble-menu" x-show="isFocused && editor().isActive('media', updatedAt)" x-cloak>
+    <span x-text="editor().getAttributes('media', updatedAt).src" class="link-preview"></span>
     @foreach($menu->getActions() as $action)
         @php
             $action = $field->getAction($action->getName());

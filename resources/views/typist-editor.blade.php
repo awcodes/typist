@@ -17,7 +17,6 @@
             mergeTags: @js($mergeTags),
             suggestions: @js($getSuggestionsForTiptap())
         })"
-        x-init="$nextTick(() => { init() })"
         id="{{ 'typist-wrapper-' . $statePath }}"
         @class([
             'typist-wrapper',
@@ -32,38 +31,33 @@
         x-on:dragged-block.stop="insertBlock($event)"
         x-on:handle-suggestion.window="handleSuggestion($event)"
     >
-        <template x-if="editor()">
-            <div class="typist-toolbar" x-bind:class="{
-                'focused': isFocused
-            }">
-                <x-typist::toolbar-actions class="typist-toolbar-start" :actions="$getToolbar()" :field="$field" />
-                <x-typist::toolbar-actions class="typist-toolbar-end" :actions="$getControls()" :field="$field" />
-            </div>
-        </template>
+        <div class="typist-toolbar" x-bind:class="{
+            'focused': isFocused
+        }">
+            <x-typist::toolbar-actions class="typist-toolbar-start" :actions="$getToolbar()" :field="$field" />
+            <x-typist::toolbar-actions class="typist-toolbar-end" :actions="$getControls()" :field="$field" />
+        </div>
 
-        <template x-if="editor()">
-            <div>
-                <div x-ref="bubbleMenu" class="typist-bubble-menu-wrapper">
-                    <div x-data="{
-                        updatedAt: Date.now(),
-                        openModal(action, name) {
-                            let data = {
-                                coordinates: editor().view.state.selection,
-                                ...editor().getAttributes(name),
+        <div class="typist-content">
+            <div class="typist-editor-wrapper">
+                <div class="typist-bubble-menu-wrapper">
+                    <div
+                        x-data="{
+                            updatedAt: Date.now(),
+                            openModal(action, name) {
+                                this.$wire.mountFormComponentAction('{{ $statePath }}', action, {
+                                    coordinates: editor().view.state.selection,
+                                    ...editor().getAttributes(name),
+                                })
                             }
-                            this.$wire.mountFormComponentAction('{{ $statePath }}', action, data)
-                        }
-                    }" x-on:selection-update.window="updatedAt = Date.now()">
+                        }"
+                        x-on:selection-update.window="updatedAt = Date.now()"
+                    >
                         @foreach($getBubbleMenus() as $bubbleMenu)
                             <x-dynamic-component :component="$bubbleMenu->getView()" :menu="$bubbleMenu" :field="$field" />
                         @endforeach
                     </div>
                 </div>
-            </div>
-        </template>
-
-        <div class="typist-content">
-            <div class="typist-editor-wrapper">
                 <div
                     x-ref="element"
                     {{
@@ -83,12 +77,10 @@
             @endif
         </div>
 
-        <template x-if="editor()">
-            <div class="typist-footer">
-                <div>
-                    <p class="text-xs">Word Count: <span x-text="wordCount"></span>
-                </div>
+        <div class="typist-footer">
+            <div>
+                <p class="text-xs">Word Count: <span x-text="wordCount"></span>
             </div>
-        </template>
+        </div>
     </div>
 </x-dynamic-component>
