@@ -38,6 +38,8 @@ return [
     'sidebar' => 'Toggle Sidebar',
     'small' => 'Small',
     'strike' => 'Strike',
+    'subscript' => 'Subscript',
+    'superscript' => 'Superscript',
     'table' => 'Table',
     'underline' => 'Underline',
     'undo' => 'Undo',

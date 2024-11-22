@@ -74,6 +74,8 @@ trait HasToolbar
                 Actions\Italic::make('Italic'),
                 Actions\Strike::make('Strike'),
                 Actions\Underline::make('Underline'),
+                Actions\Superscript::make('Superscript'),
+                Actions\Subscript::make('Subscript'),
                 Actions\Lead::make('Lead'),
                 Actions\Small::make('Small'),
                 Actions\Color::make('Color'),
