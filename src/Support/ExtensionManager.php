@@ -36,6 +36,13 @@ class ExtensionManager
             new Nodes\OrderedList,
             new Nodes\Paragraph,
             new Nodes\Text,
+            new Nodes\CodeBlockHighlight([
+                'languageClassPrefix' => 'language-',
+            ]),
+            new Nodes\Table,
+            new Nodes\TableCell,
+            new Nodes\TableHeader,
+            new Nodes\TableRow,
             new CoreExtensions\TextAlignExtension([
                 'types' => ['heading', 'paragraph'],
             ]),
