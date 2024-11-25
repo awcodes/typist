@@ -24,7 +24,10 @@
             'invalid' => $errors->has($statePath),
         ])
         x-bind:class="{
-            'fullscreen': fullscreen
+            'fullscreen': fullscreen,
+            'display-mobile': viewport === 'mobile',
+            'display-tablet': viewport === 'tablet',
+            'display-desktop': viewport === 'desktop',
         }"
         x-on:click.away="blurEditor()"
         x-on:focus-editor.window="focusEditor($event)"

@@ -68,6 +68,7 @@ export default function typist({
         statePath: statePath,
         placeholder: placeholder,
         fullscreen: false,
+        viewport: 'desktop',
         isFocused: false,
         sidebarOpen: true,
         wordCount: 0,
@@ -215,7 +216,18 @@ export default function typist({
         },
         toggleFullscreen() {
             this.fullscreen = !this.fullscreen
+
             editor.commands.focus()
+
+            if (! this.fullscreen) {
+                this.viewport = 'desktop'
+            }
+
+            this.updatedAt = Date.now()
+        },
+        toggleViewport(viewport) {
+            this.viewport = viewport
+
             this.updatedAt = Date.now()
         },
         toggleSidebar() {

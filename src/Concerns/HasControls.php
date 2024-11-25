@@ -26,6 +26,9 @@ trait HasControls
     public function getControls(): array
     {
         return $this->evaluate($this->controls) ?? [
+            Actions\MobileViewport::make('ToggleMobileViewport'),
+            Actions\TabletViewport::make('ToggleTabletViewport'),
+            Actions\DesktopViewport::make('ToggleDesktopViewport'),
             Actions\Undo::make('Undo'),
             Actions\Redo::make('Redo'),
             Actions\ClearContent::make('ClearContent'),
