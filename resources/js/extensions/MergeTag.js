@@ -207,8 +207,8 @@ export default Node.create({
                                     <template x-for="(item, index) in items" :key="index">
                                         <button
                                             x-text="item"
-                                            x-on:click="selectItem(index)"
-                                            :class="{'bg-primary-600': index === selectedIndex}"
+                                            x-on:click.prevent="selectItem(index)"
+                                            :class="{'active': index === selectedIndex}"
                                             class="typist-merge-tag-item"
                                         ></button>
                                     </template>
@@ -223,7 +223,6 @@ export default Node.create({
 
                             popup = tippy('body', {
                                 getReferenceClientRect: props.clientRect,
-                                appendTo: document.body,
                                 content: component,
                                 allowHTML: true,
                                 showOnCreate: true,
@@ -247,7 +246,16 @@ export default Node.create({
                         },
 
                         onKeyDown(props) {
-                            component.dispatchEvent(new CustomEvent('merge-tags-key-down', { detail: props.event }));
+                            if (
+                                props.event.key === 'ArrowUp' ||
+                                props.event.key === 'ArrowDown' ||
+                                props.event.key === 'Enter'
+                            ) {
+                                component.dispatchEvent(new CustomEvent('merge-tags-key-down', { detail: props.event }));
+                                return true;
+                            }
+
+                            return false;
                         },
 
                         onExit() {

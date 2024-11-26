@@ -320,7 +320,7 @@
         .typist-editor-wrapper {
             @apply p-6;
         }
-        
+
         .typist-editor-wrapper .typist-editor {
             @apply bg-white dark:bg-gray-900;
         }
@@ -365,19 +365,31 @@
 }
 
 .tippy-box[data-theme*="typist-"] {
-    @apply bg-gray-300 dark:bg-gray-700 shadow-md;
+    @apply bg-gray-100 dark:bg-gray-700 shadow-md;
 
     .tippy-content {
         @apply p-1;
     }
 
     .tippy-arrow {
-        @apply text-gray-300 dark:text-gray-700;
+        @apply text-gray-100 dark:text-gray-700;
+    }
+
+    .typist-mentions-item.active,
+    .typist-suggestion-item.active,
+    .typist-merge-tag-item.active {
+        @apply bg-primary-500 dark:bg-primary-600;
+    }
+
+    .typist-mentions {
+        .typist-mentions-item {
+            @apply block w-full min-w-32 text-left text-gray-900 rounded px-2 py-1 hover:bg-gray-900/20 dark:hover:bg-gray-900/50 dark:text-white;
+        }
     }
 
     .typist-merge-tags {
         .typist-merge-tag-item {
-            @apply block w-full min-w-32 text-left rounded px-2 py-1;
+            @apply block w-full min-w-32 text-left text-gray-900 rounded px-2 py-1 hover:bg-gray-900/20 dark:hover:bg-gray-900/50 dark:text-white;
         }
     }
 
@@ -385,7 +397,7 @@
         @apply flex flex-col;
 
         .typist-suggestion-item {
-            @apply flex items-center gap-2 block w-full text-left rounded px-2 py-1;
+            @apply flex items-center gap-2 block w-full text-left text-gray-900 rounded px-2 py-1 hover:bg-gray-900/20 dark:hover:bg-gray-900/50 dark:text-white;
         }
     }
 }

@@ -118,7 +118,7 @@ export default Extension.create({
                                         <button
                                             type="button"
                                             x-on:click.prevent="selectItem(index)"
-                                            :class="{'bg-primary-600': index === selectedIndex}"
+                                            :class="{'active': index === selectedIndex}"
                                             class="typist-suggestion-item"
                                         >
                                             <span x-html="item.icon"></span>
@@ -136,7 +136,6 @@ export default Extension.create({
 
                             popup = tippy('body', {
                                 getReferenceClientRect: props.clientRect,
-                                appendTo: document.body,
                                 content: component,
                                 allowHTML: true,
                                 showOnCreate: true,
@@ -159,7 +158,16 @@ export default Extension.create({
                         },
 
                         onKeyDown(props) {
-                            component.dispatchEvent(new CustomEvent('suggestions-key-down', { detail: props.event }))
+                            if (
+                                props.event.key === 'ArrowUp' ||
+                                props.event.key === 'ArrowDown' ||
+                                props.event.key === 'Enter'
+                            ) {
+                                component.dispatchEvent(new CustomEvent('suggestions-key-down', { detail: props.event }));
+                                return true;
+                            }
+
+                            return false;
                         },
 
                         onExit() {

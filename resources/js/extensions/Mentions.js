@@ -90,6 +90,7 @@ export default Node.create({
             Suggestion({
                 editor: this.editor,
                 char: '@',
+                allowSpaces: true,
                 items: ({ query }) => this.options.mentions.filter(item => item.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5),
                 pluginKey: new PluginKey('mentions'),
                 command: ({ editor, range, props }) => {
@@ -189,9 +190,9 @@ export default Node.create({
                                         <button
                                             type="button"
                                             x-text="item"
-                                            x-on:click="selectItem(index)"
-                                            :class="{'bg-primary-600': index === selectedIndex}"
-                                            class="block w-full text-left rounded px-2 py-1"
+                                            x-on:click.prevent="selectItem(index)"
+                                            :class="{'active': index === selectedIndex}"
+                                            class="typist-mentions-item"
                                         ></button>
                                     </template>
                                 </div>
@@ -205,7 +206,6 @@ export default Node.create({
 
                             popup = tippy('body', {
                                 getReferenceClientRect: props.clientRect,
-                                appendTo: document.body,
                                 content: component,
                                 allowHTML: true,
                                 showOnCreate: true,
@@ -229,7 +229,16 @@ export default Node.create({
                         },
 
                         onKeyDown(props) {
-                            component.dispatchEvent(new CustomEvent('mentions-key-down', { detail: props.event }));
+                            if (
+                                props.event.key === 'ArrowUp' ||
+                                props.event.key === 'ArrowDown' ||
+                                props.event.key === 'Enter'
+                            ) {
+                                component.dispatchEvent(new CustomEvent('mentions-key-down', { detail: props.event }));
+                                return true;
+                            }
+
+                            return false;
                         },
 
                         onExit() {
