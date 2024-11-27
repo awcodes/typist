@@ -5,7 +5,7 @@ namespace Awcodes\Typist\Tiptap\Extensions;
 use Tiptap\Core\Extension;
 use Tiptap\Utils\InlineStyle;
 
-class ColorExtension extends Extension
+class Color extends Extension
 {
     public static $name = 'color';
 

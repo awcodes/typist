@@ -29,6 +29,7 @@ class ToolbarGroup extends ActionGroup
     {
         foreach ($actions as $action) {
             $action->grouped();
+            $action->close();
         }
 
         $static = app(static::class, ['actions' => $actions]);

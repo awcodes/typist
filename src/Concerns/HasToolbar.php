@@ -84,6 +84,7 @@ trait HasToolbar
             ToolbarGroup::make([
                 Actions\Link::make('Link'),
                 Actions\Media::make('Media'),
+                Actions\Embed::make('Embed'),
                 Actions\BulletList::make('BulletList'),
                 Actions\OrderedList::make('OrderedList'),
                 Actions\Blockquote::make('Blockquote'),

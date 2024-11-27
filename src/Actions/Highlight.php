@@ -3,6 +3,7 @@
 namespace Awcodes\Typist\Actions;
 
 use Awcodes\Typist\TypistAction;
+use Tiptap\Marks\Highlight as HighlightExtension;
 
 class Highlight extends TypistAction
 {
@@ -15,6 +16,7 @@ class Highlight extends TypistAction
             ->icon(icon: 'typist-highlight')
             ->iconButton()
             ->command(name: 'toggleHighlight')
-            ->active(name: 'highlight');
+            ->active(name: 'highlight')
+            ->converterExtensions(new HighlightExtension);
     }
 }

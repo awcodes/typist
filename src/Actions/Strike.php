@@ -3,6 +3,7 @@
 namespace Awcodes\Typist\Actions;
 
 use Awcodes\Typist\TypistAction;
+use Tiptap\Marks\Strike as StrikeExtension;
 
 class Strike extends TypistAction
 {
@@ -15,6 +16,7 @@ class Strike extends TypistAction
             ->icon(icon: 'typist-strike')
             ->iconButton()
             ->command(name: 'toggleStrike')
-            ->active(name: 'strike');
+            ->active(name: 'strike')
+            ->converterExtensions(new StrikeExtension);
     }
 }

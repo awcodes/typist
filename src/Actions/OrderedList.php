@@ -3,6 +3,7 @@
 namespace Awcodes\Typist\Actions;
 
 use Awcodes\Typist\TypistAction;
+use Tiptap\Nodes\OrderedList as OrderedListExtension;
 
 class OrderedList extends TypistAction
 {
@@ -15,6 +16,7 @@ class OrderedList extends TypistAction
             ->icon(icon: 'typist-list-ordered')
             ->iconButton()
             ->command(name: 'toggleOrderedList')
-            ->active(name: 'unorderedList');
+            ->active(name: 'unorderedList')
+            ->converterExtensions(new OrderedListExtension);
     }
 }

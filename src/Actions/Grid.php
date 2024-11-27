@@ -2,6 +2,8 @@
 
 namespace Awcodes\Typist\Actions;
 
+use Awcodes\Typist\Tiptap\Nodes\Grid as GridExtension;
+use Awcodes\Typist\Tiptap\Nodes\GridColumn as GridColumnExtension;
 use Awcodes\Typist\TypistAction;
 use Awcodes\Typist\TypistEditor;
 use Filament\Forms\Components;
@@ -19,6 +21,10 @@ class Grid extends TypistAction
             ->icon('typist-grid')
             ->iconButton()
             ->active('grid')
+            ->converterExtensions([
+                new GridExtension,
+                new GridColumnExtension,
+            ])
             ->fillForm([
                 'columns' => 2,
                 'stack_at' => 'md',

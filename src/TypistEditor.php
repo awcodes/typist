@@ -83,7 +83,7 @@ class TypistEditor extends Field
             ...$this->getToolbarActions(),
         ])
             ->map(function ($action) {
-                return $action->getName();
+                return $action->getJsExtension();
             })
             ->unique()
             ->toArray();
@@ -98,6 +98,6 @@ class TypistEditor extends Field
 
     public function getHeadingLevels(): array
     {
-        return $this->evaluate($this->headingLevels) ?? [1, 2, 3, 4, 5, 6];
+        return $this->evaluate($this->headingLevels) ?? [1, 2, 3];
     }
 }

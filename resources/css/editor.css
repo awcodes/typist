@@ -83,11 +83,11 @@
                 @apply border-gray-900/50 dark:border-white/80;
             }
 
-            .node-scribbleBlock + .ProseMirror-gapcursor {
+            .node-typistBlock + .ProseMirror-gapcursor {
                 margin-top: 0.5rem;
             }
 
-            .node-scribbleBlock + .ProseMirror-gapcursor + .node-scribbleBlock {
+            .node-typistBlock + .ProseMirror-gapcursor + .node-typistBlock {
                 margin-top: 1rem;
             }
         }
@@ -106,6 +106,13 @@
 
         a {
             @apply text-info-500 dark:text-info-400;
+        }
+
+        .typist-embed {
+            iframe,
+            video {
+                pointer-events: none;
+            }
         }
 
         .typist-grid {

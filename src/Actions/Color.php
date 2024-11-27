@@ -2,6 +2,7 @@
 
 namespace Awcodes\Typist\Actions;
 
+use Awcodes\Typist\Tiptap\Extensions\Color as ColorExtension;
 use Awcodes\Typist\TypistAction;
 use Awcodes\Typist\TypistEditor;
 use Filament\Forms\Components\ColorPicker;
@@ -18,6 +19,7 @@ class Color extends TypistAction
             ->label(trans('typist::typist.color'))
             ->icon(icon: 'typist-color')
             ->iconButton()
+            ->converterExtensions(new ColorExtension)
             ->modalWidth(MaxWidth::Small)
             ->form([
                 ColorPicker::make('color'),

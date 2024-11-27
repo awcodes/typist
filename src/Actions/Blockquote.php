@@ -3,6 +3,7 @@
 namespace Awcodes\Typist\Actions;
 
 use Awcodes\Typist\TypistAction;
+use Tiptap\Nodes\Blockquote as BlockquoteExtension;
 
 class Blockquote extends TypistAction
 {
@@ -15,6 +16,7 @@ class Blockquote extends TypistAction
             ->icon(icon: 'typist-blockquote')
             ->iconButton()
             ->command(name: 'toggleBlockquote')
-            ->active(name: 'blockquote');
+            ->active(name: 'blockquote')
+            ->converterExtensions(new BlockquoteExtension);
     }
 }

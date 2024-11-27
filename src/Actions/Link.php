@@ -2,6 +2,7 @@
 
 namespace Awcodes\Typist\Actions;
 
+use Awcodes\Typist\Tiptap\Marks\Link as LinkExtension;
 use Awcodes\Typist\TypistAction;
 use Awcodes\Typist\TypistEditor;
 use Filament\Forms\Components;
@@ -18,6 +19,7 @@ class Link extends TypistAction
             ->icon('typist-link')
             ->iconButton()
             ->active('link')
+            ->converterExtensions(new LinkExtension)
             ->form([
                 Components\Grid::make(['md' => 3])
                     ->schema([

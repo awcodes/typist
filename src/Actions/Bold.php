@@ -3,6 +3,7 @@
 namespace Awcodes\Typist\Actions;
 
 use Awcodes\Typist\TypistAction;
+use Tiptap\Marks\Bold as BoldExtension;
 
 class Bold extends TypistAction
 {
@@ -15,6 +16,7 @@ class Bold extends TypistAction
             ->icon(icon: 'typist-bold')
             ->iconButton()
             ->command(name: 'toggleBold')
-            ->active(name: 'bold');
+            ->active(name: 'bold')
+            ->converterExtensions(new BoldExtension);
     }
 }

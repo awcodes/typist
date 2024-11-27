@@ -8,10 +8,8 @@ use Illuminate\Support\Js;
 
 class TypistAction extends Action
 {
-    use Concerns\HasTiptapCommands;
+    use Concerns\Actions\InteractsWithTiptap;
     use HasExtraAlpineAttributes;
-
-    protected ?string $active = null;
 
     protected ?string $renderView = null;
 
@@ -22,30 +20,6 @@ class TypistAction extends Action
         parent::setUp();
 
         $this->color('gray');
-    }
-
-    public function active(?string $name = null, string | array $attributes = []): static
-    {
-        $string = '';
-
-        if ($name && filled($attributes)) {
-            $string = "'{$name}', " . Js::from($attributes);
-        } elseif (! $name && filled($attributes)) {
-            $string = Js::from($attributes);
-        } elseif ($name && empty($attributes)) {
-            $string = "'{$name}'";
-        } else {
-            $string = null;
-        }
-
-        $this->active = $string;
-
-        return $this;
-    }
-
-    public function getActive(): ?string
-    {
-        return $this->active ?? null;
     }
 
     public function renderView(string $view): static

@@ -4,6 +4,7 @@ namespace Awcodes\Typist\Actions;
 
 use Awcodes\Typist\TypistAction;
 use Awcodes\Typist\TypistEditor;
+use Tiptap\Nodes\Heading as HeadingExtension;
 
 class HeadingSix extends TypistAction
 {
@@ -16,10 +17,11 @@ class HeadingSix extends TypistAction
             ->icon(icon: 'typist-heading-six')
             ->iconButton()
             ->command(name: 'toggleHeading', attributes: ['level' => 6])
-            ->close()
             ->visible(function (TypistEditor $component) {
                 return in_array(6, $component->getHeadingLevels());
             })
-            ->active(name: 'heading', attributes: ['level' => 6]);
+            ->active(name: 'heading', attributes: ['level' => 6])
+            ->jsExtension('Heading')
+            ->converterExtensions(new HeadingExtension);
     }
 }

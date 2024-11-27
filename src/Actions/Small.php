@@ -2,6 +2,7 @@
 
 namespace Awcodes\Typist\Actions;
 
+use Awcodes\Typist\Tiptap\Marks\Small as SmallExtension;
 use Awcodes\Typist\TypistAction;
 
 class Small extends TypistAction
@@ -15,6 +16,7 @@ class Small extends TypistAction
             ->icon(icon: 'typist-small')
             ->iconButton()
             ->command(name: 'toggleSmall')
-            ->active(name: 'small');
+            ->active(name: 'small')
+            ->converterExtensions(new SmallExtension);
     }
 }

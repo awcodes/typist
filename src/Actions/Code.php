@@ -3,6 +3,7 @@
 namespace Awcodes\Typist\Actions;
 
 use Awcodes\Typist\TypistAction;
+use Tiptap\Marks\Code as CodeExtension;
 
 class Code extends TypistAction
 {
@@ -15,6 +16,7 @@ class Code extends TypistAction
             ->icon(icon: 'typist-code')
             ->iconButton()
             ->command(name: 'toggleCode')
-            ->active(name: 'code');
+            ->active(name: 'code')
+            ->converterExtensions(new CodeExtension);
     }
 }

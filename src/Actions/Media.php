@@ -2,6 +2,7 @@
 
 namespace Awcodes\Typist\Actions;
 
+use Awcodes\Typist\Tiptap\Nodes\Media as ImageExtension;
 use Awcodes\Typist\TypistAction;
 use Awcodes\Typist\TypistEditor;
 use Filament\Forms\Components;
@@ -25,6 +26,7 @@ class Media extends TypistAction
             ->icon('typist-media')
             ->iconButton()
             ->active('media')
+            ->converterExtensions(new ImageExtension)
             ->fillForm(function (TypistEditor $component, array $arguments) {
                 $source = isset($arguments['src']) && $arguments['src'] !== ''
                     ? $component->getDirectory() . Str::of($arguments['src'])

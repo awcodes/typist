@@ -2,6 +2,7 @@
 
 namespace Awcodes\Typist\Actions;
 
+use Awcodes\Typist\Tiptap\Extensions\TextAlign;
 use Awcodes\Typist\TypistAction;
 
 class AlignEnd extends TypistAction
@@ -15,6 +16,8 @@ class AlignEnd extends TypistAction
             ->icon(icon: 'typist-align-end')
             ->iconButton()
             ->command(name: 'setTextAlign', attributes: 'end')
-            ->active(attributes: ['textAlign' => 'end']);
+            ->active(attributes: ['textAlign' => 'end'])
+            ->jsExtension('TextAlign')
+            ->converterExtensions(new TextAlign(['types' => ['heading', 'paragraph']]));
     }
 }

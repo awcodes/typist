@@ -31,7 +31,7 @@ class TypistManager
             ->mapWithKeys(function ($action) {
                 $action = $action::make(class_basename($action));
 
-                return [$action->getName() => $action];
+                return [$action->getJsExtension() => $action];
             })
             ->all();
 

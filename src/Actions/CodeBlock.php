@@ -3,6 +3,7 @@
 namespace Awcodes\Typist\Actions;
 
 use Awcodes\Typist\TypistAction;
+use Tiptap\Nodes\CodeBlockHighlight as CodeBlockExtension;
 
 class CodeBlock extends TypistAction
 {
@@ -15,6 +16,9 @@ class CodeBlock extends TypistAction
             ->icon(icon: 'typist-code-block')
             ->iconButton()
             ->command(name: 'toggleCodeBlock')
-            ->active(name: 'codeBlock');
+            ->active(name: 'codeBlock')
+            ->converterExtensions(new CodeBlockExtension([
+                'languageClassPrefix' => 'language-',
+            ]));
     }
 }

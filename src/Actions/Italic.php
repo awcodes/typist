@@ -3,6 +3,7 @@
 namespace Awcodes\Typist\Actions;
 
 use Awcodes\Typist\TypistAction;
+use Tiptap\Marks\Italic as ItalicExtension;
 
 class Italic extends TypistAction
 {
@@ -15,6 +16,7 @@ class Italic extends TypistAction
             ->icon(icon: 'typist-italic')
             ->iconButton()
             ->command(name: 'toggleItalic')
-            ->active(name: 'italic');
+            ->active(name: 'italic')
+            ->converterExtensions(new ItalicExtension);
     }
 }

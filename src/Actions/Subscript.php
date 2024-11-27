@@ -3,6 +3,7 @@
 namespace Awcodes\Typist\Actions;
 
 use Awcodes\Typist\TypistAction;
+use Tiptap\Marks\Subscript as SubscriptExtension;
 
 class Subscript extends TypistAction
 {
@@ -15,6 +16,7 @@ class Subscript extends TypistAction
             ->icon(icon: 'typist-subscript')
             ->iconButton()
             ->command(name: 'toggleSubscript')
-            ->active(name: 'subscript');
+            ->active(name: 'subscript')
+            ->converterExtensions(new SubscriptExtension);
     }
 }

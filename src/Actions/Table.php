@@ -7,6 +7,10 @@ use Awcodes\Typist\TypistEditor;
 use Filament\Forms\Components;
 use Filament\Forms\Get;
 use Illuminate\Support\Js;
+use Tiptap\Nodes\Table as TableExtension;
+use Tiptap\Nodes\TableCell;
+use Tiptap\Nodes\TableHeader;
+use Tiptap\Nodes\TableRow;
 
 class Table extends TypistAction
 {
@@ -18,6 +22,13 @@ class Table extends TypistAction
             ->label(trans('typist::typist.table'))
             ->icon('typist-table')
             ->iconButton()
+            ->active('table')
+            ->converterExtensions([
+                new TableExtension,
+                new TableRow,
+                new TableCell,
+                new TableHeader,
+            ])
             ->fillForm([
                 'rows' => 2,
                 'cols' => 3,
@@ -51,7 +62,6 @@ class Table extends TypistAction
             })
             ->after(function (TypistEditor $component): void {
                 $component->getLivewire()->dispatch('focus-editor', statePath: $component->getStatePath());
-            })
-            ->active('table');
+            });
     }
 }

@@ -3,6 +3,7 @@
 namespace Awcodes\Typist\Actions;
 
 use Awcodes\Typist\TypistAction;
+use Tiptap\Nodes\BulletList as BulletListExtension;
 
 class BulletList extends TypistAction
 {
@@ -15,6 +16,7 @@ class BulletList extends TypistAction
             ->icon(icon: 'typist-list-unordered')
             ->iconButton()
             ->command(name: 'toggleBulletList')
-            ->active(name: 'bulletList');
+            ->active(name: 'bulletList')
+            ->converterExtensions(new BulletListExtension);
     }
 }

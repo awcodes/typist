@@ -4,9 +4,9 @@ namespace Awcodes\Typist\Tiptap\Extensions;
 
 use Tiptap\Core\Extension;
 
-class ClassExtension extends Extension
+class Ids extends Extension
 {
-    public static $name = 'classExtension';
+    public static $name = 'idExtension';
 
     public function addGlobalAttributes(): array
     {
@@ -14,33 +14,21 @@ class ClassExtension extends Extension
             [
                 'types' => [
                     'heading',
-                    'paragraph',
                     'link',
-                    'image',
-                    'listItem',
-                    'bulletList',
-                    'orderedList',
-                    'table',
-                    'tableHeader',
-                    'tableRow',
-                    'tableCell',
-                    'textStyle',
-                    'code',
-                    'codeBlock',
                 ],
                 'attributes' => [
-                    'class' => [
+                    'id' => [
                         'default' => null,
                         'parseHTML' => function ($DOMNode) {
-                            return $DOMNode->hasAttribute('class') ? $DOMNode->getAttribute('class') : null;
+                            return $DOMNode->hasAttribute('id') ? $DOMNode->getAttribute('id') : null;
                         },
                         'renderHTML' => function ($attributes) {
-                            if (! property_exists($attributes, 'class')) {
+                            if (! property_exists($attributes, 'id')) {
                                 return null;
                             }
 
                             return [
-                                'class' => $attributes->class,
+                                'id' => $attributes->id,
                             ];
                         },
                     ],

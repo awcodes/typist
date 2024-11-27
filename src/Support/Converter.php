@@ -3,9 +3,7 @@
 namespace Awcodes\Typist\Support;
 
 use Awcodes\Typist\Enums\ContentType;
-use Awcodes\Typist\Tiptap\Extensions\ClassExtension;
-use Awcodes\Typist\Tiptap\Extensions\IdExtension;
-use Awcodes\Typist\Tiptap\Nodes\ListItem;
+use Awcodes\Typist\Facades\Typist;
 use Closure;
 use Filament\Support\Concerns\EvaluatesClosures;
 use League\HTMLToMarkdown\HtmlConverter;
@@ -69,9 +67,13 @@ class Converter
                 new \Tiptap\Nodes\Document,
                 new \Tiptap\Nodes\Text,
                 new \Tiptap\Nodes\HardBreak,
-                new ClassExtension,
-                new IdExtension,
-                new ListItem,
+                new \Tiptap\Nodes\Paragraph,
+                new \Awcodes\Typist\Tiptap\Extensions\Classes,
+                new \Awcodes\Typist\Tiptap\Extensions\Ids,
+                new \Awcodes\Typist\Tiptap\Nodes\ListItem,
+                new \Awcodes\Typist\Tiptap\Nodes\TypistBlock,
+                new \Awcodes\Typist\Tiptap\Nodes\MergeTag,
+                new \Awcodes\Typist\Tiptap\Nodes\Mentions,
                 ...$this->getExtensions(),
             ],
         ]);
@@ -79,7 +81,20 @@ class Converter
 
     public function getExtensions(): array
     {
-        return ExtensionManager::make()->getExtensions();
+        return collect(Typist::getActions())
+            ->filter(function ($action) {
+                return $action->getConverterExtensions();
+            })
+            ->map(function ($action) {
+                return $action->getConverterExtensions();
+            })
+            ->flatten()
+            ->mapWithKeys(function ($extension) {
+                return [$extension::class => $extension];
+            })
+            ->unique()
+            ->values()
+            ->toArray();
     }
 
     public function toHtml(bool $toc = false, int $maxDepth = 3, bool $wrapHeadings = false): string

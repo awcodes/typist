@@ -5,7 +5,7 @@ namespace Awcodes\Typist\Tiptap\Extensions;
 use Tiptap\Core\Extension;
 use Tiptap\Utils\InlineStyle;
 
-class TextAlignExtension extends Extension
+class TextAlign extends Extension
 {
     public static $name = 'textAlign';
 

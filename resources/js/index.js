@@ -1,19 +1,19 @@
-import { Editor } from '@tiptap/core'
+import {Editor} from '@tiptap/core'
 import StatePath from './extensions/StatePath.js'
 import Link from './extensions/Link.js'
 import Classes from './extensions/Classes.js'
 import Ids from './extensions/Ids.js'
 import MergeTag from './extensions/MergeTag.js'
 import DragAndDrop from './extensions/DragAndDrop.js'
-import { Underline } from '@tiptap/extension-underline'
-import { Subscript } from '@tiptap/extension-subscript'
-import { Superscript } from '@tiptap/extension-superscript'
+import {Underline} from '@tiptap/extension-underline'
+import {Subscript} from '@tiptap/extension-subscript'
+import {Superscript} from '@tiptap/extension-superscript'
 import TextAlign from './extensions/TextAlign.js'
-import { Table } from '@tiptap/extension-table'
-import { TableRow } from '@tiptap/extension-table-row'
-import { TableHeader } from '@tiptap/extension-table-header'
-import { TableCell } from '@tiptap/extension-table-cell'
-import { TextStyle } from '@tiptap/extension-text-style'
+import {Table} from '@tiptap/extension-table'
+import {TableRow} from '@tiptap/extension-table-row'
+import {TableHeader} from '@tiptap/extension-table-header'
+import {TableCell} from '@tiptap/extension-table-cell'
+import {TextStyle} from '@tiptap/extension-text-style'
 import Grid from './extensions/Grid/Grid.js'
 import GridColumn from './extensions/Grid/GridColumn.js'
 import Details from './extensions/Details/Details.js'
@@ -48,6 +48,7 @@ import lowlight from "./extensions/Lowlight.js";
 import {Color} from "@tiptap/extension-color";
 import {Highlight} from "@tiptap/extension-highlight";
 import Mentions from './extensions/Mentions.js';
+import Embed from './extensions/Embed.js';
 
 window.editors = [];
 window.tiptapExtensions = [];
@@ -59,6 +60,8 @@ export default function typist({
     mergeTags = [],
     suggestions = [],
     mentions = [],
+    allowedExtensions = [],
+    headingLevels = [1,2,3]
 }) {
     let editor = null;
 
@@ -66,7 +69,6 @@ export default function typist({
         updatedAt: Date.now(),
         state: state,
         statePath: statePath,
-        placeholder: placeholder,
         fullscreen: false,
         viewport: 'desktop',
         isFocused: false,
@@ -104,7 +106,7 @@ export default function typist({
                     }
                 },
                 onCreate({ editor }) {
-                    _this.wordCount = editor.getText().trim().split(' ').length;
+                    _this.wordCount = editor.getText().trim().split(' ').filter(word => word !== '').length;
                     _this.updatedAt = Date.now()
                 },
                 onUpdate({ editor }) {
@@ -114,7 +116,7 @@ export default function typist({
                             content: editor.getJSON(),
                         }
                     }));
-                    _this.wordCount = editor.getText().trim().split(' ').length;
+                    _this.wordCount = editor.getText().trim().split(' ').filter(word => word !== '').length;
                     _this.updatedAt = Date.now()
                 },
                 onSelectionUpdate({ editor }) {
@@ -272,7 +274,6 @@ export default function typist({
             this.updatedAt = Date.now()
         },
         getExtensions() {
-
             const coreExtensions = [
                 Block,
                 Classes,
@@ -285,19 +286,20 @@ export default function typist({
                 History,
                 Ids,
                 Paragraph,
-                Placeholder.configure({
-                    placeholder: this.placeholder
-                }),
-                SlashMenu.configure({
-                    suggestions,
-                    appendTo: this.$refs.element
-                }),
                 StatePath.configure({
                     statePath: statePath
                 }),
                 Text,
                 TextStyle,
             ];
+
+            if (placeholder) {
+               coreExtensions.push(Placeholder.configure({placeholder: placeholder}))
+            }
+
+            if (suggestions.length) {
+                coreExtensions.push(SlashMenu.configure({appendTo: this.$refs.element, suggestions}))
+            }
 
             if (mergeTags.length) {
                 coreExtensions.push(MergeTag.configure({mergeTags}))
@@ -307,44 +309,48 @@ export default function typist({
                 coreExtensions.push(Mentions.configure({mentions}))
             }
 
-            return [
+            const defaultExtensions = {
+                'Blockquote': Blockquote,
+                'Bold': Bold,
+                'BulletList': [BulletList, ListItem],
+                'Code': Code,
+                'CodeBlock': CodeBlockLowlight.configure({lowlight}),
+                'Color': Color,
+                'Details': [Details, DetailsContent, DetailsSummary],
+                'Embed': Embed,
+                'Grid': [Grid, GridColumn],
+                'Heading': Heading.configure({ levels: headingLevels }),
+                'Highlight': Highlight,
+                'HorizontalRule': HorizontalRule,
+                'Italic': Italic,
+                'Lead': Lead,
+                'Link': Link,
+                'Media': Media,
+                'OrderedList': [OrderedList, ListItem],
+                'Small': Small,
+                'Strike': Strike,
+                'Subscript': Subscript,
+                'Superscript': Superscript,
+                'Table': [Table.configure({ resizable: true, }), TableRow, TableHeader, TableCell],
+                'TextAlign': TextAlign,
+                'Underline': Underline,
+            };
+
+            const extensionsMap = {
+                ...defaultExtensions,
+                ...window?.tiptapExtensions || {}
+            }
+
+            Object.keys(extensionsMap).forEach((extension) => {
+                if (! Object.values(allowedExtensions).includes(extension)) {
+                    delete extensionsMap[extension]
+                }
+            })
+
+            return Array.from(new Set([
                 ...coreExtensions,
-                Blockquote,
-                Bold,
-                BulletList,
-                Code,
-                CodeBlockLowlight.configure({lowlight}),
-                Color,
-                Details,
-                DetailsContent,
-                DetailsSummary,
-                Grid,
-                GridColumn,
-                Heading,
-                Highlight,
-                HorizontalRule,
-                Italic,
-                Lead,
-                ListItem,
-                Link,
-                Media,
-                OrderedList,
-                Small,
-                Strike,
-                Subscript,
-                Superscript,
-                Table.configure({
-                    resizable: true,
-                }),
-                TableRow,
-                TableHeader,
-                TableCell,
-                TextAlign.configure({
-                    types: ['heading', 'paragraph', 'media']
-                }),
-                Underline,
-                ...window.tiptapExtensions,
-            ]
+                ...Object.values(extensionsMap).flat(),
+            ]));
         }
     }
 }

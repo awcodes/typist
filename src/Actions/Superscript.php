@@ -3,6 +3,7 @@
 namespace Awcodes\Typist\Actions;
 
 use Awcodes\Typist\TypistAction;
+use Tiptap\Marks\Superscript as SuperscriptExtension;
 
 class Superscript extends TypistAction
 {
@@ -15,6 +16,7 @@ class Superscript extends TypistAction
             ->icon(icon: 'typist-superscript')
             ->iconButton()
             ->command(name: 'toggleSuperscript')
-            ->active(name: 'superscript');
+            ->active(name: 'superscript')
+            ->converterExtensions(new SuperscriptExtension);
     }
 }

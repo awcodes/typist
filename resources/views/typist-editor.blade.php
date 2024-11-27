@@ -16,7 +16,9 @@
             placeholder: @js($getPlaceholder()),
             mergeTags: @js($mergeTags),
             suggestions: @js($getSuggestionsForTiptap()),
-            mentions: @js($getMentions())
+            mentions: @js($getMentions()),
+            allowedExtensions: @js($getAllowedExtensions()),
+            headingLevels: @js($getHeadingLevels()),
         })"
         id="{{ 'typist-wrapper-' . $statePath }}"
         @class([
