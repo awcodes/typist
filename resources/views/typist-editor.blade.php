@@ -19,6 +19,7 @@
             mentions: @js($getMentions()),
             allowedExtensions: @js($getAllowedExtensions()),
             headingLevels: @js($getHeadingLevels()),
+            customDocument: @js($getCustomDocument())
         })"
         id="{{ 'typist-wrapper-' . $statePath }}"
         @class([

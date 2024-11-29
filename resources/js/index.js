@@ -61,7 +61,8 @@ export default function typist({
     suggestions = [],
     mentions = [],
     allowedExtensions = [],
-    headingLevels = [1,2,3]
+    headingLevels = [1,2,3],
+    customDocument = null,
 }) {
     let editor = null;
 
@@ -278,7 +279,9 @@ export default function typist({
                 Block,
                 Classes,
                 CustomCommands,
-                Document,
+                customDocument ? Document.extend({
+                    content: customDocument
+                }) : Document,
                 DragAndDrop,
                 Dropcursor,
                 Gapcursor,

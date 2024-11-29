@@ -27,6 +27,8 @@ class TypistEditor extends Field
 
     protected array | Closure | null $headingLevels = null;
 
+    protected string | Closure | null $customDocument = null;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -99,5 +101,17 @@ class TypistEditor extends Field
     public function getHeadingLevels(): array
     {
         return $this->evaluate($this->headingLevels) ?? [1, 2, 3];
+    }
+
+    public function customDocument(string | Closure | null $customDocument): static
+    {
+        $this->customDocument = $customDocument;
+
+        return $this;
+    }
+
+    public function getCustomDocument(): ?string
+    {
+        return $this->evaluate($this->customDocument);
     }
 }
