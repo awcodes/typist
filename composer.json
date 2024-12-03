@@ -33,6 +33,7 @@
         "pestphp/pest": "^2.0",
         "pestphp/pest-plugin-arch": "^2.0",
         "pestphp/pest-plugin-laravel": "^2.0",
+        "pestphp/pest-plugin-livewire": "^2.1",
         "spatie/laravel-ray": "^1.26"
     },
     "autoload": {
@@ -46,7 +47,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Awcodes\\Typist\\Tests\\": "tests/"
+            "Awcodes\\Typist\\Tests\\": "tests/src",
+            "Awcodes\\Typist\\Tests\\Database\\Factories\\": "tests/database/factories"
         }
     },
     "scripts": {
