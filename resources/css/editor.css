@@ -96,6 +96,11 @@
             margin-top: 1rem;
         }
 
+        li p + ul,
+        li p + ol {
+            margin-top: -0.75em;
+        }
+
         p.is-empty:first-child::before {
             @apply text-gray-400 dark:text-gray-600;
             content: attr(data-placeholder);
@@ -283,7 +288,7 @@
         }
 
         .typist-block-controls {
-            @apply transition absolute top-0 right-0 p-1 rounded-bl-lg flex items-center bg-gray-700 dark:bg-gray-950;
+            @apply transition absolute top-0 right-0 p-1 rounded-bl-md flex items-center bg-gray-700 dark:bg-gray-950;
             z-index: 1;
 
             button {
@@ -301,7 +306,7 @@
     }
 
     .typist-sidebar {
-        @apply hidden shrink-0 p-2 space-y-2 max-w-sm md:flex flex-col h-full border-s border-gray-950/10 bg-gray-50 dark:border-white/5 dark:bg-gray-950/20;
+        @apply hidden shrink-0 p-2 space-y-2 min-w-[10rem] max-w-sm md:flex flex-col h-full border-s border-gray-950/10 bg-gray-50 dark:border-white/5 dark:bg-gray-950/20;
 
         .typist-sidebar-item {
             @apply cursor-move flex items-center justify-center gap-2 rounded border text-xs px-3 py-2 bg-white dark:bg-gray-800 dark:border-gray-700;

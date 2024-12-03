@@ -7,6 +7,7 @@ use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Concerns\HasExtraInputAttributes;
 use Filament\Forms\Components\Field;
 use Filament\Support\Concerns\HasPlaceholder;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class TypistEditor extends Field
@@ -60,7 +61,7 @@ class TypistEditor extends Field
         $this->registerActions($this->getActionsToRegister());
     }
 
-    public function getActionsToRegister(): array
+    public function getAllActions(): Collection
     {
         return collect([
             ...$this->getControls(),
@@ -68,7 +69,12 @@ class TypistEditor extends Field
             ...$this->getBubbleMenuActions(),
             ...$this->getSidebarActions(),
             ...$this->getToolbarActions(),
-        ])
+        ]);
+    }
+
+    public function getActionsToRegister(): array
+    {
+        return $this->getAllActions()
             ->map(function ($action) {
                 return fn (): Action => $action;
             })
@@ -77,13 +83,7 @@ class TypistEditor extends Field
 
     public function getAllowedExtensions(): array
     {
-        return collect([
-            ...$this->getControls(),
-            ...$this->getSuggestions(),
-            ...$this->getBubbleMenuActions(),
-            ...$this->getSidebarActions(),
-            ...$this->getToolbarActions(),
-        ])
+        return $this->getAllActions()
             ->map(function ($action) {
                 return $action->getJsExtension();
             })
