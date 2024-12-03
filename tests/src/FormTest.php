@@ -3,6 +3,7 @@
 use Awcodes\Typist\Support\Faker;
 use Awcodes\Typist\Tests\Fixtures\TestComponent;
 use Awcodes\Typist\Tests\Models\Page;
+
 use function Pest\Livewire\livewire;
 
 it('can render component', function () {
