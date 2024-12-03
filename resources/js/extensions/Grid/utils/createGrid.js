@@ -4,6 +4,7 @@ import { getGridNodeTypes } from "./getGridNodeTypes.js";
 export function createGrid(schema, colsCount, stackAt, asymmetric, leftSpan = null, rightSpan = null, colContent = null) {
   const { grid, column } = getGridNodeTypes(schema);
   const cols = [];
+  let type = asymmetric === false ? 'symmetric' : 'asymmetric';
 
   if (asymmetric) {
     cols.push(createColumn(column, leftSpan, colContent));
@@ -18,5 +19,9 @@ export function createGrid(schema, colsCount, stackAt, asymmetric, leftSpan = nu
     }
   }
 
-  return grid.createChecked({ 'data-columns': colsCount, 'data-type': asymmetric ?? 'responsive', 'data-stack-at': stackAt }, cols);
+  return grid.createChecked({
+      'data-columns': colsCount,
+      'data-type': type,
+      'data-stack-at': stackAt
+  }, cols);
 }

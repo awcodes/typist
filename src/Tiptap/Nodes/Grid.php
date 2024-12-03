@@ -22,7 +22,7 @@ class Grid extends Node
     {
         return [
             'data-type' => [
-                'default' => 'responsive',
+                'default' => 'symmetric',
                 'parseHTML' => function ($DOMNode) {
                     return $DOMNode->getAttribute('data-type');
                 },

@@ -20,7 +20,7 @@ export default Node.create({
     addAttributes() {
         return {
             'data-type': {
-                default: 'responsive',
+                default: 'symmetric',
                 parseHTML: (element) => element.getAttribute('data-type'),
             },
             'data-columns': {
