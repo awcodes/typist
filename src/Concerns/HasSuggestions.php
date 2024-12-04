@@ -41,8 +41,6 @@ trait HasSuggestions
         return collect($this->evaluate($this->suggestions) ?? $this->getDefaultSuggestions())
             ->map(function ($suggestion) {
                 $suggestion->name('suggestion_' . $suggestion->getName());
-                ray($suggestion);
-
                 return $suggestion;
             })
             ->toArray();
