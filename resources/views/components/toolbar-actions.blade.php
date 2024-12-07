@@ -22,6 +22,10 @@
             :size="$action->getSize()"
             :group="$action->getGroup()"
             :icon-position="$action->getIconPosition()"
+            :dropdownMaxHeight="$action->getDropdownMaxHeight()"
+            :dropdownOffset="$action->getDropdownOffset()"
+            :dropdownPlacement="$action->getDropdownPlacement()"
+            :dropdownWidth="$action->getDropdownWidth()"
         ></x-filament-actions::group>
     @else
         @php
