@@ -6,14 +6,14 @@ use Awcodes\Typist\Tests\Models\Page;
 
 use function Pest\Livewire\livewire;
 
-it('can render component', function () {
+it('can render form component', function () {
     livewire(TestComponent::class)
         ->assertFormFieldExists('content')
         ->assertSee('typist-wrapper')
         ->assertSee('typist-editor');
 });
 
-it('can save correct data', function () {
+it('can save correct form data', function () {
     $page = Page::factory()->withContent()->make();
 
     livewire(TestComponent::class)
@@ -34,7 +34,7 @@ it('can save correct data', function () {
     ]);
 });
 
-it('can update correct data', function () {
+it('can update correct form data', function () {
     $page = Page::factory()->withContent()->create();
     $newContent = Faker::make()->heading()->paragraphs()->asJson();
 
