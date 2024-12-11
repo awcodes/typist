@@ -11,7 +11,7 @@ class EnterFullscreen extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.enter_fullscreen'))
+            ->label(fn () => trans('typist::typist.enter_fullscreen'))
             ->icon(icon: 'typist-fullscreen-enter')
             ->iconButton()
             ->alpineClickHandler('toggleFullscreen($event)')

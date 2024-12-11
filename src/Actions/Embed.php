@@ -22,7 +22,7 @@ class Embed extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.embed.label'))
+            ->label(fn () => trans('typist::typist.embed.label'))
             ->icon('typist-embed')
             ->iconButton()
             ->active('embed')
@@ -34,7 +34,7 @@ class Embed extends TypistAction
             ])
             ->form([
                 TextInput::make('src')
-                    ->label(trans('typist::typist.embed.url'))
+                    ->label(fn () => trans('typist::typist.embed.url'))
                     ->live()
                     ->required(),
                 CheckboxList::make('options')
@@ -77,7 +77,7 @@ class Embed extends TypistAction
                         }
                     }),
                 TimePicker::make('start_at')
-                    ->label(trans('typist::typist.embed.start_at'))
+                    ->label(fn () => trans('typist::typist.embed.start_at'))
                     ->live()
                     ->date(false)
                     ->visible(function (Get $get) {
@@ -101,7 +101,7 @@ class Embed extends TypistAction
                 Checkbox::make('responsive')
                     ->default(true)
                     ->live()
-                    ->label(trans('typist::typist.embed.responsive'))
+                    ->label(fn () => trans('typist::typist.embed.responsive'))
                     ->afterStateUpdated(function (callable $set, $state) {
                         if ($state) {
                             $set('width', '16');
@@ -116,12 +116,12 @@ class Embed extends TypistAction
                     TextInput::make('width')
                         ->live()
                         ->required()
-                        ->label(trans('typist::typist.embed.width'))
+                        ->label(fn () => trans('typist::typist.embed.width'))
                         ->default('16'),
                     TextInput::make('height')
                         ->live()
                         ->required()
-                        ->label(trans('typist::typist.embed.height'))
+                        ->label(fn () => trans('typist::typist.embed.height'))
                         ->default('9'),
                 ])->columns(['md' => 2]),
             ])

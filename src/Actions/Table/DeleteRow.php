@@ -11,7 +11,7 @@ class DeleteRow extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.table_delete_row'))
+            ->label(fn () => trans('typist::typist.table_delete_row'))
             ->icon(icon: 'typist-table-delete-row')
             ->iconButton()
             ->active(false)

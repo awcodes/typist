@@ -12,7 +12,7 @@ class Blockquote extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.blockquote'))
+            ->label(fn () => trans('typist::typist.blockquote'))
             ->icon(icon: 'typist-blockquote')
             ->iconButton()
             ->command(name: 'toggleBlockquote')

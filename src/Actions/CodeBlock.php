@@ -12,7 +12,7 @@ class CodeBlock extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.code_block'))
+            ->label(fn () => trans('typist::typist.code_block'))
             ->icon(icon: 'typist-code-block')
             ->iconButton()
             ->command(name: 'toggleCodeBlock')

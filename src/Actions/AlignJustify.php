@@ -12,7 +12,7 @@ class AlignJustify extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.align_justify'))
+            ->label(fn () => trans('typist::typist.align_justify'))
             ->icon(icon: 'typist-align-justify')
             ->iconButton()
             ->command(name: 'setTextAlign', attributes: 'justify')

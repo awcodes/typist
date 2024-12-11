@@ -11,7 +11,7 @@ class AddColumnBefore extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.table_add_column_before'))
+            ->label(fn () => trans('typist::typist.table_add_column_before'))
             ->icon(icon: 'typist-table-add-column-before')
             ->iconButton()
             ->active(false)

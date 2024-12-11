@@ -12,7 +12,7 @@ class Bold extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.bold'))
+            ->label(fn () => trans('typist::typist.bold'))
             ->icon(icon: 'typist-bold')
             ->iconButton()
             ->command(name: 'toggleBold')

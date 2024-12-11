@@ -11,7 +11,7 @@ class AddRowBefore extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.table_add_row_before'))
+            ->label(fn () => trans('typist::typist.table_add_row_before'))
             ->icon(icon: 'typist-table-add-row-before')
             ->iconButton()
             ->active(false)

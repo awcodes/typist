@@ -12,7 +12,7 @@ class AlignStart extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.align_start'))
+            ->label(fn () => trans('typist::typist.align_start'))
             ->icon(icon: 'typist-align-start')
             ->iconButton()
             ->command(name: 'setTextAlign', attributes: 'start')

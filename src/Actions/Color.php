@@ -16,7 +16,7 @@ class Color extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.color'))
+            ->label(fn () => trans('typist::typist.color'))
             ->icon(icon: 'typist-color')
             ->iconButton()
             ->converterExtensions(new ColorExtension)

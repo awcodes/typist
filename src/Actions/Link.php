@@ -15,7 +15,7 @@ class Link extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.link'))
+            ->label(fn () => trans('typist::typist.link'))
             ->icon('typist-link')
             ->iconButton()
             ->active('link')

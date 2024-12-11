@@ -12,7 +12,7 @@ class Highlight extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.highlight'))
+            ->label(fn () => trans('typist::typist.highlight'))
             ->icon(icon: 'typist-highlight')
             ->iconButton()
             ->command(name: 'toggleHighlight')

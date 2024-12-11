@@ -12,7 +12,7 @@ class OrderedList extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.ordered_list'))
+            ->label(fn () => trans('typist::typist.ordered_list'))
             ->icon(icon: 'typist-list-ordered')
             ->iconButton()
             ->command(name: 'toggleOrderedList')

@@ -11,7 +11,7 @@ class Redo extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.redo'))
+            ->label(fn () => trans('typist::typist.redo'))
             ->icon(icon: 'typist-redo')
             ->iconButton()
             ->command(name: 'redo');

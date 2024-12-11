@@ -11,7 +11,7 @@ class DesktopViewport extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.desktop_viewport'))
+            ->label(fn () => trans('typist::typist.desktop_viewport'))
             ->icon(icon: 'typist-desktop')
             ->iconButton()
             ->alpineClickHandler('toggleViewport("desktop")')

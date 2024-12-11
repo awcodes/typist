@@ -11,7 +11,7 @@ class SplitCell extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.table_split_cell'))
+            ->label(fn () => trans('typist::typist.table_split_cell'))
             ->icon(icon: 'typist-table-split-cell')
             ->iconButton()
             ->active(false)

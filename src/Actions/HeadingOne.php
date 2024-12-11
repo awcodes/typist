@@ -13,7 +13,7 @@ class HeadingOne extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.heading_one'))
+            ->label(fn () => trans('typist::typist.heading_one'))
             ->icon(icon: 'typist-heading-one')
             ->iconButton()
             ->command(name: 'toggleHeading', attributes: ['level' => 1])

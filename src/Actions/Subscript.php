@@ -12,7 +12,7 @@ class Subscript extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.subscript'))
+            ->label(fn () => trans('typist::typist.subscript'))
             ->icon(icon: 'typist-subscript')
             ->iconButton()
             ->command(name: 'toggleSubscript')

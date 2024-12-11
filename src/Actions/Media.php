@@ -22,7 +22,7 @@ class Media extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.media'))
+            ->label(fn () => trans('typist::typist.media'))
             ->icon('typist-media')
             ->iconButton()
             ->active('media')

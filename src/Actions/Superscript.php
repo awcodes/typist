@@ -12,7 +12,7 @@ class Superscript extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.superscript'))
+            ->label(fn () => trans('typist::typist.superscript'))
             ->icon(icon: 'typist-superscript')
             ->iconButton()
             ->command(name: 'toggleSuperscript')

@@ -11,7 +11,7 @@ class MergeCells extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.table_merge_cells'))
+            ->label(fn () => trans('typist::typist.table_merge_cells'))
             ->icon(icon: 'typist-table-merge-cells')
             ->iconButton()
             ->active(false)

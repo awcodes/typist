@@ -11,7 +11,7 @@ class Undo extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.undo'))
+            ->label(fn () => trans('typist::typist.undo'))
             ->icon(icon: 'typist-undo')
             ->iconButton()
             ->command(name: 'undo');

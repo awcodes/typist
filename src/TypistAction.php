@@ -32,7 +32,7 @@ class TypistAction extends Action
     public function getRenderView(array $data = []): ?string
     {
         return $this->evaluate($this->renderView)
-            ? view($this->renderView, $data)
+            ? view($this->renderView, $data)->toHtml()
             : null;
     }
 
@@ -54,7 +54,7 @@ class TypistAction extends Action
     public function getEditorView(array $data = []): ?string
     {
         return $this->evaluate($this->editorView)
-            ? view($this->editorView, $data)
+            ? view($this->editorView, $data)->toHtml()
             : null;
     }
 

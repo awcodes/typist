@@ -11,7 +11,7 @@ class DeleteTable extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.table_delete'))
+            ->label(fn () => trans('typist::typist.table_delete'))
             ->icon(icon: 'typist-table-delete')
             ->iconButton()
             ->active(false)

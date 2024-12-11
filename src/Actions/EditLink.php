@@ -12,7 +12,7 @@ class EditLink extends Link
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.edit_link'))
+            ->label(fn () => trans('typist::typist.edit_link'))
             ->icon('typist-edit')
             ->active(null)
             ->fillForm(function (array $arguments) {

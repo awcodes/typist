@@ -11,7 +11,7 @@ class MobileViewport extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.mobile_viewport'))
+            ->label(fn () => trans('typist::typist.mobile_viewport'))
             ->icon(icon: 'typist-mobile')
             ->iconButton()
             ->alpineClickHandler('toggleViewport("mobile")')

@@ -11,7 +11,7 @@ class TabletViewport extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.tablet_viewport'))
+            ->label(fn () => trans('typist::typist.tablet_viewport'))
             ->icon(icon: 'typist-tablet')
             ->iconButton()
             ->alpineClickHandler('toggleViewport("tablet")')

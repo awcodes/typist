@@ -19,7 +19,7 @@ class Table extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.table'))
+            ->label(fn () => trans('typist::typist.table'))
             ->icon('typist-table')
             ->iconButton()
             ->active('table')

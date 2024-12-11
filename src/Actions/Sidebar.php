@@ -12,7 +12,7 @@ class Sidebar extends TypistAction
         parent::setUp();
 
         $this
-            ->label(trans('typist::typist.sidebar'))
+            ->label(fn () => trans('typist::typist.sidebar'))
             ->icon(icon: 'typist-sidebar')
             ->iconButton()
             ->alpineClickHandler('toggleSidebar($event)')
