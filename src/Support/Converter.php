@@ -99,6 +99,10 @@ class Converter
 
     public function toHtml(bool $toc = false, int $maxDepth = 3, bool $wrapHeadings = false): string
     {
+        if (blank($this->content) || $this->content === '') {
+            return '<!-- Typist got empty contents -->';
+        }
+
         $editor = $this->getEditor()->setContent($this->content);
 
         if ($toc) {
