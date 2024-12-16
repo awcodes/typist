@@ -14,6 +14,7 @@ class TypistEditor extends Field
 {
     use Concerns\HasBubbleMenus;
     use Concerns\HasControls;
+    use Concerns\HasCustomStyles;
     use Concerns\HasMentions;
     use Concerns\HasMergeTags;
     use Concerns\HasSidebar;
