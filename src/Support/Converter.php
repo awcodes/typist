@@ -37,6 +37,7 @@ class Converter
             ContentType::Html => $this->toHtml(toc: $toc, maxDepth: $maxDepth),
             ContentType::Json => $this->toJson(toc: $toc, maxDepth: $maxDepth),
             ContentType::Markdown => $this->toMarkdown(toc: $toc, maxDepth: $maxDepth),
+            ContentType::TableOfContents => $this->toTOC(maxDepth: $maxDepth),
             ContentType::Text => $this->toText(),
         };
     }
@@ -53,11 +54,6 @@ class Converter
         $this->mergeTagsMap = $mergeTagsMap;
 
         return $this;
-    }
-
-    public function getBlocks(): array
-    {
-        return [];
     }
 
     public function getEditor(): Editor
@@ -127,6 +123,8 @@ class Converter
 
         $editor = $this->getEditor()->setContent($this->content);
 
+        $this->sanitizeBlocks($editor);
+
         if ($toc) {
             $this->parseHeadings($editor, $maxDepth);
         }
@@ -153,15 +151,34 @@ class Converter
             ->convert($this->toHtml(toc: $toc, maxDepth: $maxDepth));
     }
 
-    public function toTOC(int $maxDepth = 3): string
+    public function toTOC(int $maxDepth = 3, bool $array = false): string | array
     {
+        if (blank($this->content) || $this->content === '') {
+            return '';
+        }
+
         if (is_string($this->content)) {
-            $content = $this->toJson();
+            $this->content = $this->toJson();
         }
 
         $headings = $this->parseTocHeadings($this->content['content'], $maxDepth);
 
-        return $this->generateNestedTOC($headings, $headings[0]['level']);
+        return $array ?
+            $this->generateTOCArray($headings) :
+            $this->generateNestedTOC($headings, $headings[0]['level']);
+    }
+
+    public function sanitizeBlocks(Editor $editor): Editor
+    {
+        $editor->descendants(function (&$node) {
+            if ($node->type !== 'typistBlock') {
+                return;
+            }
+
+            unset($node->content);
+        });
+
+        return $editor;
     }
 
     public function parseHeadings(Editor $editor, int $maxDepth = 3, bool $wrapHeadings = false): Editor
@@ -248,6 +265,39 @@ class Converter
         }
 
         return $headings;
+    }
+
+    public function generateTOCArray(array &$headings, int $parentLevel = 0): array
+    {
+
+        $result = [];
+
+        foreach ($headings as $key => &$value) {
+            $currentLevel = $value['level'];
+            $nextLevel = $headings[$key + 1]['level'] ?? 0;
+
+            if ($parentLevel >= $currentLevel) {
+                break;
+            }
+
+            unset($headings[$key]);
+
+            $heading = [
+                'id' => $value['id'],
+                'text' => $value['text'],
+                'depth' => $currentLevel,
+            ];
+
+            if ($nextLevel > $currentLevel) {
+                $heading['subs'] = $this->generateTOCArray($headings, $currentLevel);
+            }
+
+            $result[] = $heading;
+
+        }
+
+        return $result;
+
     }
 
     public function generateNestedTOC(array $headings, int $parentLevel = 0): string
