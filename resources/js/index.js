@@ -194,23 +194,12 @@ export default function typist({
                         editor
                             .chain()
                             .focus(event.detail.range.from)[event.detail.item.commandName](event.detail.item.commandAttributes)
-                            .selectNodeForward()
-                            .deleteSelection()
-                            .setTextSelection(event.detail.range.to)
                             .run()
                     })
                 } else {
                     this.$nextTick(() => {
-                        editor
-                            .chain()
-                            .focus(event.detail.range.from)
-                            .selectNodeForward()
-                            .deleteSelection()
-                            .setTextSelection(event.detail.range.from)
-                            .run()
+                        this.$wire.mountFormComponentAction(event.detail.statePath, event.detail.item.name, {coordinates: editor.view.state.selection});
                     })
-
-                    this.$wire.mountFormComponentAction(event.detail.statePath, event.detail.item.name, {coordinates: editor.view.state.selection});
                 }
             }
         },
