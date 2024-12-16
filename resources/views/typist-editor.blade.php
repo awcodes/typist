@@ -3,8 +3,16 @@
     $isDisabled = $isDisabled();
     $mergeTags = $getMergeTags();
     $sidebarActions = $getSidebarActions();
+    $customStyles = $getCustomStyles();
 @endphp
 <x-dynamic-component :component="$getFieldWrapperView()" :field="$field">
+    @if ($customStyles)
+        <div
+            wire:ignore
+            x-data="{}"
+            x-load-css="[@js($customStyles)]"
+        ></div>
+    @endif
     <div
         wire:ignore
         x-ignore

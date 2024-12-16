@@ -96,7 +96,6 @@ class TypistServiceProvider extends PackageServiceProvider
     {
         return [
             AlpineComponent::make('typist', __DIR__ . '/../resources/dist/typist.js'),
-            Css::make('typist-styles', __DIR__ . '/../resources/dist/typist.css'),
         ];
     }
 }
