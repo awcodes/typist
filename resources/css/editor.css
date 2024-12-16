@@ -1,6 +1,10 @@
 .typist-wrapper {
     @apply relative h-full flex flex-col ring-1 ring-gray-950/10 rounded-lg shadow-sm ring-1 transition bg-white dark:ring-white/20 dark:bg-white/5;
 
+    &:not(.fullscreen):focus-within {
+        @apply ring-2 ring-primary-600 dark:ring-primary-500;
+    }
+
     .typist-toolbar {
         @apply p-1 flex items-center justify-between border-b border-gray-950/10 dark:border-white/5;
 
@@ -53,10 +57,6 @@
 
     .typist-editor {
         @apply min-h-full max-h-[40rem] overflow-y-auto flex-1 h-full;
-
-        &:has(.ProseMirror-focused) {
-            @apply ring-1 ring-primary-600 dark:ring-primary-500;
-        }
     }
 
     .tiptap {
