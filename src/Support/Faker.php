@@ -54,6 +54,20 @@ class Faker
         return $this;
     }
 
+    public function lead(int $paragraphs = 1): static
+    {
+        $this->output .= '<div class="lead"><p>' . collect($this->faker->paragraphs($paragraphs))->implode('</p><p>') . '</p></div>';
+
+        return $this;
+    }
+
+    public function small(): static
+    {
+        $this->output .= '<p><small>' . $this->faker->words(mt_rand(3, 8), true) . '</small></p>';
+
+        return $this;
+    }
+
     public function unorderedList(int $count = 1): static
     {
         $this->output .= '<ul><li>' . collect($this->faker->paragraphs($count))->implode('</li><li>') . '</li></ul>';
@@ -64,13 +78,6 @@ class Faker
     public function orderedList(int $count = 1): static
     {
         $this->output .= '<ol><li>' . collect($this->faker->paragraphs($count))->implode('</li><li>') . '</li></ol>';
-
-        return $this;
-    }
-
-    public function checkedList(int $count = 1): static
-    {
-        $this->output .= '<ul class="checked-list"><li>' . collect($this->faker->paragraphs($count))->implode('</li><li>') . '</li></ul>';
 
         return $this;
     }
@@ -93,15 +100,15 @@ class Faker
         return $this;
     }
 
-    public function video(?string $provider = 'youtube', ?int $width = 1600, ?int $height = 900, bool $responsive = true): static
+    public function embed(?string $provider = 'youtube', ?int $width = 1600, ?int $height = 900, bool $responsive = true): static
     {
         $style = $responsive ? 'aspect-ratio:1600/900; width: 100%; height: auto;' : '';
         $responsive = $responsive ? 'responsive' : '';
 
         if ($provider === 'vimeo') {
-            $this->output .= '<div data-vimeo-video="true" class="' . $responsive . '"><iframe src="https://vimeo.com/146782320" width="' . $width . '" height="' . $height . '" allowfullscreen="true" allow="autoplay; fullscreen; picture-in-picture" style="' . $style . '"></iframe></div>';
+            $this->output .= '<div data-vimeo-video="true" class="' . $responsive . '"><iframe src="https://vimeo.com/146782320" width="' . $width . '" height="' . $height . '" allow="autoplay; fullscreen; picture-in-picture" style="' . $style . '"></iframe></div>';
         } else {
-            $this->output .= '<div data-youtube-video="true" class="' . $responsive . '"><iframe src="https://www.youtube.com/watch?v=4ugMYpzLA0c" width="' . $width . '" height="' . $height . '" allowfullscreen="true" allow="autoplay; fullscreen; picture-in-picture" style="' . $style . '"></iframe></div>';
+            $this->output .= '<div data-youtube-video="true" class="' . $responsive . '"><iframe src="https://www.youtube.com/watch?v=4ugMYpzLA0c" width="' . $width . '" height="' . $height . '" allow="autoplay; fullscreen; picture-in-picture" style="' . $style . '"></iframe></div>';
         }
 
         return $this;
@@ -121,9 +128,9 @@ class Faker
         return $this;
     }
 
-    public function codeBlock(?string $className = 'hljs'): static
+    public function codeBlock(?string $language = 'sh'): static
     {
-        $this->output .= "<pre><code class=\"{$className}\">export default function testComponent({\n\n\tstate,\n\n}) {\n\n\treturn {\n\n\t\tstate,\n\n\t\tinit: function () {\n\n\t\t\t// Initialise the Alpine component here, if you need to.\n\n\t\t},\n\n\t}\n\n}</code></pre>";
+        $this->output .= "<pre><code class=\"language-{$language}\">export default function testComponent({\n\tstate,\n}) {\n\treturn {\n\t\tstate,\n\t\tinit: function () {\n\t\t\t// Initialise the Alpine component here, if you need to.\n\t\t},\n\t}\n}</code></pre>";
 
         return $this;
     }
@@ -160,10 +167,10 @@ class Faker
 
     public function grid(array $cols = [1, 1, 1]): static
     {
-        $this->output .= '<div class="scribble-grid" data-type="responsive" data-columns="' . count($cols) . '" style="grid-template-columns: repeat(' . count($cols) . ', 1fr);" data-stack-at="md">';
+        $this->output .= '<div class="typist-grid" data-type="responsive" data-columns="' . count($cols) . '" style="grid-template-columns: repeat(' . count($cols) . ', 1fr);" data-stack-at="md">';
 
         foreach ($cols as $col) {
-            $this->output .= '<div class="scribble-grid-column" data-col-span="' . $col . '" style="grid-column: span 1;"><h2>' . Str::title($this->faker->words(mt_rand(3, 8), true)) . '</h2><p>' . $this->faker->paragraph() . '</p></div>';
+            $this->output .= '<div class="typist-grid-column" data-col-span="' . $col . '" style="grid-column: span 1;"><h2>' . Str::title($this->faker->words(mt_rand(3, 8), true)) . '</h2><p>' . $this->faker->paragraph() . '</p></div>';
         }
 
         $this->output .= '</div>';
@@ -171,7 +178,7 @@ class Faker
         return $this;
     }
 
-    public function block(string $identifier = 'Alert', ?array $values = []): static
+    public function block(string $identifier, ?array $values = []): static
     {
         $this->output .= '<typist-block>' . json_encode(['identifier' => $identifier, 'values' => $values]) . '</typist-block>';
 
@@ -181,7 +188,6 @@ class Faker
     public function sink(): static
     {
         $this
-            ->emptyParagraph()
             ->heading()
             ->paragraphs(2, true)
             ->unorderedList(3)

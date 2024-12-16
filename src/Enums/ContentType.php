@@ -8,4 +8,5 @@ enum ContentType: string
     case Json = 'json';
     case Text = 'text';
     case Markdown = 'markdown';
+    case TableOfContents = 'toc';
 }
