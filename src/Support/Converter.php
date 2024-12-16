@@ -99,6 +99,10 @@ class Converter
 
     public function toHtml(bool $toc = false, int $maxDepth = 3, bool $wrapHeadings = false): string
     {
+        if (blank($this->content) || $this->content === '') {
+            return '';
+        }
+
         $editor = $this->getEditor()->setContent($this->content);
 
         if ($toc) {
@@ -117,6 +121,10 @@ class Converter
 
     public function toJson(bool $toc = false, int $maxDepth = 3): array
     {
+        if (blank($this->content) || $this->content === '') {
+            return [];
+        }
+
         $editor = $this->getEditor()->setContent($this->content);
 
         if ($toc) {
@@ -128,11 +136,19 @@ class Converter
 
     public function toText(): string
     {
+        if (blank($this->content) || $this->content === '') {
+            return '';
+        }
+
         return $this->getEditor()->setContent($this->content)->getText();
     }
 
     public function toMarkdown(bool $toc = false, int $maxDepth = 3, ?array $options = []): string
     {
+        if (blank($this->content) || $this->content === '') {
+            return '';
+        }
+
         return (new HtmlConverter($options))
             ->convert($this->toHtml(toc: $toc, maxDepth: $maxDepth));
     }
