@@ -28,7 +28,7 @@ trait InteractsWithBlocks
         foreach ($content as $k => $block) {
             if ($block['type'] === 'typistBlock') {
                 $instance = $this->getAction($block['attrs']['identifier']);
-                $content[$k]['attrs']['view'] = $instance->getEditorView($block['attrs']['values']);
+                $content[$k]['attrs']['view'] = $instance?->getEditorView($block['attrs']['values']);
             } elseif (array_key_exists('content', $block)) {
                 $content[$k] = $this->renderBlockViews($block, $component);
             }
