@@ -12,7 +12,7 @@ class AlignEnd extends TypistAction
         parent::setUp();
 
         $this
-            ->label(fn () => trans('typist::typist.align_end'))
+            ->label(fn () => trans('typist::typist.align.end'))
             ->icon(icon: 'typist-align-end')
             ->iconButton()
             ->command(name: 'setTextAlign', attributes: 'end')

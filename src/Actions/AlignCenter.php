@@ -12,7 +12,7 @@ class AlignCenter extends TypistAction
         parent::setUp();
 
         $this
-            ->label(fn () => trans('typist::typist.align_center'))
+            ->label(fn () => trans('typist::typist.align.center'))
             ->icon(icon: 'typist-align-center')
             ->iconButton()
             ->command(name: 'setTextAlign', attributes: 'center')

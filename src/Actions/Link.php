@@ -15,7 +15,7 @@ class Link extends TypistAction
         parent::setUp();
 
         $this
-            ->label(fn () => trans('typist::typist.link'))
+            ->label(fn () => trans('typist::typist.link.label'))
             ->icon('typist-link')
             ->iconButton()
             ->active('link')
@@ -24,22 +24,28 @@ class Link extends TypistAction
                 Components\Grid::make(['md' => 3])
                     ->schema([
                         Components\TextInput::make('href')
+                            ->label(fn () => trans('typist::typist.link.href'))
                             ->columnSpan('full')
                             ->requiredWithout('id')
                             ->validationAttribute('URL'),
-                        Components\TextInput::make('id'),
+                        Components\TextInput::make('id')
+                            ->label(fn () => trans('typist::typist.link.id')),
                         Components\Select::make('target')
+                            ->label(fn () => trans('typist::typist.link.target.label'))
                             ->selectablePlaceholder(false)
                             ->options([
-                                '' => 'Self',
-                                '_blank' => 'New Window',
-                                '_parent' => 'Parent',
-                                '_top' => 'Top',
+                                '' => trans('typist::typist.link.target.self'),
+                                '_blank' => trans('typist::typist.link.target.new_window'),
+                                '_parent' => trans('typist::typist.link.target.parent'),
+                                '_top' => trans('typist::typist.link.target.top'),
                             ]),
-                        Components\TextInput::make('hreflang'),
+                        Components\TextInput::make('hreflang')
+                            ->label(fn () => trans('typist::typist.link.hreflang')),
                         Components\TextInput::make('rel')
+                            ->label(fn () => trans('typist::typist.link.rel'))
                             ->columnSpan('full'),
                         Components\TextInput::make('referrerpolicy')
+                            ->label(fn () => trans('typist::typist.link.referrerpolicy'))
                             ->columnSpan('full'),
                     ]),
             ])

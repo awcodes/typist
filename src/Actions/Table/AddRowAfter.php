@@ -11,7 +11,7 @@ class AddRowAfter extends TypistAction
         parent::setUp();
 
         $this
-            ->label(fn () => trans('typist::typist.table_add_row_after'))
+            ->label(fn () => trans('typist::typist.table.add_row_after'))
             ->icon(icon: 'typist-table-add-row-after')
             ->iconButton()
             ->active(false)

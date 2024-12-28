@@ -11,7 +11,7 @@ class DeleteColumn extends TypistAction
         parent::setUp();
 
         $this
-            ->label(fn () => trans('typist::typist.table_delete_column'))
+            ->label(fn () => trans('typist::typist.table.delete_column'))
             ->icon(icon: 'typist-table-delete-column')
             ->iconButton()
             ->active(false)

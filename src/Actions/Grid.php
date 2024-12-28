@@ -17,7 +17,7 @@ class Grid extends TypistAction
         parent::setUp();
 
         $this
-            ->label(fn () => trans('typist::typist.grid'))
+            ->label(fn () => trans('typist::typist.grid.label'))
             ->icon('typist-grid')
             ->iconButton()
             ->active('grid')
@@ -36,7 +36,7 @@ class Grid extends TypistAction
                         Components\View::make('typist::components.grid-preview')
                             ->columnSpanFull(),
                         Components\TextInput::make('columns')
-                            ->label('Columns')
+                            ->label(fn () => trans('typist::typist.grid.columns'))
                             ->required()
                             ->live()
                             ->minValue(2)
@@ -44,7 +44,7 @@ class Grid extends TypistAction
                             ->numeric()
                             ->step(1),
                         Components\Select::make('stack_at')
-                            ->label('Stack at')
+                            ->label(fn () => trans('typist::typist.grid.stack_at'))
                             ->live()
                             ->selectablePlaceholder(false)
                             ->options([
@@ -55,12 +55,12 @@ class Grid extends TypistAction
                             ])
                             ->default('md'),
                         Components\Toggle::make('asymmetric')
-                            ->label('Asymmetric')
+                            ->label(fn () => trans('typist::typist.grid.asymmetric'))
                             ->default(false)
                             ->live()
                             ->columnSpanFull(),
                         Components\TextInput::make('left_span')
-                            ->label('Left column span')
+                            ->label(fn () => trans('typist::typist.grid.left_span'))
                             ->required()
                             ->live()
                             ->minValue(1)
@@ -68,7 +68,7 @@ class Grid extends TypistAction
                             ->numeric()
                             ->visible(fn (Get $get) => $get('asymmetric')),
                         Components\TextInput::make('right_span')
-                            ->label('Right column span')
+                            ->label(fn () => trans('typist::typist.grid.right_span'))
                             ->required()
                             ->live()
                             ->minValue(1)
