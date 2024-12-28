@@ -13,7 +13,7 @@ class HeadingTwo extends TypistAction
         parent::setUp();
 
         $this
-            ->label(fn () => trans('typist::typist.heading_two'))
+            ->label(fn () => trans('typist::typist.heading.two'))
             ->icon(icon: 'typist-heading-two')
             ->iconButton()
             ->command(name: 'toggleHeading', attributes: ['level' => 2])

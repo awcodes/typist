@@ -22,7 +22,7 @@ class Media extends TypistAction
         parent::setUp();
 
         $this
-            ->label(fn () => trans('typist::typist.media'))
+            ->label(fn () => trans('typist::typist.media.label'))
             ->icon('typist-media')
             ->iconButton()
             ->active('media')
@@ -43,7 +43,7 @@ class Media extends TypistAction
                         ->schema([
                             Components\Group::make([
                                 Components\FileUpload::make('src')
-                                    ->label('File')
+                                    ->label(fn () => trans('typist::typist.media.src'))
                                     ->disk($component->getDisk())
                                     ->directory($component->getDirectory())
                                     ->visibility($component->getVisibility())
@@ -91,11 +91,11 @@ class Media extends TypistAction
                             ])->columnSpan(1),
                             Components\Group::make([
                                 Components\TextInput::make('link_text')
-                                    ->label('Link Text')
+                                    ->label(fn () => trans('typist::typist.media.link_text'))
                                     ->required()
                                     ->visible(fn (Get $get) => $get('type') == 'document'),
                                 Components\TextInput::make('alt')
-                                    ->label('Alt Text')
+                                    ->label(fn () => trans('typist::typist.media.alt'))
                                     ->hidden(fn (Get $get) => $get('type') == 'document')
                                     ->hintAction(
                                         Action::make('alt_hint_action')
@@ -105,19 +105,19 @@ class Media extends TypistAction
                                             ->url('https://www.w3.org/WAI/tutorials/images/decision-tree', true)
                                     ),
                                 Components\TextInput::make('title')
-                                    ->label('Title'),
+                                    ->label(fn () => trans('typist::typist.media.title')),
                                 Components\Group::make([
                                     Components\TextInput::make('width')
-                                        ->label('Width'),
+                                        ->label(fn () => trans('typist::typist.media.width')),
                                     Components\TextInput::make('height')
-                                        ->label('Height'),
+                                        ->label(fn () => trans('typist::typist.media.height')),
                                 ])->columns()->hidden(fn (Get $get) => $get('type') == 'document'),
                                 Components\ToggleButtons::make('alignment')
-                                    ->label('Alignment')
+                                    ->label(fn () => trans('typist::typist.media.alignment.label'))
                                     ->options([
-                                        'start' => 'Start',
-                                        'center' => 'Center',
-                                        'end' => 'End',
+                                        'start' => trans('typist::typist.media.alignment.start'),
+                                        'center' => trans('typist::typist.media.alignment.center'),
+                                        'end' => trans('typist::typist.media.alignment.end'),
                                     ])
                                     ->grouped()
                                     ->afterStateHydrated(function (Components\ToggleButtons $component, $state) {
@@ -126,7 +126,7 @@ class Media extends TypistAction
                                         }
                                     }),
                                 Components\Checkbox::make('loading')
-                                    ->label('Lazy Load')
+                                    ->label(fn () => trans('typist::typist.media.loading'))
                                     ->dehydrateStateUsing(function ($state): ?string {
                                         if ($state) {
                                             return 'lazy';

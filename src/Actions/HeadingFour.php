@@ -13,7 +13,7 @@ class HeadingFour extends TypistAction
         parent::setUp();
 
         $this
-            ->label(fn () => trans('typist::typist.heading_four'))
+            ->label(fn () => trans('typist::typist.heading.four'))
             ->icon(icon: 'typist-heading-four')
             ->iconButton()
             ->command(name: 'toggleHeading', attributes: ['level' => 4])

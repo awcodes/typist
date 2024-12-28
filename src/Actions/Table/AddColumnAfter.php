@@ -11,7 +11,7 @@ class AddColumnAfter extends TypistAction
         parent::setUp();
 
         $this
-            ->label(fn () => trans('typist::typist.table_add_column_after'))
+            ->label(fn () => trans('typist::typist.table.add_column_after'))
             ->icon(icon: 'typist-table-add-column-after')
             ->iconButton()
             ->active(false)

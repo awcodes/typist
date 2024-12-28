@@ -19,7 +19,7 @@ class Table extends TypistAction
         parent::setUp();
 
         $this
-            ->label(fn () => trans('typist::typist.table'))
+            ->label(fn () => trans('typist::typist.table.label'))
             ->icon('typist-table')
             ->iconButton()
             ->active('table')
@@ -36,7 +36,7 @@ class Table extends TypistAction
             ])
             ->form([
                 Components\TextInput::make('rows')
-                    ->label('Rows')
+                    ->label(fn () => trans('typist::typist.table.rows'))
                     ->numeric()
                     ->required()
                     ->dehydrateStateUsing(function (Get $get, $state) {
@@ -47,10 +47,11 @@ class Table extends TypistAction
                         return $state;
                     }),
                 Components\TextInput::make('cols')
-                    ->label('Columns')
+                    ->label(fn () => trans('typist::typist.table.columns'))
                     ->numeric()
                     ->required(),
-                Components\Checkbox::make('withHeaderRow'),
+                Components\Checkbox::make('withHeaderRow')
+                    ->label(fn () => trans('typist::typist.table.header_row')),
             ])
             ->action(function (TypistEditor $component, array $arguments, array $data): void {
                 $statePath = $component->getStatePath();
