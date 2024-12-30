@@ -38,19 +38,11 @@ trait HasSuggestions
             ];
         }
 
-        return collect($this->evaluate($this->suggestions) ?? $this->getDefaultSuggestions())
-            ->map(function ($suggestion) {
-                $suggestion->name('suggestion_' . $suggestion->getName());
-
-                return $suggestion;
-            })
-            ->toArray();
+        return $this->evaluate($this->suggestions) ?? $this->getDefaultSuggestions();
     }
 
     public function getSuggestionsForTiptap(): array
     {
-        $suggestions = $this->evaluate($this->suggestions) ?? $this->getDefaultSuggestions();
-
         return collect($this->getSuggestions())
             ->transform(function ($suggestion) {
                 return [
@@ -67,16 +59,16 @@ trait HasSuggestions
     public function getDefaultSuggestions(): array
     {
         return [
-            Actions\Media::make('Media'),
-            Actions\Embed::make('Embed'),
-            Actions\BulletList::make('BulletList'),
-            Actions\OrderedList::make('OrderedList'),
-            Actions\Blockquote::make('Blockquote'),
-            Actions\HorizontalRule::make('HorizontalRule'),
-            Actions\CodeBlock::make('CodeBlock'),
-            Actions\Details::make('Details'),
-            Actions\Grid::make('Grid'),
-            Actions\Table::make('Table'),
+            Actions\Media::make('suggestionMedia'),
+            Actions\Embed::make('suggestionEmbed'),
+            Actions\BulletList::make('suggestionBulletList'),
+            Actions\OrderedList::make('suggestionOrderedList'),
+            Actions\Blockquote::make('suggestionBlockquote'),
+            Actions\HorizontalRule::make('suggestionHorizontalRule'),
+            Actions\CodeBlock::make('suggestionCodeBlock'),
+            Actions\Details::make('suggestionDetails'),
+            Actions\Grid::make('suggestionGrid'),
+            Actions\Table::make('suggestionTable'),
         ];
     }
 }

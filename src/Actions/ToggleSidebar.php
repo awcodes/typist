@@ -5,7 +5,7 @@ namespace Awcodes\Typist\Actions;
 use Awcodes\Typist\TypistAction;
 use Awcodes\Typist\TypistEditor;
 
-class Sidebar extends TypistAction
+class ToggleSidebar extends TypistAction
 {
     protected function setUp(): void
     {
