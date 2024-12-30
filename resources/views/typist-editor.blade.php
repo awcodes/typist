@@ -92,10 +92,12 @@
             @endif
         </div>
 
+        @if($shouldShowWordCount())
         <div class="typist-footer">
             <div>
                 <p class="text-xs">Word Count: <span x-text="wordCount"></span>
             </div>
         </div>
+        @endif
     </div>
 </x-dynamic-component>

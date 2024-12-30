@@ -31,6 +31,8 @@ class TypistEditor extends Field
 
     protected string | Closure | null $customDocument = null;
 
+    protected bool | Closure | null $wordCount = null;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -114,5 +116,17 @@ class TypistEditor extends Field
     public function getCustomDocument(): ?string
     {
         return $this->evaluate($this->customDocument);
+    }
+
+    public function wordCount(bool | Closure $wordCount = true): static
+    {
+        $this->wordCount = $wordCount;
+
+        return $this;
+    }
+
+    public function shouldShowWordCount(): bool
+    {
+        return $this->evaluate($this->wordCount) ?? false;
     }
 }
