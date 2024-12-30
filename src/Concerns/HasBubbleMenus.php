@@ -46,23 +46,23 @@ trait HasBubbleMenus
     {
         return [
             BubbleMenu::make([
-                Actions\EditLink::make('EditLink'),
-                Actions\Unlink::make('Unlink'),
+                Actions\EditLink::make('bubbleEditLink'),
+                Actions\Unlink::make('bubbleUnlink'),
             ])->view('typist::bubble-link'),
             BubbleMenu::make([
-                Actions\EditMedia::make('EditMedia'),
-                Actions\RemoveMedia::make('RemoveMedia'),
+                Actions\EditMedia::make('bubbleEditMedia'),
+                Actions\RemoveMedia::make('bubbleRemoveMedia'),
             ])->view('typist::bubble-media'),
             BubbleMenu::make([
-                Actions\Table\AddColumnBefore::make('AddColumnBefore'),
-                Actions\Table\AddColumnAfter::make('AddColumnAfter'),
-                Actions\Table\DeleteColumn::make('DeleteColumn'),
-                Actions\Table\AddRowBefore::make('AddRowBefore'),
-                Actions\Table\AddRowAfter::make('AddRowAfter'),
-                Actions\Table\DeleteRow::make('DeleteRow'),
-                Actions\Table\MergeCells::make('MergeCells'),
-                Actions\Table\SplitCell::make('SplitCells'),
-                Actions\Table\DeleteTable::make('DeleteTable'),
+                Actions\Table\AddColumnBefore::make('bubbleAddColumnBefore'),
+                Actions\Table\AddColumnAfter::make('bubbleAddColumnAfter'),
+                Actions\Table\DeleteColumn::make('bubbleDeleteColumn'),
+                Actions\Table\AddRowBefore::make('bubbleAddRowBefore'),
+                Actions\Table\AddRowAfter::make('bubbleAddRowAfter'),
+                Actions\Table\DeleteRow::make('bubbleDeleteRow'),
+                Actions\Table\MergeCells::make('bubbleMergeCells'),
+                Actions\Table\SplitCell::make('bubbleSplitCells'),
+                Actions\Table\DeleteTable::make('bubbleDeleteTable'),
             ])->view('typist::bubble-table'),
         ];
     }

@@ -26,15 +26,15 @@ trait HasControls
     public function getControls(): array
     {
         return $this->evaluate($this->controls) ?? [
-            Actions\MobileViewport::make('ToggleMobileViewport'),
-            Actions\TabletViewport::make('ToggleTabletViewport'),
-            Actions\DesktopViewport::make('ToggleDesktopViewport'),
-            Actions\Undo::make('Undo'),
-            Actions\Redo::make('Redo'),
-            Actions\ClearContent::make('ClearContent'),
-            Actions\EnterFullscreen::make('EnterFullscreen'),
-            Actions\ExitFullscreen::make('ExitFullscreen'),
-            Actions\Sidebar::make('Sidebar'),
+            Actions\MobileViewport::make('controlToggleMobileViewport'),
+            Actions\TabletViewport::make('controlToggleTabletViewport'),
+            Actions\DesktopViewport::make('controlToggleDesktopViewport'),
+            Actions\Undo::make('controlUndo'),
+            Actions\Redo::make('controlRedo'),
+            Actions\ClearContent::make('controlClearContent'),
+            Actions\EnterFullscreen::make('controlEnterFullscreen'),
+            Actions\ExitFullscreen::make('controlExitFullscreen'),
+            Actions\ToggleSidebar::make('controlToggleSidebar'),
         ];
     }
 }
