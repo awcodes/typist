@@ -30,10 +30,6 @@
             customDocument: @js($getCustomDocument())
         })"
         id="{{ 'typist-wrapper-' . $statePath }}"
-        @class([
-            'typist-wrapper',
-            'invalid' => $errors->has($statePath),
-        ])
         x-bind:class="{
             'fullscreen': fullscreen,
             'display-mobile': viewport === 'mobile',
@@ -45,10 +41,15 @@
         x-on:dragged-merge-tag.stop="insertMergeTag($event)"
         x-on:dragged-block.stop="insertBlock($event)"
         x-on:handle-suggestion.window="handleSuggestion($event)"
+        {{
+            \Filament\Support\prepare_inherited_attributes($getExtraAttributeBag())
+                ->class([
+                    'typist-wrapper',
+                    'invalid' => $errors->has($statePath),
+                ])
+        }}
     >
-        <div class="typist-toolbar" x-bind:class="{
-            'focused': isFocused
-        }">
+        <div class="typist-toolbar" x-bind:class="{'focused': isFocused}">
             <x-typist::toolbar-actions class="typist-toolbar-start" :actions="$getToolbar()" :field="$field" />
             <x-typist::toolbar-actions class="typist-toolbar-end" :actions="$getControls()" :field="$field" />
         </div>
