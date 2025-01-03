@@ -3,6 +3,13 @@
 namespace Awcodes\Typist\Concerns;
 
 use Closure;
+use Filament\Forms\Components\BaseFileUpload;
+use Filament\Forms\Components\Field;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Set;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 trait InteractsWithMedia
 {
@@ -29,6 +36,8 @@ trait InteractsWithMedia
     protected bool | Closure | null $shouldPreserveFileNames = null;
 
     protected string | Closure | null $visibility = null;
+
+    protected Field | Closure | null $uploader = null;
 
     public function acceptedFileTypes(array $acceptedFileTypes): static
     {
@@ -107,16 +116,18 @@ trait InteractsWithMedia
         return $this;
     }
 
-    public function relativePaths(array | Closure $relativePaths): static
+    public function relativePaths(bool | Closure $relativePaths = true): static
     {
         $this->relativePaths = $relativePaths;
 
         return $this;
     }
 
-    public function useRelativePaths(): bool
+    public function uploader(Field | Closure $uploader): static
     {
-        return $this->evaluate($this->relativePaths) ?? false;
+        $this->uploader = $uploader;
+
+        return $this;
     }
 
     public function getAcceptedFileTypes(): array
@@ -164,6 +175,56 @@ trait InteractsWithMedia
         return $this->evaluate($this->minSize) ?? config('typist.media.min_size');
     }
 
+    public function getUploader(): Field
+    {
+        return $this->evaluate($this->uploader) ?? FileUpload::make('src')
+            ->label(fn () => trans('typist::typist.media.src'))
+            ->disk($this->getDisk())
+            ->directory($this->getDirectory())
+            ->visibility($this->getVisibility())
+            ->preserveFilenames($this->shouldPreserveFileNames())
+            ->acceptedFileTypes($this->getAcceptedFileTypes())
+            ->maxFiles(1)
+            ->maxSize($this->getMaxSize())
+            ->minSize($this->getMinSize())
+            ->imageResizeMode($this->getImageResizeMode())
+            ->imageCropAspectRatio($this->getImageCropAspectRatio())
+            ->imageResizeTargetWidth($this->getImageResizeTargetWidth())
+            ->imageResizeTargetHeight($this->getImageResizeTargetHeight())
+            ->required()
+            ->live()
+            ->afterStateUpdated(function (TemporaryUploadedFile $state, Set $set): void {
+                if (Str::contains($state->getMimeType(), 'image')) {
+                    $set('type', 'image');
+                    if (! Str::contains($state->getMimeType(), 'svg')) {
+                        $set('width', $state->dimensions()[0]);
+                        $set('height', $state->dimensions()[1]);
+                    } else {
+                        $set('width', 50);
+                        $set('height', 50);
+                    }
+                } else {
+                    $set('type', 'document');
+                }
+            })
+            ->saveUploadedFileUsing(function (BaseFileUpload $component, TemporaryUploadedFile $file): string {
+                $filename = $component->shouldPreserveFilenames()
+                    ? pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)
+                    : Str::uuid();
+                $storeMethod = $component->getVisibility() === 'public' ? 'storePubliclyAs' : 'storeAs';
+                $extension = $file->getClientOriginalExtension();
+                $storage = Storage::disk($component->getDiskName());
+
+                if ($storage->exists(ltrim($component->getDirectory() . '/' . $filename . '.' . $extension, '/'))) {
+                    $filename = $filename . '-' . time();
+                }
+
+                $upload = $file->{$storeMethod}($component->getDirectory(), $filename . '.' . $extension, $component->getDiskName());
+
+                return $storage->url($upload);
+            });
+    }
+
     public function getVisibility(): string
     {
         return $this->visibility ? $this->evaluate($this->visibility) : config('typist.media.visibility');
@@ -172,5 +233,10 @@ trait InteractsWithMedia
     public function shouldPreserveFileNames(): bool
     {
         return $this->shouldPreserveFileNames ? $this->evaluate($this->shouldPreserveFileNames) : config('typist.media.preserve_file_names');
+    }
+
+    public function useRelativePaths(): bool
+    {
+        return $this->evaluate($this->relativePaths) ?? false;
     }
 }
