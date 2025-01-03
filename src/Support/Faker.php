@@ -130,7 +130,7 @@ class Faker
 
     public function codeBlock(?string $language = 'sh'): static
     {
-        $this->output .= "<pre><code class=\"language-{$language}\">export default function testComponent({\n\tstate,\n}) {\n\treturn {\n\t\tstate,\n\t\tinit: function () {\n\t\t\t// Initialise the Alpine component here, if you need to.\n\t\t},\n\t}\n}</code></pre>";
+        $this->output .= "<pre><code class=\"language-{$language}\">export default function testComponent({\n\tstate,\n}) {\n\treturn {\n\t\tstate,\n\t\tinit: function () {\n\t\t\t// Initialize the Alpine component here, if you need to.\n\t\t},\n\t}\n}</code></pre>";
 
         return $this;
     }

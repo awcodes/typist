@@ -7,13 +7,10 @@ use Awcodes\Typist\TypistAction;
 use Awcodes\Typist\TypistEditor;
 use Filament\Forms\Components;
 use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\BaseFileUpload;
 use Filament\Forms\Get;
-use Filament\Forms\Set;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Js;
 use Illuminate\Support\Str;
-use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class Media extends TypistAction
 {
@@ -42,52 +39,7 @@ class Media extends TypistAction
                     Components\Grid::make()
                         ->schema([
                             Components\Group::make([
-                                Components\FileUpload::make('src')
-                                    ->label(fn () => trans('typist::typist.media.src'))
-                                    ->disk($component->getDisk())
-                                    ->directory($component->getDirectory())
-                                    ->visibility($component->getVisibility())
-                                    ->preserveFilenames($component->shouldPreserveFileNames())
-                                    ->acceptedFileTypes($component->getAcceptedFileTypes())
-                                    ->maxFiles(1)
-                                    ->maxSize($component->getMaxSize())
-                                    ->minSize($component->getMinSize())
-                                    ->imageResizeMode($component->getImageResizeMode())
-                                    ->imageCropAspectRatio($component->getImageCropAspectRatio())
-                                    ->imageResizeTargetWidth($component->getImageResizeTargetWidth())
-                                    ->imageResizeTargetHeight($component->getImageResizeTargetHeight())
-                                    ->required()
-                                    ->live()
-                                    ->afterStateUpdated(function (TemporaryUploadedFile $state, Set $set): void {
-                                        if (Str::contains($state->getMimeType(), 'image')) {
-                                            $set('type', 'image');
-                                            if (! Str::contains($state->getMimeType(), 'svg')) {
-                                                $set('width', $state->dimensions()[0]);
-                                                $set('height', $state->dimensions()[1]);
-                                            } else {
-                                                $set('width', 50);
-                                                $set('height', 50);
-                                            }
-                                        } else {
-                                            $set('type', 'document');
-                                        }
-                                    })
-                                    ->saveUploadedFileUsing(function (BaseFileUpload $component, TemporaryUploadedFile $file): string {
-                                        $filename = $component->shouldPreserveFilenames()
-                                            ? pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)
-                                            : Str::uuid();
-                                        $storeMethod = $component->getVisibility() === 'public' ? 'storePubliclyAs' : 'storeAs';
-                                        $extension = $file->getClientOriginalExtension();
-                                        $storage = Storage::disk($component->getDiskName());
-
-                                        if ($storage->exists(ltrim($component->getDirectory() . '/' . $filename . '.' . $extension, '/'))) {
-                                            $filename = $filename . '-' . time();
-                                        }
-
-                                        $upload = $file->{$storeMethod}($component->getDirectory(), $filename . '.' . $extension, $component->getDiskName());
-
-                                        return $storage->url($upload);
-                                    }),
+                                $component->getUploader(),
                             ])->columnSpan(1),
                             Components\Group::make([
                                 Components\TextInput::make('link_text')
