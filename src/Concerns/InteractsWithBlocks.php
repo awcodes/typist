@@ -28,7 +28,13 @@ trait InteractsWithBlocks
         foreach ($content as $k => $block) {
             if ($block['type'] === 'typistBlock') {
                 $instance = $this->getAction($block['attrs']['identifier']);
-                $content[$k]['attrs']['view'] = $instance->getEditorView($block['attrs']['values']);
+                if ($instance) {
+                    $content[$k]['attrs']['view'] = $instance->getEditorView($block['attrs']['values']);
+                } else {
+                    $content[$k]['attrs']['view'] = view('typist::components.unregistered-block', [
+                        'identifier' => $block['attrs']['identifier'],
+                    ])->render();
+                }
             } elseif (array_key_exists('content', $block)) {
                 $content[$k] = $this->renderBlockViews($block, $component);
             }
