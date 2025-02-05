@@ -1,3 +1,7 @@
+.sorting .typist-wrapper {
+    pointer-events: none;
+}
+
 .typist-wrapper {
     @apply relative h-full flex flex-col ring-1 ring-gray-950/10 rounded-lg shadow-sm ring-1 transition bg-white dark:ring-white/20 dark:bg-white/5;
 
@@ -62,10 +66,6 @@
     .tiptap {
         @apply p-4 text-gray-950 dark:text-white dark:placeholder:text-gray-500 bg-white/0 ps-3 pe-3 min-h-full;
 
-        &.ProseMirror-focused {
-            @apply outline-none;
-        }
-
         :first-child {
             @apply mt-0;
         }
@@ -75,6 +75,8 @@
         }
 
         &.ProseMirror-focused {
+            @apply outline-none;
+
             .ProseMirror-selectednode {
                 @apply outline-2 outline-offset-2 outline-dashed outline-gray-900/50 dark:outline-white/80;
             }
@@ -211,6 +213,14 @@
 
         div[data-typist-block="true"] {
             min-height: 2rem;
+
+            .typist-block-controls {
+                @apply hidden hover:block focus:block;
+            }
+        }
+
+        &.ProseMirror-focused .ProseMirror-selectednode[data-typist-block="true"] .typist-block-controls {
+            @apply block;
         }
 
         .code-block-container {

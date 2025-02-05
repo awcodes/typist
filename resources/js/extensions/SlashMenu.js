@@ -43,7 +43,7 @@ export default Extension.create({
                         detail: {
                             item: props,
                             statePath: editor.commands.getStatePath(),
-                            range: range
+                            range: range,
                         }
                     }))
                 },
