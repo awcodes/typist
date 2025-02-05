@@ -189,18 +189,15 @@ export default function typist({
         },
         handleSuggestion(event) {
             if (event.detail.statePath === editor.commands.getStatePath()) {
-                if (event.detail.item.actionType === "alpine") {
-                    this.$nextTick(() => {
-                        editor
-                            .chain()
-                            .focus(event.detail.range.from)[event.detail.item.commandName](event.detail.item.commandAttributes)
-                            .run()
-                    })
-                } else {
-                    this.$nextTick(() => {
-                        this.$wire.mountFormComponentAction(event.detail.statePath, event.detail.item.name, {coordinates: editor.view.state.selection});
-                    })
-                }
+                this.$nextTick(() => {
+                    if (event.detail.item.actionType === "alpine") {
+                        this.handleCommand(event.detail.item.commandName, event.detail.item.commandAttributes)
+                    } else {
+                        this.handleLivewire(event.detail.item.name, {
+                            coordinates: event.detail.range,
+                        })
+                    }
+                })
             }
         },
         isActive(name, attrs) {
