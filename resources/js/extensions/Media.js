@@ -48,7 +48,20 @@ export default Image.extend({
                         style,
                     }
                 },
-            }
+            },
+            media: {
+                default: null,
+                parseHTML: element => element.getAttribute('data-media-id'),
+                renderHTML: attributes => {
+                    if (!attributes.media) {
+                        return {}
+                    }
+
+                    return {
+                        'data-media-id': attributes.media,
+                    }
+                },
+            },
         };
     },
 
@@ -56,21 +69,15 @@ export default Image.extend({
         return {
             setMedia: options => ({ commands }) => {
                 const src = options?.url || options?.src;
-                const imageTypes = ['jpg', 'jpeg', 'svg', 'png', 'webp'];
+                const imageTypes = ['jpg', 'jpeg', 'svg', 'png', 'webp', 'gif', 'avif', 'jxl', 'heic'];
 
                 const regex = /.*\.([a-zA-Z]*)\??/;
-                const match = regex.exec(src);
+                const match = regex.exec(src.toLowerCase());
 
                 if (match !== null && imageTypes.includes(match[1])) {
                     commands.setImage({
+                        ...options,
                         src: src,
-                        alt: options?.alt,
-                        title: options?.title,
-                        width: options?.width,
-                        height: options?.height,
-                        lazy: options?.lazy,
-                        alignment: options?.alignment,
-                        coordinates: options?.coordinates,
                     })
                 } else {
                     commands.setDocument(options)
@@ -86,7 +93,7 @@ export default Image.extend({
 
                 return chain().focus().extendMarkRange('link').setLink({ href: options.src }).insertContent(options?.link_text).run()
             },
-            setImage: options => ({ state, chain, commands }) => {
+            setImage: options => ({ chain, commands }) => {
                 if (! [null, undefined].includes(options.coordinates?.from)) {
                     return chain().focus().insertContentAt(
                         {from: options.coordinates.from, to: options.coordinates.to},
