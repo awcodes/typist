@@ -63,6 +63,8 @@ export default function typist({
     allowedExtensions = [],
     headingLevels = [1,2,3],
     customDocument = null,
+    enableInputRules = true,
+    enablePasteRules = true,
 }) {
     let editor = null;
 
@@ -76,6 +78,8 @@ export default function typist({
         sidebarOpen: true,
         wordCount: 0,
         updatedFromEditor: false,
+        enableInputRules: enableInputRules,
+        enablePasteRules: enablePasteRules,
         init() {
             // TODO: figure out why this is necessary for Repeaters and Builders
             let existing = this.$refs.element.querySelector('.tiptap');
@@ -95,6 +99,8 @@ export default function typist({
                 element: this.$refs.element,
                 extensions: this.getExtensions(),
                 content: this.state,
+                enableInputRules: this.enableInputRules,
+                enablePasteRules: this.enablePasteRules,
                 editorProps: {
                     handlePaste(view, event, slice) {
                         slice.content.descendants(node => {

@@ -27,7 +27,9 @@
             mentions: @js($getMentions()),
             allowedExtensions: @js($getAllowedExtensions()),
             headingLevels: @js($getHeadingLevels()),
-            customDocument: @js($getCustomDocument())
+            customDocument: @js($getCustomDocument()),
+            enableInputRules: @js($getEnableInputRules()),
+            enablePasteRules: @js($getEnablePasteRules())
         })"
         id="{{ 'typist-wrapper-' . $statePath }}"
         x-bind:class="{

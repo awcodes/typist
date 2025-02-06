@@ -33,6 +33,10 @@ class TypistEditor extends Field
 
     protected bool | Closure | null $wordCount = null;
 
+    protected array | bool | Closure $enableInputRules = true;
+
+    protected array | bool | Closure $enablePasteRules = true;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -128,5 +132,29 @@ class TypistEditor extends Field
     public function shouldShowWordCount(): bool
     {
         return $this->evaluate($this->wordCount) ?? false;
+    }
+
+    public function enableInputRules(array | bool | Closure $rules = true): static
+    {
+        $this->enableInputRules = $rules;
+
+        return $this;
+    }
+
+    public function enablePasteRules(array | bool | Closure $rules = true): static
+    {
+        $this->enablePasteRules = $rules;
+
+        return $this;
+    }
+
+    public function getEnableInputRules(): bool | array
+    {
+        return $this->evaluate($this->enableInputRules);
+    }
+
+    public function getEnablePasteRules(): bool | array
+    {
+        return $this->evaluate($this->enablePasteRules);
     }
 }
