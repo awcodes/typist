@@ -21,6 +21,7 @@
         x-data="typist({
             state: $wire.{{ $applyStateBindingModifiers("entangle('{$statePath}')", isOptimisticallyLive: false) }},
             statePath: @js($statePath),
+            disabled: @js($isDisabled),
             placeholder: @js($getPlaceholder()),
             mergeTags: @js($mergeTags),
             suggestions: @js($getSuggestionsForTiptap()),
@@ -28,6 +29,8 @@
             allowedExtensions: @js($getAllowedExtensions()),
             headingLevels: @js($getHeadingLevels()),
             customDocument: @js($getCustomDocument()),
+            nodePlaceholders: @js($getNodePlaceholders()),
+            showOnlyCurrentPlaceholder: @js($getShowOnlyCurrentPlaceholder()),
             enableInputRules: @js($getEnableInputRules()),
             enablePasteRules: @js($getEnablePasteRules())
         })"

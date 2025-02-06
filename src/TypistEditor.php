@@ -37,6 +37,10 @@ class TypistEditor extends Field
 
     protected array | bool | Closure $enablePasteRules = true;
 
+    protected array | Closure | null $nodePlaceholders = null;
+
+    protected array | bool | null $showOnlyCurrentPlaceholder = false;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -156,5 +160,29 @@ class TypistEditor extends Field
     public function getEnablePasteRules(): bool | array
     {
         return $this->evaluate($this->enablePasteRules);
+    }
+
+    public function nodePlaceholders(array | Closure | null $nodePlaceholders): static
+    {
+        $this->nodePlaceholders = $nodePlaceholders;
+
+        return $this;
+    }
+
+    public function getNodePlaceholders(): ?array
+    {
+        return $this->evaluate($this->nodePlaceholders);
+    }
+
+    public function showOnlyCurrentPlaceholder(bool | Closure | null $showOnlyCurrent): static
+    {
+        $this->showOnlyCurrentPlaceholder = $showOnlyCurrent;
+
+        return $this;
+    }
+
+    public function getShowOnlyCurrentPlaceholder(): ?bool
+    {
+        return $this->evaluate($this->showOnlyCurrentPlaceholder);
     }
 }

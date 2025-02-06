@@ -56,6 +56,7 @@ window.tiptapExtensions = [];
 export default function typist({
     state,
     statePath,
+    disabled = false,
     placeholder = null,
     mergeTags = [],
     suggestions = [],
@@ -63,6 +64,8 @@ export default function typist({
     allowedExtensions = [],
     headingLevels = [1,2,3],
     customDocument = null,
+    nodePlaceholders = [],
+    showOnlyCurrentPlaceholder = true,
     enableInputRules = true,
     enablePasteRules = true,
 }) {
@@ -288,8 +291,14 @@ export default function typist({
                 TextStyle,
             ];
 
-            if (placeholder) {
-               coreExtensions.push(Placeholder.configure({placeholder: placeholder}))
+            if ((placeholder || nodePlaceholders) && (!disabled)) {
+               coreExtensions.push(Placeholder.configure({
+                   showOnlyCurrent: showOnlyCurrentPlaceholder,
+                   placeholder: ({ node }) => {
+                       const nodeSpecificPlaceholder = nodePlaceholders?.[node.type.name];
+                       return nodeSpecificPlaceholder || placeholder || '';
+                   },
+               }))
             }
 
             if (suggestions.length) {
