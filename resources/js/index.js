@@ -68,6 +68,7 @@ export default function typist({
     showOnlyCurrentPlaceholder = true,
     enableInputRules = true,
     enablePasteRules = true,
+    debounce = null,
 }) {
     let editor = null;
 
@@ -120,12 +121,17 @@ export default function typist({
                     _this.updatedAt = Date.now()
                 },
                 onUpdate({ editor }) {
-                    window.dispatchEvent(new CustomEvent('updatedEditor', {
-                        detail: {
-                            statePath: _this.statePath,
-                            content: editor.getJSON(),
-                        }
-                    }));
+                    clearTimeout(_this.timeOut);
+
+                    _this.timeOut = setTimeout(function(){
+                        window.dispatchEvent(new CustomEvent('updatedEditor', {
+                            detail: {
+                                statePath: _this.statePath,
+                                content: editor.getJSON(),
+                            }
+                        }));
+                    },debounce ?? 0);
+
                     _this.wordCount = editor.getText().trim().split(' ').filter(word => word !== '').length;
                     _this.updatedAt = Date.now()
                 },

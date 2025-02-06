@@ -19,7 +19,7 @@
         ax-load
         ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('typist', 'awcodes/typist') }}"
         x-data="typist({
-            state: $wire.{{ $applyStateBindingModifiers("entangle('{$statePath}')", isOptimisticallyLive: false) }},
+            state: $wire.{{ $applyStateBindingModifiers("\$entangle('{$statePath}')", isOptimisticallyLive: true) }},
             statePath: @js($statePath),
             disabled: @js($isDisabled),
             placeholder: @js($getPlaceholder()),
@@ -32,7 +32,8 @@
             nodePlaceholders: @js($getNodePlaceholders()),
             showOnlyCurrentPlaceholder: @js($getShowOnlyCurrentPlaceholder()),
             enableInputRules: @js($getEnableInputRules()),
-            enablePasteRules: @js($getEnablePasteRules())
+            enablePasteRules: @js($getEnablePasteRules()),
+            debounce: @js($getLiveDebounce())
         })"
         id="{{ 'typist-wrapper-' . $statePath }}"
         x-bind:class="{
