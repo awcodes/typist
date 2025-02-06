@@ -195,7 +195,7 @@ class Converter
             if (! property_exists($node->attrs, 'id') || $node->attrs->id === null) {
                 $node->attrs->id = str(collect($node->content)->map(function ($node) {
                     return $node?->text ?? null;
-                })->implode(' '))->kebab()->toString();
+                })->implode(' '))->slug()->toString();
             }
 
             if ($wrapHeadings) {
@@ -250,7 +250,7 @@ class Converter
                     })->implode(' ');
 
                     if (! isset($node['attrs']['id'])) {
-                        $node['attrs']['id'] = str($text)->kebab()->toString();
+                        $node['attrs']['id'] = str($text)->slug()->toString();
                     }
 
                     $headings[] = [
